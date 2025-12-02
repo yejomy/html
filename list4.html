@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우수학생</title>
+    <style>
+    /* 1단계 : 1. 2. 3. */
+    ol { 
+        list-style-type: decimal;
+    }
+
+    /* 2단계 : i. ii. iii.  (1학년, 2학년) */
+    ol > li > ol {
+        list-style-type: lower-roman;
+    }
+
+    /* 3단계 : A. B. C.  (개나리반, 미나리반, 고사리반) */
+    ol > li > ol > li > ol {
+        list-style-type: upper-alpha;
+    }
+
+    /* 4단계 : a. b. c.  (학생 이름들) */
+    ol > li > ol > li > ol > li > ol {
+        list-style-type: lower-alpha;
+    }
+</style>
+</head>
+<body>
+    <p>우리학교의 1-2학년 우수학생들</p>
+    <ol>
+        <li>서울미술초등학교
+            <ol>
+                <li>
+                    1학년
+                    <ol>
+                        <li>
+                            개나리반
+                            <ol>
+                                <li>이순신</li>
+                                <li>강나라</li>
+                            </ol>
+                        </li>
+                        <li>
+                            미나리반
+                            <ol>
+                                <li>김유신</li>
+                                <li>주기자</li>
+                            </ol>
+                        </li>
+                        <li>
+                            고사리반
+                            <ol>
+                                <li>황산벌</li>
+                                <li>임하리</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    2학년
+                    <ol>
+                        <li>
+                            개나리반
+                            <ol>
+                                <li>을지문덕</li>
+                                <li>의자왕</li>
+                            </ol>
+                        </li>
+                        <li>
+                            미나리반
+                            <ol>
+                                <li>라일락</li>
+                                <li>고사리</li>
+                            </ol>
+                        </li>
+                        <li>
+                            고사리반
+                            <ol>
+                                <li>왕나라</li>
+                                <li>장독대</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+    </ol>
+</body>
+</html>
