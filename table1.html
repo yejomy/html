@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>표만들기</title>
+    <style>
+        h1{text-align: center;}
+        p{text-align: center;}
+
+        /* 전체표에대한것 */
+        table{
+            /* 선의두께 */
+            border-width: 1px;
+            /* 선의색상 */
+            border-color: #000000;
+            /* 선의종류(실선) */
+            border-style: solid;
+            width: 600px;
+            text-align: center;
+            /* 표를 가운데 정렬 */
+            margin: auto;
+            /* 표와 열사이의 gap을 0으로 */
+            border-spacing: 0;
+            /* 테두리선사이의 겹침방지 */
+            border-collapse: collapse;
+        }
+        /* 열에대한것 */
+        th{
+            border-width: 1px;
+            border-color: #000000;
+            border-style: solid;
+            background-color: #e4db39;
+        }
+        td{
+            border-color: #000000;
+            border-width: 1px;
+            border-style: solid;
+            background-color: #e4db39;
+        }
+        .blue{background-color: #00ccff;}
+        .red{background-color: crimson;}
+    </style>
+</head>
+<body>
+    <h1>[문서 테이블 꾸미기]</h1>
+    <p>*주간시간표 테이블</p>
+    <!-- 표만들기 -->
+    <table>
+        <!-- 행 -->
+        <tr>
+            <th>1교시</th>
+            <th>2교시</th>
+            <th class="blue">3교시</th>
+        </tr>
+        <tr>
+            <td>포토샵</td>
+            <td class="red">HTML</td>
+            <td class="blue">JQUERY</td>
+        </tr>
+        <tr>
+            <td class="red">일러스트</td>
+            <td>CSS</td>
+            <td class="blue">포트폴리오</td>
+        </tr>
+    </table>
+</body>
+</html>
