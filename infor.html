@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의정보</title>
+    <style>
+        li{list-style: none;margin-bottom: 16px;}
+    </style>
+</head>
+<body>
+     <form action="">
+        <fieldset>
+        <legend>개인정보</legend>
+        <ul>
+            <li>
+                <input type="radio" name="gender" id="man"><label for="man">남자</label>
+                <input type="radio" name="gender" id="woman"checked><label for="woman">여자</label>
+            </li>
+            <li>
+                <label for="tour">여행</label> <input type="checkbox" id="tour">
+                <label for="movie">영화</label> <input type="checkbox" checked id="movie">
+                <label for="reading">독서</label> <input type="checkbox" id="reading">
+            </li>
+            <li>
+                <label for="st">칼라선택</label>
+                <select name="" id="st">
+                    <option value="">---색상을 선택하세요---</option>
+                    <option value="">빨강색</option>
+                    <option value="">녹색</option>
+                    <option value="">파랑색</option>
+                </select>
+            </li>
+            <li>
+                <label for="mt">다중선택</label>
+                <select name="" id="mt" multiple>
+                    <option value="">빨강</option>
+                    <option value="">노랑</option>
+                    <option value="">녹색</option>
+                    <option value="">파랑</option>
+                </select>
+            </li>
+            <li>
+                <label for="">하고싶은말</label>
+                <textarea name="" id="" cols="50" rows="10"></textarea>
+            </li>
+        </ul>
+        </fieldset>
+        <input type="submit" value="가입하기">
+        <input type="reset" value="다시하기">
+     </form>
+</body>
+</html>
