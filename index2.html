@@ -3,95 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품주문서</title>
+    <title>DIV박스</title>
     <style>
-        li{list-style: none; background-color:#eee; margin-bottom: 16px;}
-        input{height: 26px;}
-        fieldset{border: 2px solid #d3a957;}
-        .tel1{width:40px;}
-        .order1{background-color: #222; color: #fff;}
+        *{margin: 0; padding: 0;}
+        div{
+            width: 540px;
+            border: 5px solid #808080;
+            padding: 43px 16px 30px;
+        }
+        h1{color: #000400;}
+        div p {margin-top: 28px;}
     </style>
 </head>
 <body>
-    <h1>상품 주문서</h1>
-    <form action="">
-        <fieldset>
-            <legend>개인정보</legend>
-            <ul>
-                <li>
-                    <label for="name">이름 </label>
-                    <input type="text" name="name" id="name" placeholder="여백없이 입력" required autofocus>
-                </li>
-                <li>
-                    <label for="pw">비밀번호 </label>
-                    <input type="password" name="pw" id="pw" placeholder="비밀번호를 입력하시오" required>
-                </li>
-            </ul>
-        </fieldset>
-        <fieldset>
-            <legend>배송지정보 </legend>
-            <ul>
-                <li>
-                    <label for="ad">주소</label>
-                    <input type="text">
-                </li>
-                <li>
-                    <label for="tel">전화번호</label>
-                    <select name="tel" id="tel">
-                    <option value="first">010</option>
-                    <option value="middle">011</option>
-                    <option value="high">017</option>
-                    <input type="tel" name="" id="" maxlength="4" class="tel2">
-                    <input type="text" name="" id=""maxlength="4" class="tel2">
-                </li>
-                <li>
-                    <label for="memo">메모</label>
-                    <textarea name="memo" id="memo" placeholder="여기에 메모를 입력하세요" cols="50" rows="3"></textarea>
-                </li>
-            </ul>
-        </fieldset>
-        <fieldset>
-            <legend>주문정보</legend>
-            <ul>
-                <li>
-                    <label for="GT">콰태말라 안티구아(100G)</label>
-                    <input type="number" min="1" max="10" value="1">개
-                </li>
-                    <li>
-                    <label for="INDI">인도네시아 만델링(100G)</label>
-                    <input type="number" min="1" max="10" value="1">개
-                </li>
-                     <li>
-                    <label for="TAM">탐라는 도다(블렌딩) (100G)</label>
-                    <input type="number" min="1" max="10" value="1">개
-                </li>
-                <li>
-                    <label for="1">01</label>
-                    <input type="checkbox" name="1" id="1">
-                    <label for="2">02</label>
-                    <input type="checkbox" name="2" id="2">
-                    <label for="3">03</label>
-                    <input type="checkbox" name="3" id="3">
-                    <label for="4">04</label>
-                    <input type="checkbox" name="4" id="4">
-                </li>
-                <li>
-                    <label for="r1">r01</label>
-                    <input type="radio" name="coffee">
-                    <label for="r2">r02</label>
-                    <input type="radio" name="coffee">
-                    <label for="r3">r03</label>
-                    <input type="radio" name="coffee">
-                    <label for="r4">r04</label>
-                    <input type="radio" name="coffee">
-                </li>
-            </ul>
-            <fieldset>
-                <legend>버튼모음</legend>
-                <input type="submit" name="order" id="order" value="주문하기" class="order1">
-                <input type="reset" name="cancle" id="cancle" value="취소" class="order1">
-            </fieldset>
-        </fieldset>
-    </form>
+    <div>
+        <h1>Who am I?</h1>
+        <P>
+            프런트앤드 웹 기술(Front and Web Tech.)에관심이 많습니다. <br>
+            현재 제주의 한 시골 마을에서 코딩중입니다. 
+        </P>
+    </div>
 </body>
 </html>
