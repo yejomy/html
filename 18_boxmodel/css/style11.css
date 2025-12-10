@@ -1,0 +1,32 @@
+@charset "utf-8"
+body{}
+
+*{margin: 0; padding: 0;}
+
+.box
+{width: 1470px;
+    height: 200px;
+    border: 5px solid red;
+    margin: 0 auto;
+}
+
+.box div
+{
+    width: 490px;
+    height: 200px;
+    background-color: gold;
+    float: left;
+    box-sizing: border-box;
+    padding: 36px;
+}
+
+.box .child1
+{background-color: #907354;}
+
+.box .child2
+{background-color: #434343;}
+
+.box .child3
+{background-color: #c30606;}
+
+.box div h2, .box div p {color: #fff;}

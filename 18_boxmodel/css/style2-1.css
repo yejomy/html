@@ -5,7 +5,7 @@ body{}
 *{margin: 0; padding: 0;}
 li{list-style: none;}
 
-div.box 
+.box 
 {
     width: 1680px;
     height: 500px;
