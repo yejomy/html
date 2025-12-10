@@ -1,0 +1,60 @@
+@charset "utf-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {}
+
+div.box {
+    width: 1680px;
+    height: 500px;
+    margin: auto;
+}
+
+div {
+    float: left;
+    margin: 40px;
+}
+
+/* 위 카드 */
+div .first {
+    background-color: blue;
+    color: #ffffff;
+    width: 350px;
+    height: 380px;
+    padding: 10px;     /* 통일 */
+    margin: 20px;
+    border-radius: 16px;
+}
+
+.other {
+    border: 1px solid #dbdbdb;
+    background-color: #ffffff;
+    color: blue;
+    width: 350px;
+    height: 380px;
+    padding: 10px;     /* 통일 */
+    margin: 20px;
+    border-radius: 16px;
+}
+
+/* 아래 li 카드 */
+ul {
+    width: 1680px;
+    height: 500px;
+}
+
+li {
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #dbdbdb;
+    width: 350px;
+    height: 380px;
+    border-radius: 16px;
+    margin: 20px;
+    padding: 10px;     /* div와 동일하게 */
+    float: left;
+}
