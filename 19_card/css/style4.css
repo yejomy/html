@@ -20,7 +20,7 @@ ul
 ul li
 {
     width: 385px;
-    height: 655px;
+    height: 657px;
     margin-right: 20px;
     margin-top: 40px;
     float: left;
@@ -45,7 +45,7 @@ ul li a .imgbox img
 ul li a .text
 {
     width: 100%;
-    margin-top: 25px;
+    margin-top: 24px;
 }
 
 ul li .text .first
@@ -61,15 +61,15 @@ ul li .text h3
     text-align: center;
     color: #000;
     font-size: 23px;
-    line-height: 39px;
+    margin-top: 14x;
 }
 
-ul li .text p
+ul li .text .midle
 {
     text-align: center;
     color: #1e1e1e;
     font-size: 18px;
-    line-height: 39px;
+    margin-top: 14px;
 }
 
 ul li .text .footer
@@ -77,7 +77,6 @@ ul li .text .footer
     text-align: center;
     color: #9b9b9b ;
     font-size: 11px;
-    line-height: 43px;
 }
 
 ul .last   
