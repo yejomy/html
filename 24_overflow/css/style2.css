@@ -1,0 +1,49 @@
+@charset "utf-8";
+
+body
+{
+    background-color: #99cd00;
+}
+
+*{margin: 0; padding: 0;}
+
+.box
+{
+    width: 520px;
+    height: 270px;
+    background-color: #ffff08;
+    margin: 90px auto 0px;
+    border: 10px solid #34672f;
+    position: relative;
+    overflow: auto;
+}
+
+.box .red
+{
+    width: 200px;
+    height: 400px;
+    background-color: #ff6766;
+    position: absolute;
+    left: 50px;
+    top: 50px;
+}
+
+.box .green
+{
+    width: 200px;
+    height: 400px;
+    background-color: #9afe66;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
+
+.box .blue
+{
+    width: 200px;
+    height: 400px;
+    background-color: #0066cb;
+    position: absolute;
+    left: 150px;
+    top: 150px;
+}
