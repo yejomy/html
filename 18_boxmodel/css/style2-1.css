@@ -12,14 +12,14 @@ li{list-style: none;}
     margin: auto;
 }
 
-div
+.box div
 {
     width: 350px;
     height: 380px;
     background-color: #ffffff;
     border: 1px solid #dbdbdb;
-    float: left;
     margin-right: 40px;
+    float: left;
 }
 
 div .first
@@ -28,13 +28,11 @@ div .first
     height: 380px;
     margin-right: 40px;
     background-color: #290ce9;
-    float: left;
     margin-right: 40px;
 }
 
-.box.last
+.box .last
 {margin-right: 0;}
-
 
 
 ul
@@ -63,3 +61,4 @@ li
     float: left;
     margin-right: 40px;
 }
+

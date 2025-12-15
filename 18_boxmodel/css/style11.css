@@ -2,11 +2,11 @@
 body{}
 
 *{margin: 0; padding: 0;}
+a{text-decoration: none;}
 
 .box
 {width: 1470px;
     height: 200px;
-    border: 5px solid red;
     margin: 0 auto;
 }
 
@@ -20,13 +20,36 @@ body{}
     padding: 36px;
 }
 
+.box .div a
+{
+    width: 100%;
+    height: 100%;
+    padding: 36px;
+    display: block;
+}
+
 .box .child1
-{background-color: #907354;}
+{
+    background: #907354 url(../images/outback1.png) no-repeat 232px center; 
+}
+.box .child1:hover
+{
+    background: #907354 url(../images/outback3.png) no-repeat 232px center; 
+}
+
 
 .box .child2
-{background-color: #434343;}
+{background: #434343 url(../images/outback2.png) no-repeat 232px center; }
 
-.box .child3
-{background-color: #c30606;}
+.box .child2:hover
+{background: #434343 url(../images/outback1.png) no-repeat 232px center; }
+
+.box .child3 
+{background: #c30606 url(../images/outback3.png) no-repeat 232px center;}
+
+.box .child3:hover
+{
+    background: #c30606 url(../images/outback2.png) no-repeat 232px center;
+}
 
 .box div h2, .box div p {color: #fff;}
