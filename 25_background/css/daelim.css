@@ -1,0 +1,77 @@
+@charset "utf-8";
+body
+{
+    font-family: "맑은 고딕", "malgun gothic", sans-serif ;
+}
+*{margin: 0; padding: 0;}
+a{text-decoration: none;}
+li{list-style: none;}
+
+.header
+{
+    width: 100%;
+    height: 70px;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+.header .inner
+{
+    width: 1200px;
+    height: 70px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    align-items: center;
+}
+
+.header .inner h1 a
+{
+    /* 배경이미지 삽입시 반드시 크기를 설정한다 */
+    display: block;
+    width: 98px;
+    height: 28px;
+    background: url(../images/dl\ logo.png) no-repeat;
+    /* 들여쓰기 */
+    text-indent: -99999px;
+}
+
+.header .inner .icon
+{
+    display: flex;
+    gap: 22px;
+}
+
+.header .inner .icon .search
+{
+    display: block;
+    width: 15px;
+    height: 15px;
+    background: url(../images/icons\ search.png) no-repeat;
+    text-indent: -99999px;
+}
+
+.header .inner .icon .eng
+{
+    display: block;
+    width: 30px;
+    height: 15px;
+    background: url(..//images/eng.png) no-repeat;
+    text-indent: -99999px;
+}
+
+
+.header .inner .icon .menu
+{
+    display: block;
+    width: 15px;
+    height: 15px;
+    background: url(..//images/icon\ menu.png) no-repeat;
+    text-indent: -99999px;
+}
+.visual
+{
+    width: 100% ;
+    height: 920px;
+    background: url(../images/daelim\ maind.jpg) no-repeat center top;
+}
