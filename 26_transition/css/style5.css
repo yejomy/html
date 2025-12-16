@@ -1,0 +1,40 @@
+@charset "utf-8";
+body
+{
+    font-family: "맑은 고딕", "Malgun Gothic", sans-serif;
+    background: #333;
+}
+
+*{margin: 0; padding: 0;}
+
+div
+{
+    width: 658px;
+    height: 507px;
+    border: 10px solid #fff;
+    margin: 130px auto 0;
+    position: relative;
+    overflow: hidden;
+}
+
+div h2
+{
+    font-size: 50px;
+    font-weight: 900;
+    color: white;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    position: absolute;
+    right: -100%;
+    top: 50%;
+    width: 100%;
+    height: 150px;
+    line-height: 150px;
+    margin-top: -75px;
+}
+
+div:hover h2
+{
+    right: 0;
+    transition: all 1s ease-in-out;
+}
