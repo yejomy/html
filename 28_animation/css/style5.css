@@ -1,0 +1,51 @@
+@charset "utf-8";
+body
+{
+
+}
+*{margin: 0; padding: 0;}
+button{border: none; background: none;}
+
+.box{
+    width: 500px;
+    height: 300px;
+    border: 2px solid black;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.left
+{
+    position: absolute;
+    left: 55px;
+    margin-left: -110;
+    top: 0px;
+    margin-top: -55px;
+    animation: left_ani 1s ease-in-out forwards 1s;
+}
+
+@keyframes left_ani
+{
+    from{left:55px; top:0px ;}
+    to{left: 55px; top: 200px;}
+}
+
+
+.right
+{
+    position: absolute;
+    right: 0;
+    margin-right: 0;
+    bottom: 0;
+    margin-bottom: -300px;
+    animation: ri_ani 1s ease-in-out forwards 2s;
+}
+
+@keyframes ri_ani
+{
+    form{right: 0; bottom: 0px;}
+    to{right: 0; bottom: 300px;}
+}
