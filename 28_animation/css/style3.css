@@ -1,0 +1,59 @@
+@charset "utf-8";
+*{margin: 0; padding: 0;}
+
+.box{
+  width: 1000px;
+  height: 300px;
+  border: 1px solid blue;
+  margin: 0 auto;
+  position: relative;
+}
+
+.box .sq1{
+  width: 100px;
+  height: 100px;
+  background-color: #ff69b3;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: sq1_ani 4s ease-in-out 2s infinite;
+}
+
+@keyframes sq1_ani{
+  0%{left: 0; top: 0;}
+  25%{left: 900px; top: 0;}
+  50%{left: 900px; top: 200px;}
+  75%{left: 0; top: 200px;}
+  100%{left: 0; top: 0;}
+}
+
+
+.box2
+{
+  width: 1000px;
+  height: 300px;
+  border: 1px solid rgb(213, 46, 16);
+  margin: 200px auto;
+  position: relative;
+}
+
+.box2 .sq2
+{
+  width: 100px;
+  height: 100px;
+  background-color: #ffff00;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: sq2_ani 4s ease-in-out 2s forwards;
+}
+
+
+@keyframes sq2_ani{
+  0%{left: 0; top: 0;}
+  25%{left: 900px; top: 0;}
+  50%{left: 900px; top: 200px;}
+  75%{left: 0; top: 200px;}
+  90%{left: 0; top: 0;}        /* 시작점 복귀 확정 */
+  100%{left: -100px; top: 0;}  /* 시작점 기준 왼쪽 -100 */
+}

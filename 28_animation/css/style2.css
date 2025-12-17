@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+*{margin: 0; padding: 0;}
+
+div{
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    animation-name: rotate_ani;
+    animation-duration: 3s;
+    /* 애니메이션 실행시 원래 위치로 */
+    /* animation-fill-mode: forwards; */
+    /* 원하는 개수만큼 반복 실행 할 때 */
+    /* animation-iteration-count: 3; */
+    /* 무한반복 */
+    /* animation-iteration-count: infinite; */
+    /* 시계반대방향 */
+    /* animation-direction: reverse; */
+    /* 시계방향 <> 반대방향  */
+    /* animation-direction: alternate; */
+    /* 가속도 */
+    /* animation-timing-function: ease-in-out;
+    animation-timing-function: linear; */
+    /* 애니메이션 시작 지연 */
+    /* animation-delay: 2s; */
+
+    /* 애니메이션 약식(shorts hand) */
+    animation: rotate_ani 4s ease-in-out infinite forwards 2s;
+}
+
+@keyframes circle_ani {
+    from { left: 0; }
+    to   { left: 100px; }
+}
+
+@keyframes move_ani {
+    0%{left: 0;}
+    100%{left:1500px;}
+}
+
+@keyframes rotate_ani{
+    0%{left: 0; top:0;}
+    25%{left: 1000px; top:0; background: blue;}
+    50%{left: 1000px; top:300px; background: yellow;}
+    75%{left: 0; top: 300px; background: pink;}
+    100%{left: 0; top: 0; background: red;}
+}
