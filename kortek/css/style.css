@@ -1,0 +1,139 @@
+@charset "utf-8";
+@import url(@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap'););
+
+body
+{
+font-family: "Noto Sans KR", sans-serif;
+}
+
+*{margin: 0; padding: 0;}
+a{text-decoration: none;}
+li{list-style: none;}
+button{border: none; background: none;}
+
+.header
+{
+    width: 1100px;
+    height: 66px;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+.header h1 a {
+    display: block;
+    width: 113px;
+    height: 37px;
+    background: url(../images/header_logo.jpg) no-repeat;
+    text-indent: -99999px;   
+}
+
+/* 주메뉴 */
+
+.header ul.gnb
+{
+    display: flex;
+    gap: 66px;
+}
+
+.header ul.gnb> li
+{
+    position: relative;
+    padding: 18px 0;
+}
+
+.header ul.gnb> li> a
+{
+    font-size: 17px;
+    font-weight: 700;
+    color: #6e6e6e;
+}
+
+.header button
+{
+  width: 32px;
+  height: 21px;
+  border: 1px solid #dedede;
+  font-size: 11px;
+  color: #9b9b9b;
+  cursor: pointer;
+}
+
+.header ul.gnb> li:hover>a
+{
+    color: #3381c0;
+    border-bottom: 2px solid #3381c0;
+}
+
+/* 경계선 */
+.header ul.gnb> li::before{
+    content: '';
+    width: 1px;
+    height: 27px;
+    background: #c8c8c8;
+    /* 공중부양 */
+    position: absolute;
+    left: -33px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.header ul.gnb>li:first-child::before
+{
+    display: none;
+}
+
+/* 2차메뉴 */
+
+.header .gnb>li>.depth2
+{
+    width: 166px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 62px;
+    border: 1px solid #c8c8c8; 
+    border-top: none; 
+    text-align: center;
+    line-height: 35px;
+    display: none;
+    z-index: 5;
+}
+
+.header .gnb>li>.depth2 li a 
+{
+    color: #555;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.header .gnb>li>.depth2 li:hover
+{
+    background: #3381c0;
+}
+
+.header .gnb>li>.depth2 li:hover a
+{
+    color: #fff;
+    background: url(../images/icon_arrow2.png) no-repeat left center;
+}
+
+
+.visual
+{width: 100%;
+height: 960px;
+background:url(../images/mainslide_img01.jpg) no-repeat center top;
+}
+
+/* 1차 메뉴 li에다가 호버하면 2차 메뉴가 뜨도록 한다 */
+.header .gnb>li:hover>.depth2
+{
+    display: block;
+}
