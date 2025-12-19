@@ -1,0 +1,209 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+body
+{font-family: "Noto Sans KR", sans-serif;} 
+
+*{margin: 0; padding-left: 0;}
+a{text-decoration: none;}
+li{list-style: none;}
+
+.header
+{
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #e8e8e8;
+    background: white;
+    position: absolute;
+    z-index: 999;
+}
+
+.header .inner
+{
+    width: 1400px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .inner h1 a
+{
+    display: block;
+    width: 200px;
+    height: 46px;
+    background: url(../images/logo-all.png);
+    text-indent: -99999px;
+}
+
+
+/* 1차메뉴 */
+
+.header .inner .gnb
+{
+    display: flex;
+}
+
+.header .inner .gnb>li>a
+{
+    display: block;
+    padding: 0 20px;
+    height: 80px;
+    line-height: 80px;
+    /* 소문자를 대문자로 바꾸는 css */
+    text-transform: uppercase;
+    font-size: 17px;
+    font-weight: 500;
+    color: #333;
+}
+
+.header .inner .gnb>li:hover>a
+{
+    color: #0056aa;
+    position: relative;
+}
+
+.header .inner .gnb>li:hover>a::after
+{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #0056aa;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.header .inner ul.icon
+{
+    display: flex;
+    gap: 10px;
+}
+
+.header .inner ul.icon li:nth-child(1) a
+{
+    background: #222;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 999px;
+    font-size: 16px;
+}
+
+.header .inner ul.icon li:nth-child(2 ) a
+{
+    background: #0056aa;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 999px;
+    font-size: 16px;
+    padding-right: 30px;
+}
+
+.header .inner ul.icon li:nth-child(2) a::after
+{
+    content: '';
+    width: 11px;
+    height: 11px;
+    background: url(..//images/icon-arrow.png) no-repeat;
+    position: absolute;
+    right: 15x;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
+
+
+/* 2차메뉴 */
+
+.header .inner .gnb>li>.depth2
+{
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #ccc;
+    position: absolute;
+    left: 0;
+    top: 81px;
+    background: #fff;
+    display: none;
+}
+
+
+.header .inner .gnb>li:hover>.depth2
+{
+    display: block;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner
+{
+    width: 1400px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+
+/* 2차메뉴 마진 레프트 */
+
+.header .inner .gnb>li>.depth2 .depth2_inner .ceo
+{
+    margin-left: 300px;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner .sun
+{
+    margin-left: 320px;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner .part
+{
+    margin-left: 370px;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner .edu
+{
+    margin-left: 525px;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner .new
+{
+    margin-left: 730px;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner .sup
+{
+    margin-left: 625px;
+}
+
+
+.header .inner .gnb>li>.depth2 .depth2_inner li a
+{
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.header .inner .gnb>li>.depth2 .depth2_inner li:hover a
+{
+    color: #0056aa;
+}
+
+
+
+
+/* 메인 동영상 삽입 */
+.video
+{
+    width: 100%;
+    height: 100%;
+}
+
+.video video
+{
+    width: 100%;
+    height: 100%;
+}
