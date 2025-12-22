@@ -1,6 +1,5 @@
 @charset "utf-8";
 
-/* 초기화 */
 *{margin:0; padding:0; box-sizing:border-box;}
 a{text-decoration:none; color:inherit;}
 li{list-style:none;}
@@ -23,7 +22,7 @@ li{list-style:none;}
   justify-content:space-between;
   align-items:center;
   padding:0 16px;
-  border-bottom:1px solid rgba(255,255,255,.5);
+  border-bottom: 1px solid rgba(255,255,255,.5);
 }
 
 .header .first a{
