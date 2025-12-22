@@ -1,0 +1,214 @@
+@charset "utf-8";
+body{
+
+}
+
+*{margin: 0; padding: 0;}
+a{text-decoration: none;}
+li{list-style: none;}
+button{background: none; border: none; cursor: pointer;}
+
+
+/* 헤더 이너 (부모) 디자인 */
+.section
+{
+    width: 100%;
+    background: #f3f3f3;
+    padding: 80px 0;
+}
+
+.section .inner
+{
+    width: 1100px;
+    height: 260px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* left 박스 (자식) 디자인 */
+.section .inner .left
+{
+    width: 540px;
+    height: 260px;
+    background: url(../images/doctor.jpg) no-repeat;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.section .inner .left h2
+{
+    font-size: 30px;
+    color: #000;
+    font-weight: 700;
+}
+
+.section .inner .left p
+{
+    font-size: 16px;
+    color: #333;
+    font-weight: 400;
+    line-height: 26px;
+    margin: 35px 0 10px;
+}
+
+.section .inner .left form fieldset
+{
+    border: none;
+}
+
+.section .inner .left form legend
+{
+    /* form태그 글씨날리기 */
+    position: absolute;
+    left: -999999px;
+}
+
+.section .inner .left form input
+{
+    width: 219px;
+    height: 40px;
+    border: 1px solid #2763ba;
+    text-indent: 10px;
+    float: left;
+    box-sizing: border-box;
+    /* 폼안에 클릭 할때 테두리선 안나오게 해주는 명령 */
+    outline: none; 
+}
+
+.section .inner .left form button
+{
+    width: 80px;
+    height: 40px;
+    background:  #2763bb;
+    border: 1px solid #2763ba;
+    color: #fff;
+    float: left;
+    box-sizing: border-box;
+}
+
+/* right 박스 (자식) 디자인 */
+.section .inner .right
+{
+    width: 540px;
+    height: 260px;
+    padding: 30px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.section .inner .right .wrap
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section .inner .right .wrap .menu
+{
+    display: flex;
+    gap: 30px;
+}
+
+.section .inner .right .wrap .menu li
+{
+    position: relative;
+}
+
+.section .inner .right .wrap .menu li::after
+{
+    content: '';
+    width: 1px;
+    height: 15px;
+    background: #ccc;
+
+    position: absolute; /*반드시 꼭 */
+    left: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.section .inner .right .wrap .menu li:first-child::after /* 가상 별명대신사용 */
+{
+    display: none;
+}
+
+.section .inner .right .wrap .menu li a
+{
+    font-size: 20px;
+    font-weight: 700;
+    color: #888;
+}
+
+/* 더보기 */
+.section .inner .right .wrap a.more
+{
+    display: b;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #ccc;
+    text-indent: -99999px;
+    position: relative;
+}
+
+.section .inner .right .wrap a.more::after
+{
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: url(../images/spr_common.png) no-repeat;
+    background-position: -147px -77px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+/* 공지사항 리스트 */
+.section .inner .right ul.list
+{
+    margin-top: 30px;
+}
+
+.section .inner .right ul.list li
+{
+    display: flex;
+    justify-content: space-between;
+    line-height: 40px;
+    position: relative;
+}
+
+.section .inner .right ul.list li::after
+{
+    content: '';
+    width: 3px;
+    height: 3px;
+    background: #888;
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.section .inner .right ul.list li a
+{
+    font-size: 15px;
+    font-weight: 500;
+    color: #000;
+    width: 334px;
+
+    /* 넘치는 data줄 안바꾸기 */
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    /* 말줄임표 표시  */
+    text-overflow: ellipsis;
+}
+
+.section .inner .right ul.list li span
+{
+    font-size: 14px;
+    color: #9fa19f;
+}
