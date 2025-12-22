@@ -1,0 +1,61 @@
+@charset "utf-8";
+@import url(https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css" rel="stylesheet);
+
+body{
+    background: #333;
+    font-family: 'NanumBarunGothic';
+}
+
+*{margin: 0; padding: 0;}
+a{text-decoration: none;}
+li{list-style: none;}
+
+h1
+{
+    color: #fff;
+    font-size: 41px;
+    font-weight: 900;
+    text-align: center;
+    margin: 60px 0 100px 0;
+}
+
+ul
+{
+    width:640px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    display: flex;
+    gap: 20px;
+}
+
+ul li
+{
+    width: 200px;
+    height: 80px;
+    border: 1px solid #fff;
+    text-align: center;
+    line-height: 80px;
+
+    border-radius: 8px;
+    overflow: hidden;
+
+    box-shadow: 0 0 10px white;
+}
+
+ul li a
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to top, #171717, #878c86);
+    color: #fff;
+    
+    text-align: center;
+    font-size: 12px;
+}
+
+ul li:hover a
+{
+    background-image: linear-gradient(to bottom,#fbc740,#f44206);
+}
