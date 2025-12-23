@@ -1,13 +1,19 @@
 @charset "utf-8";
-body
-{
 
+/* 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-*{margin: 0; padding: 0;}
+/* 전체 영역 */
+body {
+    padding: 50px 0;
+}
 
-div
-{
+/* 이미지 래퍼 */
+.wrap {
     width: 1170px;
     height: 285px;
     display: flex;
@@ -16,49 +22,39 @@ div
     margin: 0 auto;
 }
 
-img
-{
+/* 공통 이미지 */
+.wrap img {
     display: block;
     width: 265px;
     height: 285px;
+    transition: filter 0.4s ease; 
 }
 
-.test1
-{
+/* 이미지 효과 */
+.test1 {
     filter: blur(10px);
 }
-
-.test1:hover 
-{
-    filter: invert(100%) blur(1px) ;
+.test1:hover {
+    filter: invert(100%) blur(1px);
 }
 
-.test2
-{
+.test2 {
     filter: opacity(50%);
 }
-
-.test2:hover 
-{
+.test2:hover {
     filter: sepia(50%);
 }
 
-.test3
-{
+.test3 {
     filter: grayscale(100%);
 }
-
-.test3:hover
-{
+.test3:hover {
     filter: hue-rotate(90deg);
 }
 
-.test4
-{
+.test4 {
     filter: drop-shadow(10px 10px 10px gray);
 }
-
-.test4:hover
-{
+.test4:hover {
     filter: contrast(80%);
 }
