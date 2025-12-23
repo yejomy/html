@@ -1,0 +1,107 @@
+@charset "utf-8";
+
+body{
+    background: #fff;
+    color: #333;
+}
+
+*{margin: 0; padding: 0;}
+a{text-decoration: none;}
+li{list-style: none;}
+
+.box 
+{
+    width: 100%;
+}
+
+.header{
+    width: 1200px;
+    height: 100px;
+    background: aquamarine;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 /*로고*/
+{
+    width: 200px;
+    height: 40px;
+    background: bisque;
+}
+
+.header .gnb
+{
+    width: 600px;
+    height: 40px;
+    background: pink;
+}
+
+.slide{
+    width: 1200px;
+    height: 300px;
+    margin: 0 auto;
+    background: skyblue;
+}
+
+.content
+{
+    width: 1200px;
+    height: 200px;
+    margin: 0 auto;
+    background: chocolate;
+    display: flex;
+}
+
+.content .notice
+{
+    width: 400px;
+    height: 200px;
+    background: darkgreen;
+}
+
+.content .banner
+{
+    width: 400px;
+    height: 200px;
+    background: brown;
+}
+
+.content .golink
+{
+    width: 400px;
+    height: 200px;
+    background: gold;
+}
+
+.footer
+{
+    width: 1200px;
+    height: 100px;
+    background: darkorchid;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.footer .logo
+{
+    width: 200px;
+    height: 40px;
+    background: honeydew;
+}
+
+.footer .sns
+{
+    width: 200px;
+    height: 100px;
+    background: rgb(65, 135, 65);
+}
+
+.footer .copy
+{
+    width: 800px;
+    height: 100px;
+    background: darksalmon;
+}
