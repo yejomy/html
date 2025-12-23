@@ -1,0 +1,81 @@
+@charset "utf-8";
+body
+{
+
+}
+
+*{margin: 0; padding: 0;}
+
+img
+{
+    display: block;
+    margin: 24px auto;
+}
+
+h1,h2, h3 
+{
+    text-align: center;
+    margin-top: 24px;
+}
+
+.test
+{
+    /* 이미지효과 */
+    filter: blur(10px);
+}
+
+.test2
+{
+    /* 기본밝기 100% */
+    filter: brightness(150%);
+}
+
+.test3
+{
+    /* 이미지명도대비 */
+    filter: contrast(170%);
+}
+
+.test4
+{
+    /* drop shadow */
+    /* filter: drop-shadow(x y blur color); */
+    filter: drop-shadow(10px 10px 10px gray);
+}
+
+.test5
+{
+    filter: grayscale(100%);
+}
+
+.test6
+{
+    /* 색회전 (0-360) */
+    filter: hue-rotate(90deg);
+}
+
+.test7
+{
+    /* 색반전 보색 */
+    /* filter: invert(100%); */
+    /* 투명도 */
+    filter: opacity(20%);
+}
+
+.test8
+{
+    /* 채도 */
+    filter: saturate(300%);
+}
+
+.test9
+{
+    /* 세피아톤 */
+    filter: sepia(100%);
+}
+
+.test10
+{
+    /* 효과멀티지정 */
+    filter: sepia(100%) brightness(150%);
+}

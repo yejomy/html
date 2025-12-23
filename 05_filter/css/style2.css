@@ -1,0 +1,64 @@
+@charset "utf-8";
+body
+{
+
+}
+
+*{margin: 0; padding: 0;}
+
+div
+{
+    width: 1170px;
+    height: 285px;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    margin: 0 auto;
+}
+
+img
+{
+    display: block;
+    width: 265px;
+    height: 285px;
+}
+
+.test1
+{
+    filter: blur(10px);
+}
+
+.test1:hover 
+{
+    filter: invert(100%) blur(1px) ;
+}
+
+.test2
+{
+    filter: opacity(50%);
+}
+
+.test2:hover 
+{
+    filter: sepia(50%);
+}
+
+.test3
+{
+    filter: grayscale(100%);
+}
+
+.test3:hover
+{
+    filter: hue-rotate(90deg);
+}
+
+.test4
+{
+    filter: drop-shadow(10px 10px 10px gray);
+}
+
+.test4:hover
+{
+    filter: contrast(80%);
+}
