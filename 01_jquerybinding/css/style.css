@@ -1,0 +1,24 @@
+@charset "utf-8";
+body{
+
+}
+
+*{margin: 0; padding: 0;}
+
+div{
+    width: 620px;
+    height: 370px;
+    background: orange;
+    margin: 0 auto;
+    position: relative
+}
+
+button
+{
+    width: ;
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+    top: 400px;
+    cursor: pointer;
+}
