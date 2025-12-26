@@ -1,39 +1,44 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>div박스</title>
-    <style>
-        /* 초기화 작업 전체 tag에 주기 */
-        *{margin: 0; padding: 0;}
-
-        div{width: 510px; 
-            border: 5px solid #000;
-             margin-bottom: 22px;
-             background-color: #fea500;
-             /* 안쪽여백 상하좌우 */
-             padding: 16px;
-             /* 상하 24 , 좌우 16px */
-             padding: 24px 16px;
-             /* 상 좌우 아래 */
-             padding: 36px 4px 24px;
-             /* 상 우 하 좌 */
-             padding: 8px 16px 24px 32px;
-            }
-    </style>
+    <title>문자data를 숫자data로 변환</title>
 </head>
 <body>
-    <div>
-        <h1>대한민국 국가 애국가 대한민국 국가 애국가</h1>
-    </div>
+    <script>
+        // 외부로부터 이름을 입력받고, 체중하고, 키를 입력 받아서 
+        // bmi지수를 계산하는 프로그램
+
+        let name = prompt("이름을 입력해주세요")
+        let weight = prompt("몸무게를 입력하세요")
+        let tall = prompt("키를 입력하세요")
+
+        // 체질량지수 구하는 수식
+        let bmi = weight / (tall * tall) * 10000
+        let res = ''
+
     
-    <div>
-        <p>동해물과 백두산이 마르고 닳도록 <br>
-            하느님이 보우하사 우리나라 만세 <br>
-            무궁화 삼천리 화려강산 <br>
-            대한사람 대한으로 길이 보전하세
-        </p>
-    </div>
+
+    if(bmi <= 18.5){
+        res = "저체중";
+    }
+    else if(bmi < 23){
+        res = "정상체중";
+    }
+    else if(bmi < 25){
+        res = "과체중";
+    }
+    else {
+        res = "비만";
+    }
+
+
+
+        alert( "고객님의 이름은" + name + "이고\n" + "입력하신 체질량 지수는" + bmi + "입니다\n"
+        + "고객님의 몸무게는" + res + "입니다"
+        )
+
+    </script>
 </body>
 </html>
