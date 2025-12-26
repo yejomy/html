@@ -15,24 +15,25 @@
         let tall = prompt("키를 입력하세요")
 
         // 체질량지수 구하는 수식
-        let bmi = weight / (tall * tall) * 10000
+        let bmi = Number(weight) / ( Number(tall) * Number(tall)) * 10000
         let res = ''
 
     
-
-    if(bmi <= 18.5){
-        res = "저체중";
-    }
-    else if(bmi < 23){
-        res = "정상체중";
-    }
-    else if(bmi < 25){
-        res = "과체중";
-    }
-    else {
-        res = "비만";
-    }
-
+if (bmi < 18.5) {
+    res = "저체중";
+}
+else if (bmi < 23) {
+    res = "정상체중";
+}
+else if (bmi < 25) {
+    res = "과체중";
+}
+else if (bmi < 30) {
+    res = "비만";
+}
+else {
+    res = "고도비만";
+}
 
 
         alert( "고객님의 이름은" + name + "이고\n" + "입력하신 체질량 지수는" + bmi + "입니다\n"
