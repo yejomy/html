@@ -4,25 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        *{margin:0; padding:0;}
-        div{
-            width: 513px;
-            border: 5px solid #000;
-            background-color: #fea500;
-            padding:28px 0px 20px 0px;
-        }
-        div p{margin-top:28px;}
-    </style>
 </head>
 <body>
-    <div>
-        <h1>애국가</h1>
-        <p>동해물과 백두산이 마르고 닳도록 <br>
-            하느님이 보우하사 우리나라 만세 <br>
-            무궁화 삼천리 화려강산 <br>
-            대한사람 대한으로 길이보전하세
-        </p>
-    </div>
+    <script>
+        let num = prompt("번호를 입력하세요")
+        let name = prompt("이름을 입력하세요")
+        let krn = prompt("국어점수를 입력하세요")
+        let eng = prompt("영어점수를 입력하세요")
+        let math = prompt("수학점수를 입력하세요")
+
+        let total = Number(krn) + Number(eng) + Number(math)
+        let ever = total / 3    // ← total로 수정!
+
+        alert(
+            num + "번\n" +
+            name + "님\n" +
+            "국어점수: " + krn + "\n" +
+            "영어점수: " + eng + "\n" +
+            "수학점수: " + math + "\n" +
+            "총점: " + total + "점\n" +
+            "평균: " + ever + "점"
+        )
+    </script>
 </body>
 </html>
