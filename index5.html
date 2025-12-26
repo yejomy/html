@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>if문 응용문제 성년 미성년자 구분</title>
+</head>
+<body>
+<script>
+    let name = prompt("성함을 입력해주세요")
+    let age = prompt("나이를 입력해주세요")
+
+    let res = ''
+
+    if (age >= 19){
+        res = "성인"
+    }else{
+        res = "미성년자"
+    }
+
+    alert(name + "님의 나이는 " + age + "세 이고 " + res + "입니다.")
+</script>
+
+</html>
