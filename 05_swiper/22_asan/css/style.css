@@ -1,0 +1,34 @@
+@charset "utf-8"
+body
+{font-family: "맑은고딕", "algun gothic", sans-serif;}
+*{margin: 0; padding: 0;}
+button{border: none;}
+li{list-style: none;}
+a{text-decoration: none;}
+
+.header
+{
+    width: 100%;
+    height: 45px;
+    background-color: #33353f;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header button img
+{
+    width: 45px;
+}
+.header h1 a img
+{ 
+    width: 90px;
+}
+
+/* swiper */
+.swiper
+{
+    width: 100%;
+}
+.swiper img{
+    width: 100%;
+}
