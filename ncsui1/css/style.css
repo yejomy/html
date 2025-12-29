@@ -13,13 +13,13 @@ body{
   color:var(--brand);
 }
 
-/* 전체 화면 중앙 정렬 + 하단 CTA 공간 확보 */
+/* 전체 화면 중앙 정렬 */
 .screen{
-  min-height:100svh;
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  padding: env(safe-area-inset-top) 18px calc(env(safe-area-inset-bottom) + 110px);
+  padding: env(safe-area-inset-top) 18px env(safe-area-inset-bottom);
 }
 
 .center{
@@ -45,30 +45,18 @@ body{
   color:var(--text-sub);
 }
 
-/* 하단 고정 CTA */
-.cta{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:16px;
-  background:#ffffffee;
-  backdrop-filter:blur(8px);
+/* 로딩 텍스트 */
+.loading{
+  margin-top:24px;
+  font-size:14px;
+  color:var(--brand);
+  letter-spacing:2px;
+  animation: blink 1.4s infinite;
 }
 
-.cta button{
-  width:100%;
-  padding:16px;
-  font-size:16px;
-  font-weight:800;
-  color:#fff;
-  background:var(--brand);
-  border:none;
-  border-radius:14px;
-  cursor:pointer;
-}
-
-.cta button:active{
-  transform:scale(0.99);
-  opacity:.92;
+/* 깜빡이는 로딩 효과 */
+@keyframes blink{
+  0%{ opacity:0.2; }
+  50%{ opacity:1; }
+  100%{ opacity:0.2; }
 }
