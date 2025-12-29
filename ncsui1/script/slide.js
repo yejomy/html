@@ -21,4 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.start-button').addEventListener('click', () => {
     window.location.href = 'https://www.naver.com';
   });
+
+  setTimeout(function(){
+    window.location.href = "./slide.html";
+  }, 5000);
+
 });
