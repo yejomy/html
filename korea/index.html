@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한국화장품</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -64,9 +65,44 @@
             </li>
             <li><a href="#">대리점/뷰티마스터 모집</a></li>
         </ul>
-    <!-- 메인 비쥬얼 영역 -->
+
+        <div class="swiper">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    <div class="swiper-slide"><img src="./images/slider09.jpg" alt="슬라이드이미지1"></div>
+    <div class="swiper-slide"><img src="./images/slider11.jpg" alt="슬라이드이미지2"></div>
+    <div class="swiper-slide"><img src="./images/slider13.jpg" alt="슬라이드이미지3"></div>
+    <div class="swiper-slide"><img src="./images/slider14.jpg" alt="슬라이드이미지4"></div>
+    <div class="swiper-slide"><img src="./images/slider15.jpg" alt="슬라이드이미지5"></div>
+  </div>
+
+  
+  <!-- If we need pagination  -->
+  <!-- 페이지네이션 + 일시정지 버튼 -->
+  <div class="visual-controls">
+ <div class="swiper-pagination"></div>
+    <button type="button" class="swiper-toggle" aria-label="슬라이드 일시정지">❚❚</button>
+  </div>
+
+
+  
+
+  <!-- If we need navigation buttons -->
+  <!-- <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div> -->
+
+  <!-- If we need scrollbar -->
+  <!-- <div class="swiper-scrollbar"></div> -->
+</div>
+
+    <!-- 메인 비쥬얼 영역
     <div class="visual">
         <img src="./images/main.jpg" alt="메인화면">
-    </div>
+    </div> -->
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>

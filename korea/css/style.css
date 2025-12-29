@@ -51,6 +51,7 @@ a{text-decoration: none;}
     align-items: center;
     gap: 70px;
     position: relative;
+    z-index: 100;
 }
 
 .gnb>li>a
@@ -71,21 +72,6 @@ a{text-decoration: none;}
 }
 
 
-/* 비쥬얼박스 */
-.visual
-{
-    width: 1360px;
-    height: 610px;
-    margin: 0 auto;
-}
-
-.visual img
-{
-    width: 100%;
-    height: 100%;
-}
-
-
 /* 2차메뉴 디자인*/
 
 .gnb >li>.depth2
@@ -101,6 +87,7 @@ a{text-decoration: none;}
     gap: 63px;
     justify-content: center;
     display: none;
+    z-index: 100;
 }
 
 .gnb>li:hover>.depth2
@@ -111,7 +98,8 @@ a{text-decoration: none;}
 .gnb >li>.depth2 li a
 {
     color: #838383;
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: lighter;
 }
 
 .gnb >li>.depth2 li:hover a
@@ -122,4 +110,71 @@ a{text-decoration: none;}
 .gnb>li:hover>.depth2
 {
     display: flex;
+}
+
+
+/* 슬라이드영역 */
+.swiper{
+    width: 1360px;
+    height: 610px;
+    margin: 0 auto;
+    position: relative; /* 컨트롤 위치 기준 */
+}
+
+.swiper-slide{
+    width: 1360px;
+    height: 610px;
+}
+
+.swiper-slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 오른쪽 아래 컨트롤 묶음 */
+.visual-controls{
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    z-index: 10;
+}
+
+/* 페이지네이션(동그라미) */
+.swiper-pagination{
+    position: static;          /* Swiper 기본 absolute 없앰 */
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.swiper-pagination-bullet{
+    width: 10px;
+    height: 10px;
+    background: #555;
+    opacity: 0.2;
+}
+
+.swiper-pagination-bullet-active{
+    opacity: 0.5;
+}
+
+/* 일시정지/재생 버튼 */
+.swiper-toggle{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    color: #444;
+    font-size: 15px;
+    line-height: 18px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.swiper-toggle:focus{
+    outline: none;
 }
