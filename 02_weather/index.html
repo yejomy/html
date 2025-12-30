@@ -1,0 +1,108 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>전세계 날씨 조회 (현재 위치 + 도시 검색)</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>전세계 날씨 조회</h1>
+        <div class="subtitle">
+          현재 위치 또는 도시 검색으로 <b>오늘의 날씨</b> / <b>풍속</b> / <b>습도</b> /
+          <b>대기질(AQI)</b>을 확인합니다.
+        </div>
+      </header>
+
+      <!-- 5) 검색바: 도시 검색 -->
+      <form id="searchForm" class="search" autocomplete="off">
+        <input
+          id="cityInput"
+          type="text"
+          placeholder="도시를 입력하세요 (예: Seoul, Tokyo, Paris)"
+        />
+        <button type="submit">검색</button>
+      </form>
+
+      <div class="toolbar">
+        <button id="btnMyLocation" type="button">내 위치로 다시 조회</button>
+        <span class="hint">* 브라우저 위치 권한 허용이 필요합니다.</span>
+      </div>
+
+      <!-- 4) 로딩 스피너 -->
+      <div id="spinner" class="spinner" aria-live="polite" aria-busy="true">
+        <div class="spin" aria-label="loading"></div>
+      </div>
+
+      <div id="errorBox" class="error"></div>
+
+      <!-- 결과 카드 -->
+      <div id="result" class="card" style="display: none">
+        <div class="row">
+          <div>
+            <div class="label">현재 위치/도시</div>
+            <div id="place" class="place">-</div>
+            <div id="coords" class="meta">-</div>
+            <div id="updatedAt" class="meta">업데이트: -</div>
+          </div>
+          <img id="icon" class="icon" alt="weather" />
+        </div>
+
+        <div class="grid">
+          <!-- 6) 오늘의 날씨 -->
+          <div class="panel">
+            <div class="label">오늘의 날씨</div>
+            <div id="temp" class="value">-</div>
+            <div id="desc" class="desc">-</div>
+            <div id="feels" class="subvalue">체감 -</div>
+          </div>
+
+          <!-- 풍속/습도 -->
+          <div class="panel">
+            <div class="label">바람 · 습도</div>
+            <div class="miniGrid">
+              <div class="mini">
+                <div class="label">풍속</div>
+                <div id="wind" class="value">-</div>
+              </div>
+              <div class="mini">
+                <div class="label">습도</div>
+                <div id="humidity" class="value">-</div>
+              </div>
+            </div>
+            <div id="sun" class="subvalue">일출 - · 일몰 -</div>
+          </div>
+
+          <!-- 대기질 -->
+          <div class="panel wide">
+            <div class="label">대기질</div>
+            <div class="aqiWrap">
+              <div class="pill">
+                <div class="label">AQI</div>
+                <div id="aqi" class="value">-</div>
+              </div>
+              <div class="pill">
+                <div class="label">PM2.5</div>
+                <div id="pm25" class="value">-</div>
+              </div>
+              <div class="pill">
+                <div class="label">PM10</div>
+                <div id="pm10" class="value">-</div>
+              </div>
+            </div>
+            <div class="footnote">
+              * AQI는 OpenWeather 기준(1~5)이며 국가/기관별 기준과 다를 수 있습니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>데이터 제공: OpenWeather (Current Weather / Geocoding / Air Pollution)</footer>
+    </div>
+
+    <script src="./js/main.js"></script>
+  </body>
+</html>

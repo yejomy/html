@@ -1,0 +1,411 @@
+@charset "UTF-8";
+
+/* =========================================================
+   ✅ 기본 배경 이미지 넣는 곳
+   - 폴더 구조 예시:
+     project/
+       index.html
+       style.css
+       app.js
+       assets/
+         default-bg.jpg   <-- 여기 넣기
+   - 아래 경로만 맞추면 끝
+   ========================================================= */
+:root{
+  --default-bg: url("../images/background.jpg"); /* ✅ 여기 바꾸면 기본배경 변경됨 */
+
+  /* ✅ 오버레이 강도 (JS에서 weather에 따라 숫자로 직접 세팅) */
+  --shade: 0.10;
+
+  /* 밝은 배경(화이트) 기본 그라데이션 */
+  --bg-grad-1: radial-gradient(1100px 800px at 15% 10%, rgba(255,255,255,0.92), transparent 60%);
+  --bg-grad-2: radial-gradient(900px 700px at 80% 25%, rgba(170,210,255,0.55), transparent 65%);
+  --bg-grad-3: linear-gradient(160deg, rgba(245,250,255,0.95), rgba(210,235,255,0.65), rgba(255,255,255,0.50));
+
+  --text-dark: rgba(10,12,16,0.92);
+  --muted-dark: rgba(10,12,16,0.60);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif;
+  overflow-x:hidden;
+  color: var(--text-dark);
+}
+
+/* ✅ 배경 레이어(2장 교차 전환) */
+.bg{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--bg-grad-1), var(--bg-grad-2), var(--bg-grad-3), var(--default-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  transform: scale(1.02);
+  filter: saturate(1.05) contrast(1.03) blur(0px);
+  opacity: 0;
+
+  transition:
+    opacity 520ms ease,
+    transform 900ms ease,
+    filter 900ms ease;
+}
+
+.bg.is-active{
+  opacity: 1;
+}
+
+/* ✅ 배경 전환 시: 들어오는 레이어에 줌/블러 효과 */
+.bg.is-enter{
+  opacity: 1;
+  transform: scale(1.08);
+  filter: saturate(1.05) contrast(1.03) blur(14px);
+}
+
+/* 애니메이션 캔버스 */
+.fx{
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ✅ 오버레이(날씨에 따라 진하기 변경) */
+.shade{
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 700px at 70% 20%, rgba(255,255,255,0.18), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,var(--shade)));
+  transition: background 260ms ease;
+}
+
+.container{
+  position: relative;
+  z-index: 3;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.header{ margin: 6px 0 18px; }
+
+.title{
+  margin:0;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+
+  /* 🔥 여기 */
+  color: rgba(89, 105, 121, 0.92);
+}
+
+.subtitle{
+  margin: 8px 0 16px;
+  font-size: 13px;
+  color: var(--muted-dark);
+}
+
+.search{
+  display: grid;
+  grid-template-columns: 1fr 92px;
+  gap: 12px;
+  align-items:center;
+}
+
+.search input{
+  height: 46px;
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.62);
+  padding: 0 16px;
+  outline: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.search input::placeholder{ color: rgba(0,0,0,0.35); }
+
+.search button{
+  height: 46px;
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.70);
+  cursor:pointer;
+  font-weight:700;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.toolbar{
+  margin-top: 10px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.toolbar button{
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.60);
+  cursor:pointer;
+  font-weight:600;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+    color: rgba(23, 17, 66, 0.88);
+}
+
+.hint{ font-size:12px; color: rgba(0,0,0,0.45); }
+
+/* 로딩/에러 */
+.spinner{
+  display:none;
+  justify-content:center;
+  align-items:center;
+  margin: 20px 0 8px;
+}
+.spinner.show{ display:flex; }
+
+.spin{
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 4px solid rgba(0,0,0,0.12);
+  border-top-color: rgba(0,0,0,0.55);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+.error{
+  display:none;
+  margin: 10px 0 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 80, 80, 0.12);
+  border: 1px solid rgba(255, 80, 80, 0.25);
+  color: rgba(120, 0, 0, 0.85);
+}
+.error.show{ display:block; }
+
+/* ===== 레이아웃 =====
+   왼쪽 big 카드가 오른쪽 전체(2줄)와 높이 맞도록 row span */
+.dashboard{
+  display:grid;
+  grid-template-columns: 420px 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* 카드 공통(다크 글래스 느낌, 스샷과 비슷하게) */
+.card{
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(30, 33, 40, 0.34);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255,255,255,0.92);
+}
+
+.label{ font-size:12px; color: rgba(255,255,255,0.65); }
+.meta{ margin-top:4px; font-size:12px; color: rgba(255,255,255,0.65); }
+
+.big{
+  grid-row: 1 / span 2; /* ✅ 오른쪽 두 줄 높이와 맞춤 */
+  padding: 16px;
+  height: 100%;
+}
+
+.cardTop{
+  display:flex;
+  justify-content: space-between;
+  gap:12px;
+}
+
+.place{
+  margin-top: 3px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.icon{
+  width: 62px;
+  height: 62px;
+  filter: drop-shadow(0 12px 20px rgba(0,0,0,0.25));
+}
+
+.divider{
+  margin: 12px 0;
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+}
+
+.today .temp{
+  margin-top: 10px;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.desc{
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.86);
+  text-transform: capitalize;
+}
+
+/* 오른쪽: 2줄 구성(상단 차트 + 하단 2박스) */
+.right{
+  display:grid;
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+}
+
+/* 박스 */
+.box{
+  padding: 16px;
+  min-height: 140px;
+}
+.boxTitle{
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* 차트 박스는 밝은 카드(이미지처럼) */
+.lightBox{
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(0,0,0,0.06);
+  color: rgba(0,0,0,0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+}
+.darkTitle{ color: rgba(0,0,0,0.78); }
+.darkMeta{ color: rgba(0,0,0,0.55); }
+
+/* 하단 2개 박스 */
+.row2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 바람/습도, 대기질 내부 셀 */
+.kv{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.kvItem{
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 10px 12px;
+}
+.kvValue{
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+/* ✅ 시간대별 차트 */
+.hourlyChart{
+  margin-top: 10px;
+  height: 96px;
+  display:grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+  align-items: end;
+}
+
+.bar{
+  border-radius: 14px;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.barFill{
+  width: 100%;
+  height: 100%;
+  background: rgba(60,130,255,0.30);
+}
+.barVal{
+  position:absolute;
+  top: 6px;
+  left:0; right:0;
+  text-align:center;
+  font-size: 11px;
+  font-weight: 900;
+  color: rgba(0,0,0,0.70);
+}
+
+.hourlyLabels{
+  margin-top: 8px;
+  display:grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+  font-size: 11px;
+  color: rgba(0,0,0,0.55);
+  text-align:center;
+}
+
+.footer{
+  margin-top: 14px;
+  font-size: 12px;
+  color: rgba(0,0,0,0.55);
+}
+
+/* 반응형 */
+@media (max-width: 980px){
+  .dashboard{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .big{ grid-row: auto; }
+  .right{ grid-template-rows: auto auto; }
+  .row2{ grid-template-columns: 1fr; }
+  .search{ grid-template-columns: 1fr; }
+}
+
+/* ✅ 시간대별 기온 박스도 다른 카드처럼 다크 글래스로 */
+.lightBox{
+  background: rgba(30, 33, 40, 0.34) !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  color: rgba(255,255,255,0.92) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.22) !important;
+}
+
+/* 제목/설명도 흰 톤으로 */
+.darkTitle{ color: rgba(255,255,255,0.92) !important; }
+.darkMeta{ color: rgba(255,255,255,0.65) !important; }
+
+/* 차트 색도 다크 카드에 맞게 */
+.bar{
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+}
+.barFill{
+  background: rgba(255,255,255,0.22) !important;
+}
+.barVal{
+  color: rgba(255,255,255,0.85) !important;
+}
+.hourlyLabels{
+  color: rgba(255,255,255,0.65) !important;
+}
