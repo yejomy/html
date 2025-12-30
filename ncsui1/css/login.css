@@ -1,225 +1,180 @@
 @charset "utf-8";
 
-/* 리셋 & 기본 */
-* {
-  box-sizing: border-box;
+:root{
+  --blue:#0b66b2;
+  --blue-2:#2f7cc0;
+  --light:#9bbfe2;
+  --line:#cfe3f6;
+  --text:#0f2a3a;
+  --bg:#ffffff;
+  --radius:10px;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Noto Sans KR", system-ui, sans-serif;
-  background-color: #f5f8fc;
-  color: #004c92;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* 전체 레이아웃 */
-.page-wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
+/* 화면 중앙 정렬 + 모바일 비율 느낌 */
+.screen{
+  min-height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:22px 16px 26px;
 }
 
-.login-card {
-  width: 100%;
-  max-width: 375px; /* 시안 기준 */
-  background-color: #ffffff;
-  padding: 32px 24px 40px;
-  border-radius: 8px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+.card{
+  width:min(420px, 100%);
+  padding:10px 6px 0;
 }
 
-/* 브랜드 로고 */
-.brand {
-  text-align: center;
-  margin-bottom: 32px;
+/* 로고 */
+.brand{
+  display:flex;
+  justify-content:center;
+  margin:14px 0 18px;
+}
+.brand__logo{
+  width:min(270px, 78vw);
+  height:auto;
+  display:block;
 }
 
-.brand-logo img {
-  max-width: 220px;
-  width: 100%;
-  height: auto;
+/* 폼 */
+.form{
+  width:100%;
+  padding:0 8px;
 }
 
-/* 폼 영역 */
-.login-main {
-  display: flex;
-  flex-direction: column;
+.field{
+  display:block;
+  margin:14px 0 18px;
+}
+.field__label{
+  display:block;
+  font-size:14px;
+  color:var(--light);
+  margin:0 0 6px;
+}
+.field__input{
+  width:100%;
+  border:none;
+  outline:none;
+  font-size:16px;
+  padding:8px 2px 10px;
+  background:transparent;
+  color:var(--text);
+}
+.field__input::placeholder{
+  color:var(--light);
+  opacity:1;
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.field__line{
+  display:block;
+  width:100%;
+  height:1px;
+  background:var(--line);
+  margin-top:4px;
+  transition:background .2s, height .2s;
+}
+.field:focus-within .field__line{
+  background:var(--blue-2);
+  height:2px;
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
+/* 버튼 */
+.btn{
+  width:100%;
+  height:52px;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  margin:10px 0;
 }
 
-.input-label {
-  font-size: 13px;
-  color: #8fb3da;
-  margin-bottom: 4px;
+.btn--primary{
+  border:none;
+  background:var(--blue);
+  color:#fff;
+  box-shadow: 0 2px 0 rgba(0,0,0,.06);
+}
+.btn--primary:active{ transform: translateY(1px); }
+
+.btn--outline{
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--blue);
 }
 
-.input-group input {
-  border: none;
-  border-bottom: 1px solid #d2e1f4;
-  padding: 6px 0 10px;
-  font-size: 15px;
-  outline: none;
-  color: #004c92;
+/* 링크 줄 */
+.links{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin:12px 0 14px;
+  font-size:13px;
+}
+.links__item{
+  color:var(--light);
+  text-decoration:none;
+}
+.links__item:hover{ color:var(--blue-2); }
+.links__sep{
+  color:var(--light);
+  opacity:.8;
 }
 
-.input-group input::placeholder {
-  color: #c0cee3;
+/* 구분선 */
+.divider{
+  height:1px;
+  background:var(--line);
+  margin:18px 0 10px;
 }
 
-.input-group input:focus {
-  border-bottom-color: #0072ce;
+/* 간편 로그인 */
+.social__title{
+  text-align:center;
+  color:var(--light);
+  font-size:13px;
+  margin:0 0 12px;
 }
 
-/* 버튼 영역 */
-.button-group {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.social{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:26px;
+  padding:6px 0 24px;
 }
 
-.btn {
-  width: 100%;
-  padding: 12px 0;
-  font-size: 15px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease,
-    border-color 0.2s ease;
+.social__btn{
+  width:44px;
+  height:44px;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  transition: transform .12s ease, background .12s ease;
+}
+.social__btn:hover{
+  background:rgba(11,102,178,.06);
+}
+.social__btn:active{
+  transform:scale(.96);
 }
 
-.btn-primary {
-  background-color: #0072ce;
-  color: #ffffff;
-}
-
-.btn-primary:hover {
-  background-color: #005ea6;
-}
-
-.btn-secondary {
-  background-color: #ffffff;
-  color: #0072ce;
-  border-color: #0072ce;
-}
-
-.btn-secondary:hover {
-  background-color: #e9f3ff;
-}
-
-/* 하단 링크 */
-.help-links {
-  margin-top: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #9cb3d2;
-}
-
-.help-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.help-link:hover {
-  text-decoration: underline;
-}
-
-.divider {
-  color: #d2e1f4;
-}
-
-/* 간편 로그인 텍스트 + 라인 */
-.easy-login-wrap {
-  margin-top: 26px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.easy-login-line {
-  flex: 1;
-  height: 1px;
-  background-color: #e2ebf7;
-}
-
-.easy-login-text {
-  font-size: 12px;
-  color: #9cb3d2;
-  white-space: nowrap;
-}
-
-/* 소셜 로그인 아이콘 영역 */
-.social-login {
-  margin-top: 16px;
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-}
-
-/* 공통 버튼 스타일 */
-.social-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.social-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-}
-
-/* SVG 공통 */
-.social-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* 개별 색상은 SVG 안에서 이미 지정되어 있음
-   여기서는 배경 투명 처리만 해도 됨 */
-.social-kakao,
-.social-naver,
-.social-google,
-.social-facebook {
-  background: transparent;
-}
-
-/* 반응형 */
-@media (max-width: 400px) {
-  .login-card {
-    padding: 24px 18px 32px;
-  }
-}
-
-@media (min-width: 768px) {
-  .login-card {
-    border-radius: 16px;
-  }
+/* 데스크탑에서 너무 헐렁하지 않게 */
+@media (min-width: 768px){
+  .screen{ align-items:center; }
+  .card{ padding:22px 14px 8px; }
 }

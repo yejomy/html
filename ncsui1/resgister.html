@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CAMBAK - 회원가입</title>
+  <link rel="stylesheet" href="./css/resgister.css" />
+</head>
+<body>
+  <main class="screen">
+    <section class="card" aria-label="CAMBAK 회원가입">
+
+      <!-- 로고 -->
+      <div class="brand" role="img" aria-label="CAMBAK">
+        <img class="brand__logo" src="./images/logo.png" alt="CAMBAK" />
+      </div>
+
+      <form class="form" id="signupForm" novalidate>
+
+        <label class="field">
+          <span class="field__label">아이디</span>
+          <input class="field__input" type="text" name="username" placeholder="아이디 입력" required />
+          <span class="field__line"></span>
+        </label>
+
+        <label class="field">
+          <span class="field__label">이메일</span>
+          <input class="field__input" type="email" name="email" placeholder="example@email.com" required />
+          <span class="field__line"></span>
+        </label>
+
+        <label class="field">
+          <span class="field__label">비밀번호</span>
+          <input class="field__input" type="password" name="password" placeholder="비밀번호 입력" required />
+          <span class="field__line"></span>
+        </label>
+
+        <label class="field">
+          <span class="field__label">비밀번호 확인</span>
+          <input class="field__input" type="password" name="passwordConfirm" placeholder="비밀번호 다시 입력" required />
+          <span class="field__line"></span>
+        </label>
+
+        <!-- 약관 동의 -->
+        <label class="agree">
+          <input type="checkbox" name="agree" />
+          <span>이용약관 및 개인정보 처리방침에 동의합니다</span>
+        </label>
+
+        <button class="btn btn--primary" type="submit">회원가입</button>
+        <button class="btn btn--outline" type="button" id="goLogin">로그인으로</button>
+
+      </form>
+    </section>
+  </main>
+
+  <script src="./script/resgister.js"></script>
+</body>
+</html>
