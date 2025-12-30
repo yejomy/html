@@ -19,61 +19,69 @@
   });
 
   // Bottom sheet
-  const dim = document.getElementById("sheetDim");
-  const sheet = document.getElementById("sheet");
-  const closeBtn = document.getElementById("closeBtn");
-  const routeBtn = document.getElementById("routeBtn");
+const dim = document.getElementById("sheetDim");
+const sheet = document.getElementById("sheet");
+const closeBtn = document.getElementById("closeBtn");
+const routeBtn = document.getElementById("routeBtn"); // ✅ 이거 반드시 있어야 함
 
-  const sheetTitle = document.getElementById("sheetTitle");
-  const sheetAddr = document.getElementById("sheetAddr");
-  const sheetImg = document.getElementById("sheetImg");
+const sheetTitle = document.getElementById("sheetTitle");
+const sheetAddr = document.getElementById("sheetAddr");
+const sheetImg = document.getElementById("sheetImg");
 
-  const bookmarkBtn = document.getElementById("bookmarkBtn");
-  const bookmarkIcon = document.getElementById("bookmarkIcon");
-  let bookmarked = false;
+const bookmarkBtn = document.getElementById("bookmarkBtn");
+const bookmarkIcon = document.getElementById("bookmarkIcon");
+let bookmarked = false;
 
-  function openSheet({ title, addr, img }) {
-    sheetTitle.textContent = title || "테마별 카테고리";
-    sheetAddr.textContent = addr || "";
-    if (img) sheetImg.src = img;
+function openSheet({ title, addr, img }) {
+  sheetTitle.textContent = title || "테마별 카테고리";
+  sheetAddr.textContent = addr || "";
+  if (img) sheetImg.src = img;
 
-    dim.hidden = false;
-    sheet.classList.add("is-open");
-    sheet.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
+  dim.hidden = false;
+  sheet.classList.add("is-open");
+  sheet.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
 
-  function closeSheet() {
-    sheet.classList.remove("is-open");
-    sheet.setAttribute("aria-hidden", "true");
-    dim.hidden = true;
-    document.body.style.overflow = "";
-  }
+function closeSheet() {
+  sheet.classList.remove("is-open");
+  sheet.setAttribute("aria-hidden", "true");
+  dim.hidden = true;
+  document.body.style.overflow = "";
+}
 
-document.querySelectorAll("[data-open-sheet='true']").forEach(el => {
+document.querySelectorAll("[data-open-sheet='true']").forEach((el) => {
   el.addEventListener("click", () => {
-    // ✅ 클릭한 카드 안의 이미지 src를 그대로 가져옴
     const clickedImg = el.querySelector("img");
     const src = clickedImg ? clickedImg.getAttribute("src") : "";
 
     openSheet({
       title: el.dataset.title,
       addr: el.dataset.addr,
-      img: src // ✅ 여기! dataset.img 말고 실제 클릭 이미지
+      img: src
     });
   });
 });
-  dim.addEventListener("click", closeSheet);
-  closeBtn.addEventListener("click", closeSheet);
 
-  routeBtn.addEventListener("click", () => {
-    alert("길찾기 (예시) — 지도/네비 연동은 여기서 처리");
-  });
+dim.addEventListener("click", closeSheet);
+closeBtn.addEventListener("click", closeSheet);
 
-  bookmarkBtn.addEventListener("click", () => {
-    bookmarked = !bookmarked;
-    bookmarkIcon.textContent = bookmarked ? "★" : "☆";
-  });
+// ✅ 길찾기: alert 제거하고 구글지도로만 이동
+routeBtn.addEventListener("click", () => {
+  const addr = (sheetAddr.textContent || "").trim();
+  if (!addr) return;
+
+  // 원하면 시트 닫고 이동
+  // closeSheet();
+
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addr)}`;
+  window.open(url, "_blank");
+});
+
+bookmarkBtn.addEventListener("click", () => {
+  bookmarked = !bookmarked;
+  bookmarkIcon.textContent = bookmarked ? "★" : "☆";
+});
 
   // 카테고리 클릭(예시)
   document.querySelectorAll(".cat").forEach(btn => {

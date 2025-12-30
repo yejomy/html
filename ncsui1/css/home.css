@@ -26,9 +26,23 @@ button{font:inherit}
 .app{min-height:100%}
 
 /* ===================== HERO ===================== */
+
 .hero{
   position:relative;
+  width:100%;
+  aspect-ratio: 16 / 9;   /* ✅ 여기 비율만 배너에 맞게 */
+  overflow:hidden;
 }
+
+.hero__bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit: cover;      /* 비율이 같으면 cover여도 안 잘림 */
+  display:block;
+}
+
 
 .hero::after{
   content:"";
