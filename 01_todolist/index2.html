@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#b98cff" />
   <title>하루하나</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/style2.css" />
 </head>
 <body>
 
@@ -13,6 +13,7 @@
        LINE ICONS (NO EMOJI)
        ========================= -->
   <svg class="icon-sprite" width="0" height="0" style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+
     <symbol id="i-logo" viewBox="0 0 24 24">
       <path d="M6 3.5h9.8a2.2 2.2 0 0 1 2.2 2.2v12.6a2.2 2.2 0 0 1-2.2 2.2H6A2.2 2.2 0 0 1 3.8 20.3V5.7A2.2 2.2 0 0 1 6 3.5z"
             fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
@@ -73,15 +74,21 @@
   </svg>
 
   <div class="app">
-<div class="logo-wrap">
-  <div class="logo"></div>
-  <div class="logo-text"></div>
-</div>
-    <!-- Top -->
+
+    <!-- ==========================
+         LOGO CENTERED
+         ========================== -->
+    <div class="logo-wrap">
+      <div class="logo"></div>
+      <div class="logo-text"></div>
+    </div>
+
+    <!-- ==========================
+         TOP AREA
+         ========================== -->
     <header class="top">
       <div class="top-left">
         <div class="brand">
-          <!-- <svg class="icon icon-logo" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-logo"></use></svg> -->
           <div class="brand-text">
             <div class="brand-title">To do list</div>
             <div class="brand-sub">오늘할일</div>
@@ -91,7 +98,7 @@
       </div>
 
       <div class="top-right">
-        <div class="progress-pill" title="오늘 진행률">
+        <div class="progress-pill">
           <div class="ring" id="ring" style="--p:0%">0%</div>
           <div class="progress-text">
             <div class="progress-sub">today</div>
@@ -101,117 +108,125 @@
       </div>
     </header>
 
-    <!-- Search row -->
+    <!-- ==========================
+         SEARCH BAR
+         ========================== -->
     <section class="row row-search">
       <div class="search">
-        <svg class="icon icon-soft" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"></use></svg>
-        <input id="search" placeholder="검색" inputmode="search" />
+        <svg class="icon icon-soft"><use href="#i-search"></use></svg>
+        <input id="search" placeholder="검색" />
       </div>
 
-      <button class="pill-btn pill-icon" id="calendarBtn" type="button" aria-label="캘린더">
-        <svg class="icon icon-soft" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"></use></svg>
+      <button class="pill-btn pill-icon" id="calendarBtn">
+        <svg class="icon icon-soft"><use href="#i-calendar"></use></svg>
       </button>
 
-      <button class="pill-btn" id="toggleFilters" type="button" aria-expanded="true" aria-controls="filters">
-        <span class="mini-purple" aria-hidden="true"></span>
+      <button class="pill-btn" id="toggleFilters">
+        <span class="mini-purple"></span>
         필터
       </button>
 
-      <button class="pill-btn pill-icon" id="moreBtn" type="button" aria-label="더보기">
-        <svg class="icon icon-soft" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-more"></use></svg>
+      <button class="pill-btn pill-icon" id="moreBtn">
+        <svg class="icon icon-soft"><use href="#i-more"></use></svg>
       </button>
     </section>
 
-    <!-- Tabs -->
-    <section class="row">
-      <div class="tabs" role="tablist" aria-label="보기">
-        <button class="tab active" data-tab="today" type="button" role="tab" aria-selected="true">오늘</button>
-        <button class="tab" data-tab="all" type="button" role="tab" aria-selected="false">전체</button>
-        <button class="tab" data-tab="done" type="button" role="tab" aria-selected="false">완료</button>
+    <!-- ==========================
+         ⭐⭐⭐ NEW FULL-WIDTH TAB BAR
+         ========================== -->
+    <section class="tab-container">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="today">오늘</button>
+        <button class="tab" data-tab="all">전체</button>
+        <button class="tab" data-tab="done">완료</button>
       </div>
     </section>
 
-    <!-- ✅ FILTERS: Custom gradient dropdowns -->
+    <!-- FILTERS -->
     <section class="row selects" id="filters" style="display:flex">
       <div class="dd" data-dd="sort">
-        <button class="dd-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <button class="dd-btn" type="button">
           <span class="dd-label" id="sortLabel">정렬: 스마트</span>
-          <span class="dd-caret" aria-hidden="true">▾</span>
+          <span class="dd-caret">▾</span>
         </button>
-        <div class="dd-menu" role="listbox">
-          <button class="dd-item" type="button" role="option" data-value="smart">정렬: 스마트</button>
-          <button class="dd-item" type="button" role="option" data-value="due">정렬: 마감일</button>
-          <button class="dd-item" type="button" role="option" data-value="priority">정렬: 우선순위</button>
-          <button class="dd-item" type="button" role="option" data-value="newest">정렬: 최신</button>
+        <div class="dd-menu">
+          <button class="dd-item" data-value="smart">정렬: 스마트</button>
+          <button class="dd-item" data-value="due">정렬: 마감일</button>
+          <button class="dd-item" data-value="priority">정렬: 우선순위</button>
+          <button class="dd-item" data-value="newest">정렬: 최신</button>
         </div>
       </div>
 
       <div class="dd" data-dd="prio">
-        <button class="dd-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <button class="dd-btn">
           <span class="dd-label" id="prioLabel">우선순위: 전체</span>
-          <span class="dd-caret" aria-hidden="true">▾</span>
+          <span class="dd-caret">▾</span>
         </button>
-        <div class="dd-menu" role="listbox">
-          <button class="dd-item" type="button" role="option" data-value="">우선순위: 전체</button>
-          <button class="dd-item" type="button" role="option" data-value="high">우선순위: 높음</button>
-          <button class="dd-item" type="button" role="option" data-value="med">우선순위: 보통</button>
-          <button class="dd-item" type="button" role="option" data-value="low">우선순위: 낮음</button>
+        <div class="dd-menu">
+          <button class="dd-item" data-value="">우선순위: 전체</button>
+          <button class="dd-item" data-value="high">우선순위: 높음</button>
+          <button class="dd-item" data-value="med">우선순위: 보통</button>
+          <button class="dd-item" data-value="low">우선순위: 낮음</button>
         </div>
       </div>
 
       <div class="dd" data-dd="dueQuick">
-        <button class="dd-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <button class="dd-btn">
           <span class="dd-label" id="dueLabel">기한: 전체</span>
-          <span class="dd-caret" aria-hidden="true">▾</span>
+          <span class="dd-caret">▾</span>
         </button>
-        <div class="dd-menu" role="listbox">
-          <button class="dd-item" type="button" role="option" data-value="">기한: 전체</button>
-          <button class="dd-item" type="button" role="option" data-value="today">기한: 오늘</button>
-          <button class="dd-item" type="button" role="option" data-value="tomorrow">기한: 내일</button>
-          <button class="dd-item" type="button" role="option" data-value="overdue">기한: 지남</button>
-          <button class="dd-item" type="button" role="option" data-value="none">기한: 없음</button>
+        <div class="dd-menu">
+          <button class="dd-item" data-value="">기한: 전체</button>
+          <button class="dd-item" data-value="today">기한: 오늘</button>
+          <button class="dd-item" data-value="tomorrow">기한: 내일</button>
+          <button class="dd-item" data-value="overdue">기한: 지남</button>
+          <button class="dd-item" data-value="none">기한: 없음</button>
         </div>
       </div>
     </section>
 
-    <!-- List -->
+    <!-- LIST -->
     <main id="list" class="list"></main>
 
     <div class="tip">
-     Tip: 아래 바에서 바로 추가 가능. 캘린더에서 “언제 무엇을 썼는지” 확인 가능.
+      Tip: 아래 바에서 바로 추가 가능. 캘린더에서 “언제 무엇을 썼는지” 확인 가능.
     </div>
+
   </div>
 
-  <!-- Bottom bar -->
+  <!-- ==========================
+       BOTTOM BAR
+       ========================== -->
   <div class="bottom-bar">
     <div class="bottom-inner">
       <div class="quickbox">
-        <svg class="icon icon-soft" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"></use></svg>
+        <svg class="icon icon-soft"><use href="#i-plus"></use></svg>
         <input id="quickTitle" placeholder="할 일 추가..." />
       </div>
-      <button class="add-btn" id="openSheet" type="button">추가</button>
+      <button class="add-btn" id="openSheet">추가</button>
     </div>
   </div>
 
-  <!-- Sheet -->
-  <div class="sheet-backdrop" id="backdrop" aria-hidden="true"></div>
-  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <div class="grab" aria-hidden="true"></div>
+  <!-- SHEET + DIALOGS (원본 그대로) -->
+  <div class="sheet-backdrop" id="backdrop"></div>
+
+  <div class="sheet" id="sheet" role="dialog">
+    <div class="grab"></div>
 
     <div class="sheet-head">
       <div>
         <div class="sheet-title" id="sheetTitle">할 일 추가</div>
         <div class="sheet-sub" id="sheetDesc">제목/우선순위/마감일을 설정할 수 있어요.</div>
       </div>
-      <button class="pill-btn pill-icon" id="closeSheet" type="button" aria-label="닫기">
-        <svg class="icon icon-soft" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-more"></use></svg>
+      <button class="pill-btn pill-icon" id="closeSheet">
+        <svg class="icon icon-soft"><use href="#i-more"></use></svg>
       </button>
     </div>
 
     <form id="form" class="form">
       <div class="field">
         <label for="title">제목</label>
-        <input id="title" type="text" placeholder="예: 운동 30분" maxlength="120" required />
+        <input id="title" type="text" required />
       </div>
 
       <div class="grid">
@@ -244,29 +259,29 @@
           <label for="remind">리마인더</label>
           <div class="switch-row">
             <div class="switch-note">열려있을 때만</div>
-            <div class="switch" id="remind" role="switch" aria-checked="false" tabindex="0"></div>
+            <div class="switch" id="remind" role="switch"></div>
           </div>
         </div>
       </div>
 
       <div class="sheet-actions">
-        <button type="submit" class="add-btn" style="flex:1">저장</button>
-        <button type="button" class="pill-btn danger" id="deleteBtn" style="display:none">삭제</button>
+        <button type="submit" class="add-btn">저장</button>
+        <button type="button" class="pill-btn danger" id="deleteBtn">삭제</button>
       </div>
     </form>
   </div>
 
-  <!-- Calendar -->
+  <!-- CALENDAR DIALOG -->
   <dialog id="calendarDialog" class="cal-dialog">
     <div class="cal-head">
       <div class="cal-title">캘린더</div>
-      <button class="pill-btn pill-icon" id="calClose" type="button" aria-label="닫기">닫기</button>
+      <button class="pill-btn pill-icon" id="calClose">닫기</button>
     </div>
 
     <div class="cal-monthbar">
-      <button class="pill-btn pill-icon" id="calPrev" type="button" aria-label="이전달">‹</button>
+      <button class="pill-btn pill-icon" id="calPrev">‹</button>
       <div class="cal-month" id="calMonthText"></div>
-      <button class="pill-btn pill-icon" id="calNext" type="button" aria-label="다음달">›</button>
+      <button class="pill-btn pill-icon" id="calNext">›</button>
     </div>
 
     <div class="cal-weekdays">
@@ -281,28 +296,28 @@
     </div>
   </dialog>
 
-  <!-- More -->
+  <!-- MORE DIALOG -->
   <dialog id="moreDialog" class="more-dialog">
     <div class="more-head">
       <div>
         <div class="more-title">더보기</div>
         <div class="more-sub">백업/복원, 알림 권한</div>
       </div>
-      <button class="pill-btn" id="closeMore" type="button">닫기</button>
+      <button class="pill-btn" id="closeMore">닫기</button>
     </div>
 
     <div class="more-body">
-      <button class="pill-btn" id="exportBtn" type="button">JSON 내보내기</button>
-      <label class="pill-btn" for="importFile" style="cursor:pointer">JSON 가져오기</label>
+      <button class="pill-btn" id="exportBtn">JSON 내보내기</button>
+      <label class="pill-btn" for="importFile">JSON 가져오기</label>
       <input id="importFile" type="file" accept="application/json" class="sr-only" />
 
-      <button class="pill-btn" id="notifyBtn" type="button">알림 권한 요청</button>
-      <button class="pill-btn" id="testNotifyBtn" type="button">테스트 알림</button>
+      <button class="pill-btn" id="notifyBtn">알림 권한 요청</button>
+      <button class="pill-btn" id="testNotifyBtn">테스트 알림</button>
 
-      <button class="pill-btn danger" id="clearDoneBtn" type="button">완료 항목 정리</button>
+      <button class="pill-btn danger" id="clearDoneBtn">완료 항목 정리</button>
     </div>
   </dialog>
 
-  <script src="./js/main.js"></script>
+  <script src="./js/main2.js"></script>
 </body>
 </html>

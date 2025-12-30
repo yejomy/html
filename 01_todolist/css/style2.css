@@ -17,7 +17,7 @@
   --orange:#ffb35a;
   --orange2:#ffcc6d;
 
-  --bd: rgba(29, 28, 28, 0.08);
+  --bd: rgba(0,0,0,.08);
   --shadow: 0 18px 55px rgba(0,0,0,.15);
   --shadow2: 0 10px 30px rgba(0,0,0,.12);
 
@@ -47,14 +47,32 @@ body{
   padding: calc(18px + var(--safe-top)) 16px calc(110px + var(--safe-bottom));
 }
 
-.logo{
-    width: 120px;
-    height: 40px;
-    background: url(../images/logo2.png);
-    text-indent: -99999px;
+/* ==========================
+   중앙 로고 래퍼
+   ========================== */
+.logo-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:16px;
 }
 
-/* icons: subtle */
+.logo{
+  width:120px;
+  height:40px;
+  background:url(../images/logo2.png) center/contain no-repeat;
+  text-indent:-99999px;
+}
+
+.logo-text{
+  margin-top:6px;
+  font-size:18px;
+  font-weight:900;
+  color:#fff;
+}
+
+/* icons */
 .icon{width:18px;height:18px;display:inline-block;vertical-align:middle;color:rgba(27,27,31,.55);}
 .icon-soft{color:rgba(138,99,255,.55);}
 .icon-logo{width:22px;height:22px;color:rgba(138,99,255,.62);}
@@ -62,7 +80,7 @@ body{
 /* top */
 .top{display:flex;justify-content:space-between;gap:12px;padding: 6px 0 12px;}
 .brand{display:flex;align-items:center;gap:10px;}
-.brand-text{display:flex;flex-direction:column;gap:2px; color: #1b1b1f;}
+.brand-text{display:flex;flex-direction:column;gap:2px;}
 .brand-title{font-size:16px;font-weight:900;letter-spacing:-.2px;}
 .brand-sub{font-size:11px;color:var(--sub);}
 .app-date{margin-top:8px;font-size:12px;color:var(--sub);}
@@ -82,6 +100,7 @@ body{
 .progress-sub{font-size:11px;color:var(--sub)}
 .progress-main{font-size:12px;font-weight:800}
 
+/* search row */
 .row{display:flex;gap:10px;align-items:center;margin-bottom:12px;}
 .row-search{margin-top:6px;}
 
@@ -106,22 +125,46 @@ body{
 }
 .pill-btn.danger{border-color: rgba(255,71,114,.22);}
 
-
+/* ==========================
+   ⭐ NEW FULL-WIDTH TABBAR
+   ========================== */
+.tab-container{
+  display:flex;
+  justify-content:center;
+  margin: 8px 0 16px;
+}
 
 .tabs{
-  display:flex;gap:8px;padding:6px;border-radius:16px;border:1px solid var(--bd);
-  background:var(--card2);box-shadow:var(--shadow2);
-}
-.tab{
-  border:0;background:transparent;color:var(--sub);
-  padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px;
-  
-}
-.tab.active{
-  color:#fff;background:linear-gradient(135deg,var(--purple),var(--purple2));
-  box-shadow:0 10px 20px rgba(138,99,255,.18);
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  width:100%;
+  /* max-width:420px; */
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(8px);
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow:var(--shadow2);
+  overflow:hidden;
 }
 
+.tab{
+  padding:14px 0;
+  border:none;
+  background:transparent;
+  font-size:14px;
+  font-weight:700;
+  color:var(--sub);
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.tab.active{
+  background:linear-gradient(135deg, var(--purple), var(--purple2));
+  color:#fff;
+  font-weight:900;
+}
+
+/* selects */
 .selects{gap:10px;flex-wrap:wrap;margin-top:2px;}
 
 /* list */
@@ -266,9 +309,7 @@ label{font-size:12px;color:var(--sub)}
 .log-time{font-size:12px;color:rgba(0,0,0,.50);margin-bottom:4px}
 .log-title{font-size:13px;font-weight:800;color:rgba(0,0,0,.78)}
 
-/* ===============================
-   Custom dropdown (pretty menu)
-   =============================== */
+/* dropdown */
 .dd{position:relative;flex:1 1 auto;min-width:140px;}
 .dd-btn{
   width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -302,32 +343,4 @@ label{font-size:12px;color:var(--sub)}
   background:linear-gradient(135deg, rgba(138,99,255,.20), rgba(255,179,90,.16));
   box-shadow: inset 0 0 0 1px rgba(138,99,255,.18);
   font-weight:900;
-}
-
-
-/* =========================
-   CENTERED TOP LOGO
-   ========================= */
-.logo-wrap {
-  width: 100%;
-  display: flex;
-  flex-direction: column;   /* 이미지 위 / 텍스트 아래 배치 */
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;         /* 위 여백 */
-  margin-bottom: 16px;      /* 아래 간격 */
-}
-
-.logo {
-  width: 120px;
-  height: 48px;
-  background: url('../images/logo2.png') no-repeat center / contain;
-  margin-bottom: 6px;       /* 이미지와 텍스트 사이 간격 */
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: 900;
-  color: #FFC366;          /* 요청한 포인트 옐로우 */
-  letter-spacing: -0.3px;
 }
