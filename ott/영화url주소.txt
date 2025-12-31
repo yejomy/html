@@ -1,0 +1,18 @@
+**** 받아올  data는 tmdb 사이트는 api_key="발급을받음"
+
+api_key=0bda5d6b5a7917e8209f970a2db952ee
+
+curl --request GET \
+     --url 'https://api.themoviedb.org/3/movie/now_playing?
+
+     --header 'accept: application/json'
+
+최근에 상영작 : movie/now_playing
+넷플리스에서만 상영작 : discover/tv?with_networks=213
+최신 trending상영작 :trending/all/week
+최신 인기작 : movie/top_rated
+액션영화 :discover/movie?with_genres=28
+코메디영화 :discover/movie?with_genres=35
+horror 공포영화 :  discover/movie?with_genres=27
+로맨스영화 : discover/movie?with_genres=10749
+다큐멘터리영화:discover/movie?with_genres=99

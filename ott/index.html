@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YETFLIX</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- ===== SVG ICONS ===== -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+      <path d="M16.5 16.5 21 21" />
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24">
+      <path d="M9 7.5v9l8-4.5z" />
+      <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" />
+      <path d="M12 10.8v6.2" />
+      <path d="M12 7.2h.01" />
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+      <path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>
+    </symbol>
+  </svg>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" aria-label="페이지 헤더">
+    <div class="header__left">
+      <button class="icon-btn" id="btnHamburger" aria-label="메뉴 열기" aria-expanded="false">
+        <svg class="svg-icon" width="18" height="18"><use href="#i-menu"></use></svg>
+      </button>
+
+      <a class="logo" href="#sec-home" aria-label="YETFLIX 홈">
+        <span class="logo__dot" aria-hidden="true"></span>
+        <span class="logo__text">YETFLIX</span>
+      </a>
+
+      <nav class="header__nav" aria-label="상단 메뉴">
+        <a class="hlink is-active" href="#sec-home" data-nav="home">홈</a>
+        <a class="hlink" href="#sec-only-netflix" data-nav="series">시리즈</a>
+        <a class="hlink" href="#sec-now-playing" data-nav="movies">영화</a>
+        <a class="hlink" href="#sec-new-trending" data-nav="new">NEW!요즘 대세 콘텐츠</a>
+        <a class="hlink" href="#sec-popular" data-nav="my">내가 찜한 리스트</a>
+        <a class="hlink" href="#sec-action" data-nav="country">국가별로 찾아보기</a>
+      </nav>
+    </div>
+
+    <div class="header__right">
+      <button class="icon-btn" id="btnHeaderSearch" aria-label="검색">
+        <svg class="svg-icon" width="18" height="18"><use href="#i-search"></use></svg>
+      </button>
+
+      <div class="header__auth" aria-label="인증 버튼">
+        <button class="btn btn--ghost" type="button" id="btnLogin">로그인</button>
+        <button class="btn btn--primary" type="button" id="btnSignup">회원가입</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== OFFCANVAS SIDE NAV ===== -->
+  <aside class="sidenav" id="sidenav" aria-label="사이드 메뉴" aria-hidden="true">
+    <div class="sidenav__head">
+      <div class="sidenav__brand">
+        <span class="logo__dot" aria-hidden="true"></span>
+        <span class="sidenav__title">YETFLIX</span>
+      </div>
+      <button class="icon-btn" id="btnCloseNav" aria-label="메뉴 닫기">
+        <svg class="svg-icon" width="18" height="18"><use href="#i-close"></use></svg>
+      </button>
+    </div>
+
+    <div class="sidenav__search" role="search">
+      <label class="sr-only" for="searchInput">콘텐츠 검색</label>
+      <input id="searchInput" class="input" type="search" placeholder="Search" autocomplete="off" />
+    </div>
+
+    <nav class="nav" aria-label="사이드 메뉴 목록">
+      <a class="nav__item is-active" href="#sec-home"><span class="nav__label">홈</span></a>
+      <a class="nav__item" href="#sec-only-netflix"><span class="nav__label">시리즈</span></a>
+      <a class="nav__item" href="#sec-now-playing"><span class="nav__label">영화</span></a>
+      <a class="nav__item" href="#sec-new-trending"><span class="nav__label">NEW! 요즘 대세</span></a>
+      <a class="nav__item" href="#sec-popular"><span class="nav__label">내가 찜한 리스트</span></a>
+      <a class="nav__item" href="#sec-action"><span class="nav__label">국가별로 찾기</span></a>
+    </nav>
+
+    <div class="sidenav__bottom">
+      <div class="profile" aria-label="프로필">
+        <div class="avatar" aria-hidden="true">KS</div>
+        <div class="profile__meta">
+          <div class="profile__name">Kim Stream</div>
+          <div class="profile__tier">Premium</div>
+        </div>
+      </div>
+
+      <button class="btn btn--wide" id="btnMyPage" type="button" aria-label="마이페이지로 이동">
+        <svg class="svg-icon" width="18" height="18"><use href="#i-user"></use></svg>
+        <span>My Page</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="top">
+    <!-- HERO full-bleed -->
+    <section class="hero hero--full" aria-label="메인 추천" id="sec-home" data-section="home">
+      <div class="hero__bg" id="heroBg" aria-hidden="true"></div>
+
+      <!-- ✅ 3초 후 영상 영역 -->
+      <div class="hero__video" id="heroVideoWrap" aria-hidden="true">
+        <iframe
+          id="heroVideoFrame"
+          title="Hero Trailer"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+
+      <div class="hero__overlay">
+        <div class="badge">FEATURED</div>
+        <h1 class="hero__title" id="heroTitle">Loading...</h1>
+
+        <div class="hero__meta">
+          <span class="chip" id="heroYear">—</span>
+          <span class="chip" id="heroType">—</span>
+          <span class="chip" id="heroRating">★ —</span>
+        </div>
+
+        <p class="hero__desc" id="heroDesc">TMDB에서 데이터를 불러오는 중...</p>
+
+        <div class="hero__actions">
+          <button class="btn btn--primary" id="btnPlay" type="button">
+            <svg class="svg-icon" width="18" height="18"><use href="#i-play"></use></svg>
+            재생
+          </button>
+          <button class="btn btn--ghost" id="btnMore" type="button">
+            <svg class="svg-icon" width="18" height="18"><use href="#i-info"></use></svg>
+            상세 정보
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="rows" aria-label="콘텐츠 목록">
+      <div class="row" id="sec-now-playing" data-row="now_playing" data-section="movies">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Now Playing</h2>
+            <p class="row__desc">현재 극장에서 상영 중인 인기 영화</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left" aria-label="왼쪽으로 스크롤">‹</button>
+            <button class="icon-btn" data-scroll="right" aria-label="오른쪽으로 스크롤">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-only-netflix" data-row="only_netflix" data-section="series">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Only Netflix (TV)</h2>
+            <p class="row__desc">넷플릭스 오리지널/독점 TV 시리즈 모음</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-new-trending" data-row="new_trending" data-section="new">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">New Trending (This Week)</h2>
+            <p class="row__desc">이번 주 가장 화제인 콘텐츠</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-popular" data-row="popular" data-section="my">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Popular (Top Rated)</h2>
+            <p class="row__desc">평점 높은 작품을 한 번에</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-action" data-row="action" data-section="country">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Action</h2>
+            <p class="row__desc">시원한 액션 장르 추천</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-comedy" data-row="comedy">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Comedy</h2>
+            <p class="row__desc">가볍게 웃기 좋은 코미디</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-horror" data-row="horror">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Horror</h2>
+            <p class="row__desc">공포 장르 추천</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-romance" data-row="romance">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Romance</h2>
+            <p class="row__desc">로맨스 장르 추천</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+
+      <div class="row" id="sec-documentary" data-row="documentary">
+        <div class="row__head">
+          <div class="row__headText">
+            <h2 class="row__title">Documentary</h2>
+            <p class="row__desc">다큐멘터리 추천</p>
+          </div>
+          <div class="row__controls">
+            <button class="icon-btn" data-scroll="left">‹</button>
+            <button class="icon-btn" data-scroll="right">›</button>
+          </div>
+        </div>
+        <div class="rail" tabindex="0"></div>
+      </div>
+    </section>
+
+    <footer class="footer" aria-label="푸터">
+      <div class="footer__container">
+        <div class="footer__top">
+          <div class="footer__help">
+            <span class="footer__helpLabel">고객센터</span>
+            <a class="footer__helpLink" href="#">문의하기</a>
+            <span class="footer__helpSep">•</span>
+            <a class="footer__helpLink" href="#">자주 묻는 질문</a>
+          </div>
+
+          <div class="footer__lang">
+            <label class="sr-only" for="langSelect">언어 선택</label>
+            <select id="langSelect" class="footer__select">
+              <option value="ko" selected>한국어</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="footer__grid">
+          <div class="footer__col">
+            <a class="footer__link" href="#">자주 묻는 질문</a>
+            <a class="footer__link" href="#">고객센터</a>
+            <a class="footer__link" href="#">계정</a>
+            <a class="footer__link" href="#">미디어 센터</a>
+          </div>
+          <div class="footer__col">
+            <a class="footer__link" href="#">투자 정보</a>
+            <a class="footer__link" href="#">채용 정보</a>
+            <a class="footer__link" href="#">이용 방법</a>
+            <a class="footer__link" href="#">쿠키 설정</a>
+          </div>
+          <div class="footer__col">
+            <a class="footer__link" href="#">이용약관</a>
+            <a class="footer__link" href="#">개인정보 처리방침</a>
+            <a class="footer__link" href="#">법적 고지</a>
+            <a class="footer__link" href="#">회사 정보</a>
+          </div>
+          <div class="footer__col">
+            <a class="footer__link" href="#">속도 테스트</a>
+            <a class="footer__link" href="#">광고/제휴 문의</a>
+            <a class="footer__link" href="#">콘텐츠 제안</a>
+            <a class="footer__link" href="#">문의/신고</a>
+          </div>
+        </div>
+
+        <div class="footer__legal">
+          <div class="footer__brandLine">
+            <span class="footer__brand">YETFLIX</span>
+            <span class="footer__muted">• 본 페이지는 UI 데모입니다.</span>
+          </div>
+          <div class="footer__muted">Data provided by TMDB.</div>
+          <div class="footer__muted">© 2025 YETFLIX. All rights reserved.</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <dialog class="modal" id="previewModal" aria-label="콘텐츠 미리보기">
+    <form method="dialog" class="modal__inner">
+      <button class="modal__close icon-btn" value="cancel" aria-label="닫기">
+        <svg class="svg-icon" width="18" height="18"><use href="#i-close"></use></svg>
+      </button>
+      <div class="modal__hero" id="modalHero" aria-hidden="true"></div>
+      <div class="modal__body">
+        <div class="modal__title" id="modalTitle">Title</div>
+        <div class="modal__meta" id="modalMeta">Meta</div>
+        <p class="modal__desc" id="modalDesc">Description</p>
+        <div class="modal__actions">
+          <button class="btn btn--primary" value="cancel" type="submit">
+            <svg class="svg-icon" width="18" height="18"><use href="#i-play"></use></svg>
+            재생
+          </button>
+          <button class="btn btn--ghost" value="cancel" type="submit">닫기</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./js/main2.js"></script>
+</body>
+</html>
