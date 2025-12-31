@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gyuling Login</title>
+  <link rel="stylesheet" href="./css/login.css" />
+</head>
+<body>
+  <main class="app login" aria-label="로그인">
+
+    <section class="login__wrap">
+      <!-- ✅ 로고: 너가 이미지 갈아끼우면 됨 -->
+      <div class="brand" aria-label="브랜드">
+        <!-- 로고 이미지를 넣을 거면 src만 바꾸면 됨 -->
+        <img class="brand__logo" src="./images/logo.svg" alt="Gyuling" />
+        <!-- 로고 이미지가 아직 없으면 위 img가 깨질 수 있으니, 필요하면 임시로 숨기거나 대체 텍스트 쓰면 됨 -->
+      </div>
+
+      <form class="form" id="loginForm" autocomplete="on">
+        <label class="field">
+          <span class="sr-only">아이디 또는 이메일</span>
+          <input
+            class="input"
+            type="text"
+            name="id"
+            placeholder="아이디 또는 이메일을 입력해주세요"
+            autocomplete="username"
+            required
+          />
+        </label>
+
+        <label class="field">
+          <span class="sr-only">비밀번호</span>
+          <input
+            class="input"
+            type="password"
+            name="password"
+            placeholder="비밀번호를 입력해주세요."
+            autocomplete="current-password"
+            required
+          />
+        </label>
+
+        <div class="options">
+          <label class="check">
+            <input type="checkbox" name="autoLogin" />
+            <span>자동 로그인</span>
+          </label>
+
+          <label class="check">
+            <input type="checkbox" name="saveId" />
+            <span>아이디저장</span>
+          </label>
+        </div>
+
+        <button class="btn btn--primary" type="submit">로그인</button>
+        <button class="btn btn--outline" type="button" id="joinBtn">회원가입</button>
+
+        <div class="links">
+          <a href="#" class="link">아이디찾기</a>
+          <span class="sep">|</span>
+          <a href="#" class="link">비밀번호 찾기</a>
+          <span class="sep">|</span>
+          <a href="#" class="link">둘러보기</a>
+        </div>
+
+        <div class="divider" aria-hidden="true">
+          <span class="divider__line"></span>
+          <span class="divider__text">or</span>
+          <span class="divider__line"></span>
+        </div>
+
+        <div class="social" aria-label="소셜 로그인">
+          <!-- Kakao -->
+          <button class="social__btn" type="button" id="kakaoBtn" aria-label="카카오로 이동">
+            <!-- 카카오 SVG -->
+            <svg viewBox="0 0 64 64" class="social__icon" aria-hidden="true">
+              <circle cx="32" cy="32" r="28" fill="#FEE500"/>
+              <path d="M32 18c-9 0-16 5.4-16 12.1 0 4.4 3.1 8.2 7.8 10.3l-1.1 4.1c-.1.5.4.9.8.6l4.8-3.1c1.2.2 2.4.3 3.7.3 9 0 16-5.4 16-12.1S41 18 32 18z"
+                    fill="#111"/>
+            </svg>
+          </button>
+
+          <!-- Google -->
+          <button class="social__btn" type="button" id="googleBtn" aria-label="구글로 이동">
+            <!-- 구글 G (단순화 SVG) -->
+            <svg viewBox="0 0 64 64" class="social__icon" aria-hidden="true">
+              <circle cx="32" cy="32" r="28" fill="#fff"/>
+              <path d="M55 32.5c0-1.6-.1-2.8-.4-4.1H32v7.7h13c-.5 3-2.4 5.5-5.3 7.1v5h7.2c4.2-3.9 6.6-9.6 6.6-15.7z"
+                    fill="#4285F4"/>
+              <path d="M32 56c6.3 0 11.6-2.1 15.5-5.8l-7.2-5c-2 1.3-4.6 2.2-8.3 2.2-6 0-11.1-4-12.9-9.4h-7.4v5.2C15.5 51 23.2 56 32 56z"
+                    fill="#34A853"/>
+              <path d="M19.1 38.1c-.5-1.3-.8-2.7-.8-4.1s.3-2.8.8-4.1v-5.2h-7.4C10.6 26.8 10 29.3 10 34s.6 7.2 1.7 9.3l7.4-5.2z"
+                    fill="#FBBC05"/>
+              <path d="M32 16.6c3.4 0 6.5 1.2 8.9 3.5l6.1-6.1C43.6 10.9 38.3 8.5 32 8.5c-8.8 0-16.5 5-20.3 12.2l7.4 5.2c1.8-5.4 6.9-9.3 12.9-9.3z"
+                    fill="#EA4335"/>
+              <circle cx="32" cy="32" r="28" fill="none" stroke="#eee"/>
+            </svg>
+          </button>
+
+          <!-- Facebook -->
+          <button class="social__btn" type="button" id="fbBtn" aria-label="페이스북으로 이동">
+            <svg viewBox="0 0 64 64" class="social__icon" aria-hidden="true">
+              <circle cx="32" cy="32" r="28" fill="#1877F2"/>
+              <path d="M36 22h5v-7h-5c-5 0-9 4-9 9v5h-6v7h6v13h7V36h6l1-7h-7v-4c0-1.7 1.3-3 3-3z"
+                    fill="#fff"/>
+            </svg>
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+  </main>
+
+  <script src="./script/login.js"></script>
+</body>
+</html>

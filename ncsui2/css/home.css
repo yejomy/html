@@ -1,0 +1,366 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap");
+
+/* ✅ (요청3) 폰트 강제 적용: 전 요소에 Noto Sans KR */
+html, body, * , input, button, textarea, select {
+  font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important;
+}
+
+:root{
+  --accent: #ff7a00;
+  --text: #111;
+  --muted: #777;
+  --bg: #ffffff;
+
+  --card: rgba(255,255,255,.92);
+  --shadow: 0 10px 22px rgba(0,0,0,.12);
+  --radius: 12px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+*{ box-sizing: border-box; }
+html, body{ width:100%; height:100%; margin:0; }
+
+body{
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app{
+  min-height: 100svh;
+  width: 100%;
+  background: var(--bg);
+}
+
+/* ===== HERO ===== */
+.hero{
+  position: relative;
+  height: 420px;
+  min-height: 380px;
+  overflow: visible;
+}
+
+.hero__bg{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* top row */
+.hero__top{
+  position: absolute;
+  top: calc(12px + var(--safe-top));
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 3;
+}
+
+.avatar{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255,255,255,.8);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.avatar img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+.avatar--fallback .avatar__fallback{
+  width: 20px; height: 20px; border-radius: 999px;
+  background: rgba(0,0,0,.12);
+}
+
+/* ✅ (요청4) 알림 아이콘: 배경 없이 투명 + 아이콘만 */
+.icon-btn{
+  width: 30px;
+  height: 30px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  display: grid;
+  place-items: center;
+  position: relative;
+  cursor: pointer;
+}
+.icon--bell{
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.25));
+}
+.notif-dot{
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #ff3b30;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.18);
+}
+
+/* greeting */
+/* ✅ (요청1) 네모박스: 인사 텍스트 20px 아래 */
+.hero__text{
+  position: absolute;
+  left: 18px;
+  top: 140px; /* 기존 120px → 140px */
+  z-index: 3;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+.hello{ margin:0; font-size: 16px; font-weight: 800; }
+.sub{ margin: 4px 0 0; font-size: 16px; font-weight: 800; }
+
+/* cards */
+.hero__cards{
+  position: absolute;
+  left: 14px;
+  right: 14px;
+
+  /* ✅ (요청1) 카드영역도 20px 아래로 */
+  bottom: -70px; /* 기존 -46px → -26px (아래로 20px 이동 느낌) */
+
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 12px;
+  z-index: 4;
+}
+
+.card{
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,0,0,.05);
+}
+
+.card--weather{ padding: 12px 12px 10px; }
+
+.weather__top{
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.weather__title{
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #333;
+}
+.weather__pin{
+  display:flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.icon--pin{ width: 16px; height: 16px; color: var(--accent); }
+
+.weather__bottom{
+  margin-top: 10px;
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.temp{
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--accent);
+}
+.temp__unit{ font-size: 22px; margin-left: 2px; }
+.wxicon .wx{ width: 40px; height: 40px; color: var(--accent); }
+
+.stack{ display: grid; gap: 10px; }
+.card--small{ padding: 10px 12px; }
+
+.small__head{
+  font-size: 12px;
+  color: #333;
+  font-weight: 900;
+}
+.small__row{
+  margin-top: 8px;
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.badge{
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255,122,0,.12);
+  display: grid;
+  place-items: center;
+}
+.icon--accent{ width: 18px; height: 18px; color: var(--accent); }
+.small__value{
+  font-size: 14px;
+  font-weight: 900;
+  color: #111;
+}
+
+/* ===== CONTENT ===== */
+/* ✅ 카드가 위에서 덜 내려오므로 패딩도 살짝 조정 + (요청1) 타이틀 20px 아래 */
+.content{
+  padding: 84px 14px calc(92px + var(--safe-bottom)); /* 기존 64px → 84px */
+}
+
+.section-head{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ✅ (요청1) 첫 섹션 타이틀만 20px 아래로 (여백 추가) */
+.section-head--first{
+  margin-top: 20px;
+}
+
+.section-title{
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+}
+.section-head--row{ margin-top: 14px; }
+.section-subtitle{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+}
+.more{
+  font-size: 12px;
+  color: #777;
+  text-decoration: none;
+}
+
+/* hscroll */
+.hscroll{
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+.hscroll::-webkit-scrollbar{ height: 0; }
+
+.thumb{
+  flex: 0 0 auto;
+  width: calc((100% - 12px) / 2);
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: #f2f2f2;
+  box-shadow: 0 10px 18px rgba(0,0,0,.10);
+}
+.thumb img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+/* vlist */
+.vlist{
+  margin-top: 12px;
+  display: grid;
+  gap: 14px;
+}
+
+.bigcard{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f2f2f2;
+  box-shadow: 0 12px 22px rgba(0,0,0,.12);
+  text-decoration: none;
+}
+.bigcard img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+.bigcard__overlay{
+  position:absolute;
+  left: 16px;
+  top: 16px;
+  right: 16px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+}
+
+/* ✅ (요청2) "첫번째 코스 이야기" 텍스트 더 크게 + 약간 opacity */
+.vlist .bigcard:first-child .bigcard__title{
+  font-size: 18px;     /* 기존 14px → 18px */
+  opacity: .88;        /* 살짝 투명 */
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.bigcard__title{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.content__spacer{ height: 10px; }
+
+/* ===== TAB BAR ===== */
+.tabbar{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 10px calc(10px + var(--safe-bottom));
+  background: rgba(255,255,255,.96);
+  border-top: 1px solid #FE8608;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  z-index: 10;
+  
+}
+
+.tab{
+  border: 0;
+  background: transparent;
+  padding: 6px 0;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  color: #b7b7b7;
+  cursor: pointer;
+}
+
+.tab__icon{ width: 22px; height: 22px; color: currentColor; }
+.tab__label{ font-size: 11px; font-weight: 800; }
+
+.tab.is-active{ color: var(--accent); }

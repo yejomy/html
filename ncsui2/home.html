@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home</title>
+
+  <!-- Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/home.css" />
+</head>
+<body>
+  <main class="app home">
+    <!-- ===== HERO / BANNER ===== -->
+    <header class="hero">
+      <!-- 배너 이미지: 너가 교체 -->
+      <img class="hero__bg" src="./images/homebaner.png" alt="" />
+
+      <div class="hero__top">
+        <button class="avatar" type="button" aria-label="프로필">
+          <img src="./images/profile.jpg" alt="" onerror="this.style.display='none'; this.parentElement.classList.add('avatar--fallback');">
+          <span class="avatar__fallback" aria-hidden="true"></span>
+        </button>
+
+        <!-- ✅ 알림: 배경 투명 + 아이콘만 + 빨간 점 -->
+        <button class="icon-btn icon-btn--ghost" type="button" aria-label="알림">
+          <svg viewBox="0 0 24 24" class="icon icon--bell" aria-hidden="true">
+            <path d="M12 22a2.2 2.2 0 0 0 2-2H10a2.2 2.2 0 0 0 2 2Z" fill="currentColor" opacity=".95"/>
+            <path d="M19 17H5c1.6-1.7 2.2-3.1 2.2-5.4V9.6A4.8 4.8 0 0 1 12 4.8a4.8 4.8 0 0 1 4.8 4.8v2.0c0 2.3.6 3.7 2.2 5.4Z"
+                  fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <span class="notif-dot" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <!-- ✅ (요청1) 네모박스: 인사 텍스트 20px 아래로 -->
+      <div class="hero__text">
+        <p class="hello"><b id="userName">김예진</b>님 안녕하세요</p>
+        <p class="sub">즐거운 여행 되세요</p>
+      </div>
+
+      <!-- ✅ 카드가 배너 하단에 "반만" 걸치도록 -->
+      <!-- ✅ (요청1) 네모박스: 카드영역 20px 아래로 -->
+      <section class="hero__cards" aria-label="요약 카드">
+        <!-- Weather -->
+        <article class="card card--weather" aria-label="날씨">
+          <div class="weather__top">
+            <div class="weather__title" id="weatherTitle">Mostly<br>Sunny</div>
+            <div class="weather__pin">
+              <svg viewBox="0 0 24 24" class="icon icon--pin" aria-hidden="true">
+                <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
+                      fill="currentColor" opacity=".20"/>
+                <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="12" cy="10" r="2.5" fill="currentColor"/>
+              </svg>
+              <span id="weatherPlace">제주</span>
+            </div>
+          </div>
+
+          <div class="weather__bottom">
+            <div class="temp">
+              <span id="weatherTemp">20</span><span class="temp__unit">°</span>
+            </div>
+            <div class="wxicon" aria-hidden="true" id="weatherIcon"></div>
+          </div>
+        </article>
+
+        <!-- Right stacked -->
+        <div class="stack">
+          <article class="card card--small">
+            <div class="small__head">완주코스</div>
+            <div class="small__row">
+              <div class="badge">
+                <svg viewBox="0 0 24 24" class="icon icon--accent" aria-hidden="true">
+                  <path d="M6 22V3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M6 4h10l-2 3 2 3H6Z" fill="currentColor" opacity=".22"/>
+                  <path d="M6 4h10l-2 3 2 3H6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="small__value"><span id="courseDone">1</span>/<span id="courseTotal">10</span></div>
+            </div>
+          </article>
+
+          <article class="card card--small">
+            <div class="small__head">이동거리</div>
+            <div class="small__row">
+              <div class="badge">
+                <svg viewBox="0 0 24 24" class="icon icon--accent" aria-hidden="true">
+                  <path d="M6 19a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 6 19Z" fill="currentColor" opacity=".25"/>
+                  <path d="M18 9a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 18 9Z" fill="currentColor" opacity=".25"/>
+                  <path d="M6 15c0-6 6-2 6-6s6-1 6 6"
+                        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M6 19a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 6 19Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M18 9a2.2 2.2 0 1 0 0-4.4A2.2 2.2 0 0 0 18 9Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                </svg>
+              </div>
+              <div class="small__value"><span id="distance">16</span>Km</div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </header>
+
+    <!-- ===== CONTENT ===== -->
+    <section class="content">
+      <!-- ✅ (요청1) 네모박스: 이 타이틀 영역도 20px 아래로 -->
+      <div class="section-head section-head--first">
+        <h2 class="section-title">제주도 자전거 여행정보 가이드</h2>
+      </div>
+
+      <div class="hscroll" aria-label="가이드 이미지 가로 스크롤">
+        <a class="thumb" href="#">
+          <img src="./images/home-photo1.png" alt="여행정보가이드1" />
+        </a>
+        <a class="thumb" href="#">
+          <img src="./images/home-photo2.png" alt="여행정보가이드2" />
+        </a>
+        <a class="thumb" href="#">
+          <img src="./images/home-photo3.png" alt="여행정보가이드3" />
+        </a>
+      </div>
+
+      <div class="section-head section-head--row">
+        <h3 class="section-subtitle">제주도 자전거 여행정보 가이드</h3>
+        <a class="more" href="#">더보기</a>
+      </div>
+
+      <div class="vlist" aria-label="패키지 이야기">
+        <a class="bigcard" href="#">
+          <img src="./images/home-photo4.png" alt="자전거여행첫번째코스" />
+          <div class="bigcard__overlay">
+            <p class="bigcard__title">제주도 자전거 여행 패키지<br>첫번째 코스 이야기</p>
+          </div>
+        </a>
+
+        <a class="bigcard" href="#">
+          <img src="./images/home-photo5.png" alt="자전거여행두번째코스" />
+          <div class="bigcard__overlay">
+            <p class="bigcard__title">제주도 자전거 여행 패키지<br>두번째 코스 이야기</p>
+          </div>
+        </a>
+
+        <a class="bigcard" href="#">
+          <img src="./images/home-photo6.png" alt="자전거여행세번째코스" />
+          <div class="bigcard__overlay">
+            <p class="bigcard__title">제주도 자전거 여행 패키지<br>세번째 코스 이야기</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="content__spacer" aria-hidden="true"></div>
+    </section>
+
+    <!-- ===== TAB BAR ===== -->
+    <nav class="tabbar" aria-label="하단 탭">
+      <button class="tab is-active" type="button" data-page="home" aria-label="홈">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z"
+                fill="currentColor" opacity=".18"/>
+          <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9.5 21V14h5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        <span class="tab__label">홈</span>
+      </button>
+
+      <button class="tab" type="button" data-page="commu" aria-label="커뮤니티">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z"
+                fill="currentColor" opacity=".18"/>
+          <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="9.5" cy="9.5" r="1" fill="currentColor"/>
+          <circle cx="12" cy="9.5" r="1" fill="currentColor"/>
+          <circle cx="14.5" cy="9.5" r="1" fill="currentColor"/>
+        </svg>
+        <span class="tab__label">커뮤니티</span>
+      </button>
+
+      <button class="tab" type="button" data-page="juice" aria-label="주스">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
+                fill="currentColor" opacity=".18"/>
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="12" cy="10" r="2.5" fill="currentColor"/>
+        </svg>
+        <span class="tab__label">주스</span>
+      </button>
+
+      <button class="tab" type="button" data-page="rank" aria-label="랭킹">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z"
+                fill="currentColor" opacity=".18"/>
+          <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M6 20h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tab__label">랭킹</span>
+      </button>
+
+      <button class="tab" type="button" data-page="my" aria-label="마이">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="currentColor" opacity=".18"/>
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tab__label">마이</span>
+      </button>
+    </nav>
+  </main>
+
+  <script src="./script/home.js"></script>
+</body>
+</html>

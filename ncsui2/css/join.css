@@ -1,0 +1,240 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap");
+
+html, body, input, button, textarea, select {
+  font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important;
+}
+
+:root{
+  --accent: #ff7a00;
+  --text: #111;
+  --muted: #777;
+  --line: #e6e6e6;
+
+  /* ✅ 요청: input 배경색 */
+  --input-bg: #fafafa;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+*{ box-sizing: border-box; }
+html, body{ width:100%; height:100%; margin:0; }
+
+body{
+  font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #fff;
+  color: var(--text);
+}
+
+.app{
+  min-height: 100svh;
+  width: 100%;
+  padding: calc(14px + var(--safe-top)) 18px calc(18px + var(--safe-bottom));
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 10px;
+}
+
+/* 상단 작은 로고 */
+.top{
+  width: min(520px, 100%);
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+.top__brand{
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+.top__logo{
+  width: 56px;      /* ✅ 기존 28px → 56px */
+  height: 56px;
+  object-fit: contain;
+  display: block;
+}
+/* 카드/내용 */
+.card{
+  width: min(520px, 100%);
+}
+
+.page-title{
+  margin: 6px 0 14px;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.form{
+  display: grid;
+  gap: 12px;
+}
+
+.field{
+  display: grid;
+  gap: 6px;
+}
+
+.label{
+  font-size: 13px;
+  font-weight: 800;
+  color: #222;
+}
+
+.input{
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--input-bg); /* ✅ #fafafa */
+  padding: 0 14px;
+  font-size: 14.5px;
+  outline: none;
+}
+
+.input::placeholder{ color: #a0a0a0; }
+
+.input:focus{
+  background: #fff;
+  border-color: rgba(255,122,0,.55);
+  box-shadow: 0 0 0 3px rgba(255,122,0,.12);
+}
+
+.hint{
+  font-size: 12px;
+  color: #9a9a9a;
+}
+
+.error{
+  min-height: 18px;
+  font-size: 12px;
+  color: #e54848;
+}
+
+/* 약관 박스 */
+.terms{
+  margin-top: 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  display: grid;
+  gap: 10px;
+}
+
+.terms__list{
+  display: grid;
+  gap: 8px;
+  padding-left: 4px;
+}
+
+/* 원형 체크 */
+.check{
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: #444;
+}
+
+.check input{
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.check input:checked{
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.check input:checked::after{
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* 버튼 */
+.btn{
+  height: 52px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn--primary{
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--primary:active{ transform: translateY(1px); }
+
+/* 하단 로그인 */
+.bottom{
+  margin: 2px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.bottom__link{
+  margin-left: 6px;
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+}
+.bottom__link:active{ opacity: .7; }
+
+/* 입력 완료 상태 */
+.input.is-filled{
+  background: #fff4ec;              /* 이전보다 한 톤 진함 */
+  border-color: #ffb78a;            /* 은은한 오렌지 테두리 */
+}
+
+/* 포커스 + 값 있음 */
+.input.is-filled:focus{
+  background: #ffffff;
+  border-color: #ff7a00;            /* 브랜드 컬러 */
+  box-shadow: 0 0 0 3px rgba(255,122,0,.15);
+}
+
+/* 필드 */
+.field{
+  position: relative;
+}
+
+/* ✅ input 높이(48px) 기준으로 정확히 중앙 */
+.field-check{
+  position: absolute;
+  right: 14px;
+
+  /* 라벨(한 줄) + gap(6px) 만큼 내려준 후,
+     input(48px) 중앙에 맞춤 */
+  top: calc( (13px * 1.2) + 6px + 24px );
+
+  transform: translateY(-50%);
+  color: #ff7a00;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}
+
+.field-check.is-on{
+  opacity: 1;
+}

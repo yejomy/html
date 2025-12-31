@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>회원가입</title>
+
+  <link rel="stylesheet" href="./css/join.css" />
+</head>
+<body>
+  <main class="app join">
+
+    <!-- 상단: 작은 로고 자리 -->
+    <header class="top">
+      <div class="top__brand" aria-label="브랜드 로고">
+        <!-- ✅ 로고 파일은 너가 교체 -->
+        <a href="login.html"><img class="top__logo" src="./images/logo.svg" alt="Gyuling" /></a>
+      </div>
+    </header>
+
+    <!-- 폼 -->
+    <section class="card" aria-label="회원가입 폼">
+
+      <form id="joinForm" class="form" novalidate>
+        <label class="field">
+          <span class="label">이름</span>
+          <input class="input" type="text" name="name" placeholder="이름을 입력해주세요" required />
+          <span class="hint">실명으로 입력하면 추천/기록 공유에 도움이 돼요.</span>
+        </label>
+
+        <label class="field">
+          <span class="label">이메일</span>
+          <input class="input" type="email" name="email" placeholder="example@email.com" autocomplete="email" required />
+        </label>
+
+        <label class="field">
+          <span class="label">아이디</span>
+          <input class="input" type="text" name="username" placeholder="영문/숫자 4~16자" minlength="4" maxlength="16" required />
+        </label>
+
+        <label class="field">
+          <span class="label">비밀번호</span>
+          <input class="input" type="password" name="password" placeholder="8자 이상 (영문+숫자 조합 권장)" minlength="8" autocomplete="new-password" required />
+        </label>
+
+        <label class="field">
+          <span class="label">비밀번호 확인</span>
+          <input class="input" type="password" name="password2" placeholder="비밀번호를 다시 입력해주세요" minlength="8" autocomplete="new-password" required />
+          <span id="pwMsg" class="error" aria-live="polite"></span>
+        </label>
+
+        <label class="field">
+          <span class="label">휴대폰 번호</span>
+          <input class="input" type="tel" name="phone" placeholder="010-1234-5678" inputmode="tel" />
+          <span class="hint">선택 입력 (알림 설정 시 사용)</span>
+        </label>
+
+        <!-- 약관 -->
+        <div class="terms">
+          <label class="check">
+            <input type="checkbox" id="allAgree" />
+            <span><b>전체 동의</b></span>
+          </label>
+
+          <div class="terms__list">
+            <label class="check">
+              <input type="checkbox" class="agree" data-required="true" />
+              <span>(필수) 이용약관 동의</span>
+            </label>
+
+            <label class="check">
+              <input type="checkbox" class="agree" data-required="true" />
+              <span>(필수) 개인정보 처리방침 동의</span>
+            </label>
+
+            <label class="check">
+              <input type="checkbox" class="agree" data-required="false" />
+              <span>(선택) 마케팅 정보 수신 동의</span>
+            </label>
+          </div>
+
+          <span id="termsMsg" class="error" aria-live="polite"></span>
+        </div>
+
+        <!-- ✅ 버튼: 회원가입 완료만 -->
+        <button class="btn btn--primary" type="submit">회원가입 완료</button>
+
+        <!-- 맨 밑 로그인 링크(요청: JS로 이동 처리) -->
+        <p class="bottom">
+          이미 계정이 있나요?
+          <a href="#" id="goLogin" class="bottom__link">로그인</a>
+        </p>
+      </form>
+    </section>
+
+  </main>
+
+  <script src="./script/join.js"></script>
+</body>
+</html>
