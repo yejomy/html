@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Post</title>
+
+  <!-- Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/post.css" />
+</head>
+<body>
+  <main class="app post-detail">
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar">
+      <button class="topbar__btn" type="button" id="btnBack" aria-label="뒤로가기">
+        <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+          <path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="topbar__title">오늘의 이야기</div>
+
+      <button class="avatar" type="button" aria-label="프로필">
+        <img src="./images/profile.jpg" alt="" onerror="this.style.display='none'; this.parentElement.classList.add('avatar--fallback');">
+        <span class="avatar__fallback" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <section class="wrap">
+      <!-- ===== POST CARD ===== -->
+      <article class="post">
+        <header class="post__top">
+          <div class="post__user">
+            <span class="post__avatar">
+              <img id="authorAvatar" src="./images/profile1.jpg" alt="">
+            </span>
+            <div class="post__meta">
+              <div class="post__name" id="authorName">김이나</div>
+              <div class="post__time" id="postTime">10분 전</div>
+            </div>
+          </div>
+
+          <div class="post__right">
+            <span class="post__pill" id="authorLevel">Lv.30</span>
+            <button class="icon-btn" type="button" aria-label="더보기">
+              <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                <circle cx="6" cy="12" r="1.6" fill="currentColor"/>
+                <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
+                <circle cx="18" cy="12" r="1.6" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="post__media">
+          <img id="postImage" src="./images/commu6.png" alt="게시글 이미지">
+        </div>
+
+        <div class="post__content">
+          <h2 class="post__title" id="postTitle">오늘의 추천 코스</h2>
+          <p class="post__text" id="postText">
+            바람이 딱 좋은 날이라 해안도로로 쭉 달렸어요. 중간에 전망대에서 사진도 찍고,
+            물빛이 너무 예뻐서 한참 멍때렸네요. 🚲🍊
+          </p>
+          <div class="post__tags" id="postTags">
+            <span class="tag">#제주도</span>
+            <span class="tag">#해안도로</span>
+            <span class="tag">#라이딩</span>
+          </div>
+        </div>
+
+        <footer class="post__bottom">
+          <div class="post__stats">
+            <button class="stat" type="button" id="btnLike" aria-label="좋아요">
+              <svg viewBox="0 0 24 24" class="stat__icon stat__icon--like" aria-hidden="true">
+                <path d="M12 21s-7-4.6-9.2-9C1 8.5 3.2 6 6.2 6c1.7 0 3.1.9 3.8 2.1C10.7 6.9 12.1 6 13.8 6c3 0 5.2 2.5 3.4 6-2.2 4.4-9.2 9-9.2 9Z"
+                      fill="currentColor" opacity=".22"/>
+                <path d="M12 21s-7-4.6-9.2-9C1 8.5 3.2 6 6.2 6c1.7 0 3.1.9 3.8 2.1C10.7 6.9 12.1 6 13.8 6c3 0 5.2 2.5 3.4 6-2.2 4.4-9.2 9-9.2 9Z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+              <span id="likeCount">126</span>
+            </button>
+
+            <div class="stat stat--plain" aria-label="댓글 수">
+              <svg viewBox="0 0 24 24" class="stat__icon" aria-hidden="true">
+                <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z"
+                      fill="currentColor" opacity=".16"/>
+                <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+              <span id="commentCount">18</span>
+            </div>
+
+            <div class="stat stat--plain" aria-label="조회수">
+              <svg viewBox="0 0 24 24" class="stat__icon" aria-hidden="true">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"
+                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="2.6" fill="currentColor" opacity=".22"/>
+                <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              <span id="viewCount">542</span>
+            </div>
+          </div>
+
+          <button class="btn btn--pill" type="button">View Active</button>
+        </footer>
+      </article>
+
+      <!-- ===== COMMENTS ===== -->
+      <section class="comments" aria-label="댓글">
+        <div class="comments__head">
+          <h3 class="comments__title">댓글</h3>
+          <span class="comments__count"><span id="commentCountTop">18</span>개</span>
+        </div>
+
+        <ul class="comments__list" id="commentList"></ul>
+
+        <form class="comment-form" id="commentForm" autocomplete="off">
+          <input class="comment-form__input" id="commentInput" type="text" placeholder="댓글을 입력하세요" maxlength="120" />
+          <button class="comment-form__btn" type="submit">등록</button>
+        </form>
+      </section>
+    </section>
+
+    <!-- ===== TAB BAR ===== -->
+    <nav class="tabbar" aria-label="하단 탭">
+      <button class="tab" type="button" data-page="home" aria-label="홈">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z" fill="currentColor" opacity=".18"/>
+          <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9.5 21V14h5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        <span class="tab__label">홈</span>
+      </button>
+
+      <button class="tab is-active" type="button" data-page="commu" aria-label="커뮤니티">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z" fill="currentColor" opacity=".18"/>
+          <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="9.5" cy="9.5" r="1" fill="currentColor"/>
+          <circle cx="12" cy="9.5" r="1" fill="currentColor"/>
+          <circle cx="14.5" cy="9.5" r="1" fill="currentColor"/>
+        </svg>
+        <span class="tab__label">커뮤니티</span>
+      </button>
+
+      <button class="tab" type="button" data-page="juice" aria-label="주스">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="currentColor" opacity=".18"/>
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="12" cy="10" r="2.5" fill="currentColor"/>
+        </svg>
+        <span class="tab__label">주스</span>
+      </button>
+
+      <button class="tab" type="button" data-page="rank" aria-label="랭킹">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z" fill="currentColor" opacity=".18"/>
+          <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M6 20h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tab__label">랭킹</span>
+      </button>
+
+      <button class="tab" type="button" data-page="my" aria-label="마이">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="currentColor" opacity=".18"/>
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tab__label">마이</span>
+      </button>
+    </nav>
+  </main>
+
+  <script src="./script/post.js"></script>
+</body>
+</html>

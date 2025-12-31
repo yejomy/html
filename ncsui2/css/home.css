@@ -341,7 +341,7 @@ body{
   bottom: 0;
   padding: 10px 10px calc(10px + var(--safe-bottom));
   background: rgba(255,255,255,.96);
-  border-top: 1px solid #FE8608;
+  border-top: 2px solid rgba(255,122,0,.25);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 4px;

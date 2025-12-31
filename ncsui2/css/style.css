@@ -174,3 +174,19 @@ body{
     --body-size: 26px;
   }
 }
+
+.loading-wrap{
+  animation: floatText 1.8s ease-in-out infinite;
+}
+
+@keyframes floatText{
+  0%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(-4px); /* 위로 살짝 */
+  }
+  100%{
+    transform: translateY(0);
+  }
+}
