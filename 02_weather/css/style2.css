@@ -409,3 +409,24 @@ body{
 .hourlyLabels{
   color: rgba(255,255,255,0.65) !important;
 }
+
+
+/* ===============================
+   ✅ 상단 중앙 로고
+   =============================== */
+.topLogo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 12px; /* 제목과 간격 */
+}
+
+.topLogo img{
+  height: 100px;        /* 로고 크기 */
+  width: auto;
+  object-fit: contain;
+
+  /* 배경 위에서 잘 보이게 */
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,0.35));
+}
