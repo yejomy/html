@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>Kakao Map Demo</title>
+  <style>
+    /* 지도가 표시될 영역 크기 지정 (필수) */
+    #map { width: 100%; height: 400px; }
+  </style>
+</head>
+<body>
+  <h1>카카오맵 지도</h1>
+  <div id="map"></div>
+
+  <!-- Kakao Maps JS SDK -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41"></script>
+  <script>
+    // 지도 생성
+    const container = document.getElementById('map');
+
+    const options = {
+      center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울시청 근처
+      level: 3 // 확대 레벨 (숫자 클수록 더 멀리 보임)
+    };
+
+    const map = new kakao.maps.Map(container, options);
+
+    // 마커 추가(옵션)
+    const markerPosition = new kakao.maps.LatLng(37.5665, 126.9780);
+    const marker = new kakao.maps.Marker({ position: markerPosition });
+    marker.setMap(map);
+  </script>
+</body>
+</html>
