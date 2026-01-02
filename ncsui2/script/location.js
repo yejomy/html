@@ -301,7 +301,7 @@ function bindTabs() {
       const page = btn.dataset.page;
       if (page === "home") window.location.href = "./home.html";
       if (page === "commu") window.location.href = "./commu.html";
-      if (page === "addr") window.location.href = "./addr.html";
+      if (page === "addr") window.location.href = "./location.html";
       if (page === "rank") window.location.href = "./rank.html";
       if (page === "my") window.location.href = "./my.html";
     });

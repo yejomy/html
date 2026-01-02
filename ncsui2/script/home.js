@@ -163,7 +163,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (page === "commu") {
         window.location.href = "./commu.html";
-      } else if (page === "juice") {
+      } else if (page === "addr") {
         // ✅ 주소 탭 → location.html로 이동
         window.location.href = "./location.html";
       }
