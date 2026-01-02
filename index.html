@@ -1,45 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문자data를 숫자data로 변환</title>
+    <title>배열data</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <script>
-        // 외부로부터 이름을 입력받고, 체중하고, 키를 입력 받아서 
-        // bmi지수를 계산하는 프로그램
-
-        let name = prompt("이름을 입력해주세요")
-        let weight = prompt("몸무게를 입력하세요")
-        let tall = prompt("키를 입력하세요")
-
-        // 체질량지수 구하는 수식
-        let bmi = Number(weight) / ( Number(tall) * Number(tall)) * 10000
-        let res = ''
-
     
-if (bmi < 18.5) {
-    res = "저체중";
-}
-else if (bmi < 23) {
-    res = "정상체중";
-}
-else if (bmi < 25) {
-    res = "과체중";
-}
-else if (bmi < 30) {
-    res = "비만";
-}
-else {
-    res = "고도비만";
-}
+    <!-- 배열 -->
+    <script>
+        // 바나나, 포도, 딸기, 수박
+        let fruit = "바나나"
+        let fruit2 = "포도"
+        let fruit3 = "딸기"
+        let fruit4 = "수박"
+
+        document.write("과일의 종류는" + fruit + ',' + fruit2 + ',' + fruit3 + ',' 
+         + fruit4 + "입니다<br>")
+
+         document.write( `과일의 종류는 ${fruit},${fruit2},${fruit3},${fruit4}입니다<br>`)
+        //  `` 벡팅 ${}
+
+        // 배열로처리
+        // 여러개의 data를 저장 배열로 선언하여 저장 
+        // 베열로 선언시 []로 선언
+
+        let product = ['바나나','포도','딸기','수박','키위'];
+        // 배열에 기억되어 있는 값을 접근해서 출력
+        // 배열명[key] 배열에 특정값을 출력
+        document.write(`첫번째 데이터는 ${product[0]} <br>`);
+        document.write(`두번째 data는 ${product[1]} <br>`);
+        document.write(`세번째 data는 ${product[2]} <br>`);
+        document.write(`네번째 data는 ${product[3]} <br>`);
+
+        // 배열에 기억된 값 모두 출력
+        document.write(`과일종류는 ${product} 입니다<br>`)
+        document.write(`오늘의 추천과일은 ${product[3]} 입니다<br>`)
+        document.write(`올해의 제철과일은 ${product} 입니다<br>`)
+
+        // 빅데이터는 대부분 배열에 입력
 
 
-        alert( "고객님의 이름은" + name + "이고\n" + "입력하신 체질량 지수는" + bmi + "입니다\n"
-        + "고객님의 몸무게는" + res + "입니다"
-        )
+        // 응용예
+        // 월,화,수,목,금,토,일
 
-    </script>
+        let week = ['월','화','수','목','금','토','일']
+
+
+        document.write(`요일은 ${week}이 있습니다<br>`)
+
+        // 오늘은 금요일 입니다
+        document.write(`오늘은 ${week[4]}요일 입니다<br>`)
+
+        // 배열 선언 방식
+
+        let gail = new Array('사과', '배', '토마토', '참외')
+        // 배열에 있는 값출력
+        document.write(`올해의 제철과일은 ${gail}입니다<br>`)
+        // 배열에 있는 key값 출력
+        document.write(`오늘의 추천과일은 ${gail[2]}입니다<br>`)
+        // 동물 data를 여러개 기억시켜서 얼룩말, 타조 , 강아지, 참새, 고양이, 개미 , 알파카, 닭
+        let animal = [ `얼룩말`,`타조`,`강아지`, `참새`, `고양이`, `개미`, `알파카`, `닭`]
+
+        document.write(`동물은 ${animal}들이 있습니다 <br>`)
+        document.write(`그중 조류는 ${animal[3]}입니다<br>`)
+        document.write(`그중 곤충류는 ${animal[5]}입니다<br>`)
+        </script>
+   
+   
+   <script src="./js/main.js"></script>
 </body>
 </html>
+
