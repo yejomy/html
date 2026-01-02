@@ -1,86 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>객체data</title>
+	<meta charset="utf-8"/>
+	<title>Kakao 지도 시작하기</title>
 </head>
 <body>
-    <!-- 하나의 객체에 여러개를 저장 -->
-     <!-- 1인 홍길동 이름 성별 주소 전화번호 ...-->
+	<div id="map" style="width:500px;height:400px;"></div>
+	<script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41"></script>
+	<script>
+		var container = document.getElementById('map');
+		var options = {
+			center: new kakao.maps.LatLng(33.450701, 126.570667),
+			level: 3
+		};
 
-     <script>
-        // 객체를 선언하는 방법
-        // {}
-        // 객체에 접근해서 data를 출력하는 방법
-        // 객체변수명.indekey값
-        // 객체는 indexkey 값을 개발자가 만든다
-        // 서버있는 api data하고 통신할떄에는 json파일 형식으로 주고 받는다
-        
-        // 배열로선언
-        let score = [100,90,80,70]
-        document.write(`영어점수=${score[0]}<br> 국어점수=${score[1]}<br> 
-        수학점수=${score[2]}<br> 컴퓨터점수=${score[3]}<br>`);
-
-        // 객체로 선언
-        let jumsu = {
-            eng:100,
-            kor:90,
-            mat:80,
-            com:70
-        }
-        document.write("<hr>") // 따옴표 중요해용! 
-        // 객체로 data접근 출력
-        document.write(`영어점수= ${jumsu.eng} <br> 국어점수= ${jumsu.kor} <br> 
-        수학점수= ${jumsu.mat} <br> 컴퓨터점수= ${jumsu.com}`);
-        document.write("<hr>");
-
-        // 책 목록을 출력하는 프로그램(객체) -> 소년이 온다
-        let books = [
-        {
-        제목: "소년이 온다",
-        저자: "한강",
-        가격: 13500,
-        출간일: "2014년 5월 19일",
-        평점: 9.8,
-        preview: "본 콘텐츠는 (사)한국출판인회의에서 배포하는 ‘KoPub 글꼴’을 사용하고 있습니다. 본 전자책은 구동되는 단말기나 소프트웨어, 서체 등에 따라 다르게 보일 수 있습니다.이 책 내용의 전부 또는 일부를 재사용하려면 반드시 저작권자와 창비 양측의 동의를 받아야 합니다."
-        },
-        {
-        제목: "작별하지 않는다",
-        저자: "한강",
-        가격: 15200,
-        출간일: "2014년 5월 19일",
-        평점: 9.8,
-        preview: "본 콘텐츠는 (사)한국출판인회의에서 배포하는 ‘KoPub 글꼴’을 사용하고 있습니다. 본 전자책은 구동되는 단말기나 소프트웨어, 서체 등에 따라 다르게 보일 수 있습니다.이 책 내용의 전부 또는 일부를 재사용하려면 반드시 저작권자와 창비 양측의 동의를 받아야 합니다."
-        }
-        ];
-        
-        document.write(`책제목:${books[0].제목} <br> 
-        가격:${books[0].가격} <br> 
-        저자:${books[0].저자} <br> 
-        출간일:${books[0].출간일} <br> 
-        평점:${books[0].평점} <br> 
-        preview:<br>${books[0].preview} <br>`);
-
-        document.write("<hr>");
-
-        // 문제1 배열 / 2 객체변수 제품이름은 마오, 유형은 당절임 성분은 망고 설탕 치자
-        // 원산지 필리핀 객체 변수로 기억시켜서 출력
-
-        let product = [`마오`,`당절임`, `망고,설탕,치자`,`필리핀`]
-        document.write(`제품명=${product[0]}<br>`,`유형=${product[1]}<br>`, `성분=${product[2]}<br>`, `원산지=${product[3]}입니다`);
-        document.write("<hr>");
-
-        let food = {
-            이름:"마오",
-            유형:"당절임",
-            성분:"망고,설탕,치자",
-            원산지: "필리핀"
-        }
-
-        document.write(
-            `제품명=${food.이름} <br> 유형=${food.유형} <br> 성분=${food.성분} <br> 원산지=${food.원산지}입니다`);
-        document.write("<hr>")
-     </script>
+		var map = new kakao.maps.Map(container, options);
+	</script>
 </body>
 </html>
