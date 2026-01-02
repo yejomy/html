@@ -32,6 +32,8 @@ body{
   min-height: 100svh;
   width: 100%;
   background: var(--bg);
+  /* ✅ commu 구조랑 맞추기: 탭바 높이만큼 패딩 */
+  padding-bottom: calc(78px + var(--safe-bottom));
 }
 
 /* ===== HERO ===== */
@@ -217,7 +219,8 @@ body{
 
 /* ===== CONTENT ===== */
 .content{
-  padding: 84px 14px calc(78px + var(--safe-bottom));
+  /* ✅ 아래 패딩에서 탭바 높이 제거해서 commu랑 동일 구조로 */
+  padding: 84px 14px 14px;
 }
 
 .section-head{
