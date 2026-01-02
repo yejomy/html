@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>주소</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ✅ Leaflet 제거, 우리 CSS만 유지 -->
+  <link rel="stylesheet" href="./css/map.css" />
+</head>
+<body>
+  <main class="app">
+
+    <!-- TOP -->
+    <header class="topbar">
+      <div class="topbar__title">주소</div>
+      <button class="avatar" type="button" aria-label="프로필">
+        <img src="./images/profile.jpg" alt="" onerror="this.style.display='none'; this.parentElement.classList.add('avatar--fallback');">
+        <span class="avatar__fallback" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <!-- FILTERS -->
+    <section class="filters">
+      <div class="seg" role="tablist" aria-label="지역 선택">
+        <button class="seg__btn is-active" type="button" data-region="east" role="tab" aria-selected="true">제주 동부</button>
+        <button class="seg__btn" type="button" data-region="west" role="tab" aria-selected="false">제주 서부</button>
+      </div>
+
+      <div class="search">
+        <svg viewBox="0 0 24 24" class="search__icon" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20l-3.3-3.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+
+        <input id="q" class="search__input" type="text" placeholder="코스를 검색해주세요" list="searchAreas" />
+        <datalist id="searchAreas">
+          <option value="성산"></option>
+          <option value="월정리"></option>
+          <option value="표선"></option>
+          <option value="한림"></option>
+          <option value="협재"></option>
+        </datalist>
+      </div>
+
+      <div class="meta-row">
+        <button class="chip" type="button" id="btnLocate">
+          <svg viewBox="0 0 24 24" class="chip__icon" aria-hidden="true">
+            <path d="M12 2v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 19v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M2 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="1.2" fill="currentColor"/>
+          </svg>
+          내 위치
+        </button>
+
+        <div class="speed">
+          <span class="speed__label">기본속도</span>
+          <select id="speed" class="speed__select" aria-label="속도 선택">
+            <option value="14">14km/h</option>
+            <option value="18" selected>18km/h</option>
+            <option value="22">22km/h</option>
+            <option value="26">26km/h</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAP -->
+    <section class="map-wrap" aria-label="지도">
+      <div id="map" class="map"></div>
+    </section>
+
+    <!-- 요약 코스 카드 -->
+    <section class="route-panel" aria-label="선택 코스 요약">
+      <div class="route-card" id="routeCard" aria-live="polite">
+        <div class="route-card__top">
+          <div class="route-card__title" id="routeTitle">코스를 선택해 주세요</div>
+          <span class="route-card__badge" id="routeRegion">동부</span>
+        </div>
+
+        <div class="route-card__grid">
+          <div class="rc">
+            <div class="rc__label">거리</div>
+            <div class="rc__value" id="routeKm">-</div>
+          </div>
+          <div class="rc">
+            <div class="rc__label">예상시간</div>
+            <div class="rc__value" id="routeTime">-</div>
+          </div>
+          <div class="rc">
+            <div class="rc__label">난이도</div>
+            <div class="rc__value" id="routeLevel">-</div>
+          </div>
+        </div>
+
+        <div class="route-card__hint" id="routeHint">코스 카드 클릭 → 지도에 루트 표시</div>
+
+        <!-- ✅ 카카오맵 상세 길찾기 버튼 -->
+        <button class="route-card__nav" id="routeNavBtn" type="button" disabled>
+          카카오맵 길찾기 상세 보기
+        </button>
+      </div>
+    </section>
+
+    <!-- LIST -->
+    <section class="list" aria-label="추천 코스">
+      <div class="section-head">
+        <h2 class="section-title">추천 코스</h2>
+        <span class="section-sub" id="countLabel">0개</span>
+      </div>
+
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <!-- TABBAR -->
+    <nav class="tabbar" aria-label="하단 탭">
+      <button class="tab" type="button" data-page="home" aria-label="홈">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z" fill="currentColor" opacity=".18"/>
+          <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9.5 21V14h5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        <span class="tab__label">홈</span>
+      </button>
+
+      <button class="tab" type="button" data-page="commu" aria-label="커뮤니티">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z" fill="currentColor" opacity=".18"/>
+          <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="9.5" cy="9.5" r="1" fill="currentColor"/>
+          <circle cx="12" cy="9.5" r="1" fill="currentColor"/>
+          <circle cx="14.5" cy="9.5" r="1" fill="currentColor"/>
+        </svg>
+        <span class="tab__label">커뮤니티</span>
+      </button>
+
+      <button class="tab is-active" type="button" data-page="addr" aria-label="주소">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="currentColor" opacity=".18"/>
+          <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="12" cy="10" r="2.5" fill="currentColor"/>
+        </svg>
+        <span class="tab__label">주소</span>
+      </button>
+
+      <button class="tab" type="button" data-page="rank" aria-label="랭킹">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z" fill="currentColor" opacity=".18"/>
+          <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M6 20h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tab__label">랭킹</span>
+      </button>
+
+      <button class="tab" type="button" data-page="my" aria-label="마이">
+        <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="currentColor" opacity=".18"/>
+          <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="tab__label">마이</span>
+      </button>
+    </nav>
+
+  </main>
+
+  <!-- ✅ 카카오 지도 SDK (JS 키 넣기) -->
+  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41"></script>
+  <script src="./script/map.js"></script>
+</body>
+</html>
