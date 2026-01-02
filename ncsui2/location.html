@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Leaflet 제거, 우리 CSS만 -->
   <link rel="stylesheet" href="./css/location.css" />
 </head>
 <body>
@@ -102,14 +101,19 @@
 
         <div class="route-card__hint" id="routeHint">코스 카드 클릭 → 지도에 루트 표시</div>
 
-        <!-- 카카오맵 상세 길찾기 -->
-        <!-- <button class="route-card__nav" id="routeNavBtn" type="button" disabled>
-          카카오맵 길찾기 상세 보기
-        </button> -->
-
-        <!-- 코스 시작 (GPS 배지용) -->
+        <!-- 코스 시작 (추천 코스 / 배지용) -->
         <button class="route-card__start" id="routeStartBtn" type="button" disabled>
           추천 코스 시작하기
+        </button>
+
+        <!-- 자유 라이딩 (GPS로 자동 기록) -->
+        <button class="route-card__free" id="freeRideBtn" type="button">
+          자유 라이딩 시작하기 (자동 기록)
+        </button>
+
+        <!-- 공유 버튼 (선택된 코스 있을 때 활성화) -->
+        <button class="route-card__share" id="shareCourseBtn" type="button" disabled>
+          이 코스 커뮤니티에 공유하기
         </button>
       </div>
     </section>
@@ -118,7 +122,12 @@
     <section class="list" aria-label="추천 코스">
       <div class="section-head">
         <h2 class="section-title">추천 코스</h2>
-        <span class="section-sub" id="countLabel">0개</span>
+        <div class="section-right">
+          <button class="mycourse-btn" id="btnMyCourse" type="button">
+            나만의 코스 만들기
+          </button>
+          <span class="section-sub" id="countLabel">0개</span>
+        </div>
       </div>
 
       <div class="cards" id="cards"></div>
@@ -176,7 +185,7 @@
 
   </main>
 
-  <!-- 카카오 지도 SDK: YOUR_KAKAO_JS_KEY 부분에 JS 키 넣기 -->
+  <!-- 카카오 지도 SDK: JS 키 넣어둔 상태 -->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41"></script>
   <script src="./script/location.js"></script>
 </body>
