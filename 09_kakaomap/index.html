@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8"/>
-	<title>Kakao 지도 시작하기</title>
+    <meta charset="utf-8">
+    <title>지도+마커</title>
+    
 </head>
 <body>
-	<div id="map" style="width:500px;height:400px;"></div>
-	<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41"></script>
-	<script>
+<div id="map" style="width:100%;height:350px;"></div>
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/7ee9b095c90cdea6dd4e498a51c88a41"></script>
+<script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: 2 // 지도의 확대 레벨
     };
 
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -28,9 +30,7 @@ var marker = new kakao.maps.Marker({
 marker.setMap(map);
 
 // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
-// marker.setMap(null);   
+// marker.setMap(null);    
 </script>
 </body>
 </html>
-
-
