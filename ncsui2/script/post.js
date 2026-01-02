@@ -116,6 +116,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const page = btn.dataset.page;
       if (page === "home") window.location.href = "./home.html";
       if (page === "commu") window.location.href = "./commu.html";
+      if (page === "addr") window.location.href = "./location.html";
     });
   });
 });
