@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>랭킹</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/rank.css" />
+</head>
+<body>
+
+  <!-- ✅ Sticker Badge Icon Sprite (이모지 X, 직접 그린 통일 아이콘) -->
+  <svg class="sprite" aria-hidden="true">
+    <!-- 귤 라이더 -->
+    <symbol id="b-gyul" viewBox="0 0 64 64">
+      <defs>
+        <linearGradient id="gOrange" x1="12" y1="10" x2="52" y2="54" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#FFB13C"/>
+          <stop offset="1" stop-color="#FF7A00"/>
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="26" r="16" fill="url(#gOrange)" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M28 10c3 3 8 3 10 0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M33 8c3-4 10-5 14 2-6 2-10 3-14-2Z" fill="#22B455" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <circle cx="27" cy="26" r="2.2" fill="currentColor"/>
+      <circle cx="37" cy="26" r="2.2" fill="currentColor"/>
+      <path d="M26 33c4 5 8 5 12 0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- 핸들 -->
+      <path d="M22 42c5-8 15-8 20 0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- 바퀴 -->
+      <circle cx="20" cy="48" r="7" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="44" cy="48" r="7" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M20 48h14l6-10" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M34 48l-4-9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 헬멧 라이더 -->
+    <symbol id="b-rider" viewBox="0 0 64 64">
+      <path d="M20 28c0-8 6-14 14-14s14 6 14 14" fill="#2ED573" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="34" cy="30" r="10" fill="#FFD8B1" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M28 30h12" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M18 46c6-10 24-10 30 0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="22" cy="50" r="7" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="48" cy="50" r="7" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M22 50h16l8-12" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- 지도 핀 -->
+    <symbol id="b-pin" viewBox="0 0 64 64">
+      <path d="M32 58s18-15 18-31a18 18 0 1 0-36 0c0 16 18 31 18 31Z"
+            fill="#FF9A3D" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <circle cx="32" cy="27" r="6.5" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M20 14c5-6 19-6 24 0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" opacity=".8"/>
+    </symbol>
+
+    <!-- 말풍선/소통 -->
+    <symbol id="b-chat" viewBox="0 0 64 64">
+      <path d="M14 18c0-6 5-10 11-10h18c6 0 11 4 11 10v10c0 6-5 10-11 10H30l-10 8v-8h-1c-3 0-5-2-5-5V18Z"
+            fill="#FFFFFF" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <circle cx="26" cy="26" r="2.4" fill="currentColor"/>
+      <circle cx="32" cy="26" r="2.4" fill="currentColor"/>
+      <circle cx="38" cy="26" r="2.4" fill="currentColor"/>
+      <path d="M44 44c6 0 10 3 10 8 0 5-4 8-10 8h-9l-7 4v-4" fill="#FFEDD6" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M40 52h8" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 카메라/사진 -->
+    <symbol id="b-camera" viewBox="0 0 64 64">
+      <path d="M18 22h8l3-5h10l3 5h6c4 0 7 3 7 7v14c0 4-3 7-7 7H18c-4 0-7-3-7-7V29c0-4 3-7 7-7Z"
+            fill="#FFF" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <circle cx="32" cy="36" r="9" fill="#FFB13C" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="32" cy="36" r="3.5" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M46 28h6" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- 왕관/레전드 -->
+    <symbol id="b-crown" viewBox="0 0 64 64">
+      <path d="M14 24l8 8 10-14 10 14 8-8 4 26H10l4-26Z"
+            fill="#FFB13C" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M18 50h28" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="22" cy="22" r="3" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="32" cy="16" r="3" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="42" cy="22" r="3" fill="#fff" stroke="currentColor" stroke-width="3.5"/>
+    </symbol>
+  </svg>
+
+  <main class="app">
+    <!-- TOP -->
+    <header class="topbar">
+      <div class="topbar__title">랭킹</div>
+      <button class="avatar" type="button" aria-label="프로필">
+        <img src="./images/profile.jpg" alt=""
+             onerror="this.style.display='none'; this.parentElement.classList.add('avatar--fallback');">
+        <span class="avatar__fallback" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <section class="wrap">
+
+
+      <!-- MY STATUS -->
+      <section class="mycard" aria-label="내 랭킹 현황">
+        <div class="mycard__left">
+          <div class="mycard__kicker">이번 주 내 랭킹</div>
+          <div class="mycard__rankline">
+            <span class="mycard__rank" id="myRank">#12</span>
+            <span class="mycard__sep">·</span>
+            <span class="mycard__sub">총 <b id="totalUsers">1,248</b>명</span>
+          </div>
+
+          <div class="mycard__badges">
+            <div class="badge-meter">
+              <div class="badge-meter__label">내 배지</div>
+              <div class="badge-meter__count"><b id="myBadges">7</b>개</div>
+            </div>
+            <div class="mini-badges" id="miniBadges" aria-label="내 배지 미리보기"></div>
+          </div>
+        </div>
+
+        <div class="mycard__right">
+          <div class="badge-hero" aria-label="대표 배지">
+            <div class="badge-hero__sticker">
+              <div class="badge-hero__shine"></div>
+              <svg class="badge-hero__icon" viewBox="0 0 64 64" aria-hidden="true">
+                <use href="#b-gyul"></use>
+              </svg>
+            </div>
+            <div class="badge-hero__name" id="heroBadgeName">귤라이더</div>
+            <div class="badge-hero__rarity" id="heroBadgeRarity">Epic</div>
+          </div>
+        </div>
+      </section>
+
+            <!-- ✅ 주간 BEST 글 (딱 1개)
+      <section class="best" aria-label="주간 베스트 글">
+        <div class="best__head">
+          <h2 class="best__title">주간 BEST</h2>
+          <span class="best__sub">이번 주 가장 핫한 글 /span>
+        </div>
+
+        <a class="best-card" id="bestCard" href="./commu.html" aria-label="주간 베스트 글 보기">
+          <div class="best-card__media">
+            <img id="bestImg" src="./images/location2.jpg" alt="" loading="lazy" decoding="async">
+            <div class="best-card__pill">BEST</div>
+          </div>
+
+          <div class="best-card__body">
+            <div class="best-card__meta">
+              <span class="best-card__author" id="bestAuthor">김예진</span>
+              <span class="dot">·</span>
+              <span class="best-card__time" id="bestTime">25년12월15일</span>
+            </div>
+            <div class="best-card__headline" id="bestTitle">너무추워서 자전거 탈수가 없어</div>
+            <div class="best-card__stats">
+              <span class="stat">❤️ <b id="bestLike">126</b></span>
+              <span class="stat">💬 <b id="bestComment">18</b></span>
+              <span class="stat">👀 <b id="bestView">542</b></span>
+              <span class="cta">보러가기 →</span>
+            </div>
+          </div>
+        </a>
+      </section> -->
+      <!-- SECTIONS -->
+      <section class="section" aria-label="주간 탐험가 TOP3">
+        <div class="section__head">
+          <h2 class="section__title">주간 탐험가 TOP3</h2>
+          <span class="section__sub">라이딩/코스 활동</span>
+        </div>
+        <div class="podium" id="podiumExplorer"></div>
+      </section>
+
+      <section class="section" aria-label="주간 소통러 TOP3">
+        <div class="section__head">
+          <h2 class="section__title">주간 소통러 TOP3</h2>
+          <span class="section__sub">댓글/좋아요</span>
+        </div>
+        <div class="podium" id="podiumSocial"></div>
+      </section>
+
+      <section class="section" aria-label="주간 큐레이터 TOP3">
+        <div class="section__head">
+          <h2 class="section__title">주간 큐레이터 TOP3</h2>
+          <span class="section__sub">코스 추천/정리</span>
+        </div>
+        <div class="podium" id="podiumCurator"></div>
+      </section>
+
+      <section class="section" aria-label="명예의 전당">
+        <div class="section__head">
+          <h2 class="section__title">명예의 전당</h2>
+          <span class="section__sub">레전드 배지 보유자</span>
+        </div>
+        <div class="hall" id="hall"></div>
+      </section>
+
+      <div class="spacer"></div>
+    </section>
+
+    <!-- TABBAR -->
+<nav class="tabbar" aria-label="하단 탭">
+  <button class="tab" type="button" data-page="home" aria-label="홈">
+    <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+      <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z"
+            fill="currentColor" opacity=".18"/>
+      <path d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 20v-9.5Z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M9.5 21V14h5v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    </svg>
+    <span class="tab__label">홈</span>
+  </button>
+
+  <button class="tab is-active" type="button" data-page="commu" aria-label="커뮤니티">
+    <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+      <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z"
+            fill="currentColor" opacity=".18"/>
+      <path d="M5 6.8A4.8 4.8 0 0 1 9.8 2h4.4A4.8 4.8 0 0 1 19 6.8v4.1A4.8 4.8 0 0 1 14.2 16H10l-4.3 3v-3A4.7 4.7 0 0 1 5 14.9Z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="9.5" cy="9.5" r="1" fill="currentColor"/>
+      <circle cx="12" cy="9.5" r="1" fill="currentColor"/>
+      <circle cx="14.5" cy="9.5" r="1" fill="currentColor"/>
+    </svg>
+    <span class="tab__label">커뮤니티</span>
+  </button>
+
+  <button class="tab" type="button" data-page="addr" aria-label="주소">
+    <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+      <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
+            fill="currentColor" opacity=".18"/>
+      <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="12" cy="10" r="2.5" fill="currentColor"/>
+    </svg>
+    <span class="tab__label">주소</span>
+  </button>
+
+  <button class="tab" type="button" data-page="rank" aria-label="랭킹">
+    <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+      <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z"
+            fill="currentColor" opacity=".18"/>
+      <path d="M4 9l4 4 4-7 4 7 4-4v9H4V9Z"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M6 20h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="tab__label">랭킹</span>
+  </button>
+
+  <button class="tab" type="button" data-page="my" aria-label="마이">
+    <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
+      <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="currentColor" opacity=".18"/>
+      <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="tab__label">마이</span>
+  </button>
+</nav>
+  </main>
+
+  <script src="./script/rank.js"></script>
+</body>
+</html>
