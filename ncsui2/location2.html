@@ -9,7 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Leaflet 제거, 우리 CSS만 -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
   <link rel="stylesheet" href="./css/location.css" />
 </head>
 <body>
@@ -17,7 +20,7 @@
 
     <!-- TOP -->
     <header class="topbar">
-      <div class="topbar__title">주소 및 추천코스</div>
+      <div class="topbar__title">주소</div>
       <button class="avatar" type="button" aria-label="프로필">
         <img src="./images/profile.jpg" alt="" onerror="this.style.display='none'; this.parentElement.classList.add('avatar--fallback');">
         <span class="avatar__fallback" aria-hidden="true"></span>
@@ -77,7 +80,7 @@
       <div id="map" class="map"></div>
     </section>
 
-    <!-- 요약 코스 카드 -->
+    <!-- 요약 코스 카드 (지도 안가림) -->
     <section class="route-panel" aria-label="선택 코스 요약">
       <div class="route-card" id="routeCard" aria-live="polite">
         <div class="route-card__top">
@@ -101,16 +104,6 @@
         </div>
 
         <div class="route-card__hint" id="routeHint">코스 카드 클릭 → 지도에 루트 표시</div>
-
-        <!-- 카카오맵 상세 길찾기 -->
-        <!-- <button class="route-card__nav" id="routeNavBtn" type="button" disabled>
-          카카오맵 길찾기 상세 보기
-        </button> -->
-
-        <!-- 코스 시작 (GPS 배지용) -->
-        <button class="route-card__start" id="routeStartBtn" type="button" disabled>
-          추천 코스 시작하기
-        </button>
       </div>
     </section>
 
@@ -124,7 +117,7 @@
       <div class="cards" id="cards"></div>
     </section>
 
-    <!-- TABBAR -->
+    <!-- ✅ TABBAR (아이콘 복구) -->
     <nav class="tabbar" aria-label="하단 탭">
       <button class="tab" type="button" data-page="home" aria-label="홈">
         <svg viewBox="0 0 24 24" class="tab__icon" aria-hidden="true">
@@ -176,8 +169,7 @@
 
   </main>
 
-  <!-- 카카오 지도 SDK: YOUR_KAKAO_JS_KEY 부분에 JS 키 넣기 -->
-  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="./script/location.js"></script>
 </body>
 </html>

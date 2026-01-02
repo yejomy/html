@@ -1,6 +1,6 @@
 @charset "UTF-8";
 :root{
-  --accent:#f38722;
+  --accent:#ff7a00;
   --ink:#111;
   --muted:#7b7b7b;
   --bg:#ffffff;
@@ -36,8 +36,8 @@ body{
   align-items:center;
   justify-content: space-between;
 }
-.topbar__title{ font-size: 16px; font-weight: 900; text-align: center;}
-.avatar{ 
+.topbar__title{ font-size: 16px; font-weight: 900; }
+.avatar{
   width:34px; height:34px;
   border-radius:999px;
   border:0; padding:0;
@@ -67,12 +67,10 @@ body{
   color: #888;
   cursor:pointer;
 }
-
-/* ✅ 선택된 탭(제주 동부 / 제주 서부) 스타일 */
 .seg__btn.is-active{
-  background: var(--accent);      /* 포인트 컬러 배경 */
-  color: #ffffff;                /* 글씨 흰색 */
-  box-shadow: 0 8px 14px rgba(255,122,0,.35);
+  background: #fff;
+  color: var(--accent);
+  box-shadow: 0 8px 14px rgba(0,0,0,.08);
 }
 
 .search{
@@ -138,7 +136,7 @@ body{
   box-shadow: 0 12px 22px rgba(0,0,0,.12);
 }
 
-/* ROUTE CARD */
+/* ROUTE CARD (지도 아래) */
 .route-panel{ padding: 12px 16px 0; background: var(--bg); }
 .route-card{
   background: var(--card);
@@ -179,47 +177,6 @@ body{
 .rc__value{ margin-top: 4px; font-size: 13px; font-weight: 900; color: #111; }
 .route-card__hint{ margin-top: 10px; font-size: 12px; color: #888; font-weight: 700; }
 
-/* 카카오맵 길찾기 버튼 */
-.route-card__nav{
-  margin-top: 10px;
-  width: 100%;
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 12px;
-  font-size: 13px;
-  font-weight: 900;
-  background: linear-gradient(135deg, #ff7a00, #ffb347);
-  color: #fff;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  cursor: pointer;
-}
-.route-card__nav:disabled{
-  opacity: .4;
-  cursor: default;
-  box-shadow: none;
-}
-
-/* 코스 시작 버튼 */
-.route-card__start{
-  margin-top: 8px;
-  width: 100%;
-  border: 0;
-  border-radius: 999px;
-  padding: 9px 12px;
-  font-size: 13px;
-  font-weight: 900;
-  background: #ffffff;
-  color: var(--accent);
-  border: 1px solid rgba(255,122,0,0.5);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-  cursor: pointer;
-}
-.route-card__start:disabled{
-  opacity: .4;
-  cursor: default;
-  box-shadow: none;
-}
-
 /* LIST */
 .list{ margin-top: 10px; padding: 14px 16px 0; background: var(--rail); }
 .section-head{
@@ -238,7 +195,7 @@ body{
   padding-bottom: 18px;
 }
 
-/* 추천 코스 카드 */
+/* ✅ 추천 코스 카드 */
 .course{
   background: #fff;
   border-radius: 14px;
@@ -247,6 +204,8 @@ body{
   border: 1px solid rgba(0,0,0,.05);
   cursor:pointer;
 }
+
+/* ✅ 이미지 박스 (3:2) - 여기서 "깔끔"하게 */
 .course__media{
   width: 100%;
   aspect-ratio: 3 / 2;
@@ -254,16 +213,20 @@ body{
   margin-bottom: 10px;
   overflow: hidden;
   position: relative;
-  background: #eee;
+  background: #eee; /* 이미지 로딩 전 바탕 */
 }
+
+/* ✅ <img>로 렌더링: 선명도 체감 훨씬 좋음 */
 .course__media img{
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  /* iOS에서 가끔 생기는 미세 blur 방지 */
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
 }
+
 .course__body{
   display:flex;
   align-items:flex-start;
@@ -299,47 +262,6 @@ body{
   padding: 6px 10px;
   border-radius: 999px;
 }
-
-/* 평점 + 한줄 리뷰 */
-.course__rating-row{
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 20px;
-}
-.course__rating-badge{
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255,122,0,0.1);
-  font-size: 11px;
-  font-weight: 900;
-  color: var(--accent);
-}
-.course__rating-star{
-  font-size: 11px;
-}
-.course__rating-score{
-  font-size: 12px;
-}
-.course__review{
-  margin: 0;
-  font-size: 11px;
-  color: #777;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 180px;
-}
-.course__review--empty{
-  opacity: .7;
-}
-
 .course__right{
   flex: 0 0 auto;
   display:grid;
@@ -356,7 +278,7 @@ body{
 }
 .small{ font-size: 12px; font-weight: 900; color: #111; }
 
-/* TAB BAR */
+/* ===== TAB BAR ===== */
 .tabbar{
   position: fixed;
   left: 0;
@@ -370,6 +292,7 @@ body{
   gap: 4px;
   z-index: 10;
 }
+
 .tab{
   border: 0;
   background: transparent;
@@ -380,6 +303,8 @@ body{
   color: #b7b7b7;
   cursor: pointer;
 }
+
 .tab__icon{ width: 22px; height: 22px; color: currentColor; }
 .tab__label{ font-size: 11px; font-weight: 800; }
+
 .tab.is-active{ color: var(--accent); }
