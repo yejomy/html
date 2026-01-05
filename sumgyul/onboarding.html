@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Onboarding</title>
+  <link rel="stylesheet" href="./css/onboarding.css" />
+</head>
+<body>
+  <main class="onboarding" aria-label="온보딩">
+
+    <section class="slides" aria-live="polite">
+      <!-- Slide 1 -->
+      <article class="slide active" data-index="0" aria-hidden="false">
+        <div class="image image-1" role="img" aria-label="온보딩 이미지 1"></div>
+        <div class="content">
+          <h1>쉼의 허락</h1>
+          <p>불안은 잠시 흔들림일 뿐이에요<br/>오늘은 조금 쉬어도 괜찮아요</p>
+        </div>
+      </article>
+
+      <!-- Slide 2 -->
+      <article class="slide" data-index="1" aria-hidden="true">
+        <div class="image image-2" role="img" aria-label="온보딩 이미지 2"></div>
+        <div class="content">
+          <h1>함께 연습하기</h1>
+          <p>불안은 혼자 감당하는 게 아니에요<br/>우리, 함께 연습해봐요</p>
+        </div>
+      </article>
+
+      <!-- Slide 3 (FULL IMAGE) -->
+      <article class="slide full" data-index="2" aria-hidden="true">
+        <div class="image image-3 fullimg" role="img" aria-label="온보딩 이미지 3"></div>
+
+        <!-- 텍스트 필요없으면 이 블록 삭제해도 됨 -->
+        <div class="overlay">
+          <h1>혼자가 아닌 나</h1>
+          <p>당신은 혼자가 아니에요<br/>여기엔 같은 길을 걷는 사람들이 함께 있어요</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ✅ 하단 바: 왼쪽 dots / 오른쪽 SKIP (스샷처럼) -->
+    <footer class="bottombar" aria-label="하단 컨트롤">
+      <div class="dots" aria-label="페이지 표시">
+        <span class="dot active" aria-hidden="true"></span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="dot" aria-hidden="true"></span>
+      </div>
+
+      <button class="skip" id="skipBtn" type="button">SKIP</button>
+    </footer>
+
+  </main>
+
+  <script src="./js/onboarding.js"></script>
+</body>
+</html>

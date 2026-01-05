@@ -1,0 +1,188 @@
+@charset "utf-8";
+
+/* 폰트 */
+@font-face {
+  font-family: 'RomanticGumi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/GumiRomanceTTF.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+/* ===============================
+   기본 변수: 데스크탑
+   =============================== */
+:root{
+  --text: #ffffff;
+  --orange: #E06A2E;
+
+  /* Desktop assets */
+  --bg-image: url("../images/splash_background.png");
+  --rogi-idle: url("../images/splash_background_rogi.png");
+  --rogi-exhale: url("../images/splash_background_rogi_hue.png");
+
+  /* timing */
+  --breath-duration: 5s;
+}
+
+/* 앱(세로/작은 화면)에서는 모바일 assets로 교체 */
+@media (max-width: 768px), (max-aspect-ratio: 9/16){
+  :root{
+    --bg-image: url("../images/splash_back_app.png");
+    --rogi-idle: url("../images/splashimg_rogi_app.png");
+    --rogi-exhale: url("../images/splashimg_rogi_hue_app.png");
+  }
+}
+
+/* reset */
+*{ box-sizing: border-box; } 
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  font-family: 'RomanticGumi', system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ===============================
+   배경
+   =============================== */
+.bg{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg-image) center / cover no-repeat;
+}
+
+/* ===============================
+   로기 레이어
+   - rogi-idle / rogi-exhale는 "투명 PNG"라서
+     background로 깔고 contain으로 안전하게 보여줌
+   =============================== */
+
+   
+.rogi{
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  /* 아주 미세한 숨결 느낌(몸 전체가 살짝 내려앉는 느낌) */
+  animation: rogiSettle var(--breath-duration) ease-in-out forwards;
+  will-change: transform;
+}
+
+.rogi__frame{
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+  will-change: opacity, transform, filter;
+}
+
+/* 첫 프레임: 숨 안 쉬는 상태 */
+.rogi__idle{
+  background-image: var(--rogi-idle);
+  opacity: 1;
+  animation: idleOut var(--breath-duration) ease-in-out forwards;
+}
+
+/* 두 번째 프레임: 숨 내쉬는 상태(입김 포함) */
+.rogi__exhale{
+  background-image: var(--rogi-exhale);
+  opacity: 0;
+  animation: exhaleInOut var(--breath-duration) ease-in-out forwards;
+}
+
+/* "한숨 쉬며 힘 빠짐" 느낌: 아주 살짝 내려오고 작아짐 */
+@keyframes rogiSettle{
+  0%   { transform: translateY(0) scale(1); }
+  55%  { transform: translateY(0) scale(1); }
+  100% { transform: translateY(6px) scale(0.996); }
+}
+
+/* idle은 초반엔 그대로 있다가 후반에 서서히 사라짐 */
+@keyframes idleOut{
+  0%   { opacity: 1; }
+  55%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* exhale은 천천히 나타나고, 끝에서 살짝 날아가듯 약해짐 */
+@keyframes exhaleInOut{
+  0%   { opacity: 0; filter: blur(0.6px); transform: translateX(0); }
+  35%  { opacity: 0.15; }
+  65%  { opacity: 1; filter: blur(0px); }
+  100% { opacity: 1; transform: translateX(-6px); }
+}
+/* ===============================
+   UI 레이어
+   =============================== */
+.wrap{
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+}
+
+/* 타이틀: 머리 위 */
+.hero{
+  position: absolute;
+  top: clamp(48px, 7vh, 90px);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: min(900px, 92vw);
+}
+
+.title{
+  margin: 0;
+  letter-spacing: -0.04em;
+  font-size: clamp(44px, 4.6vw, 72px);
+  line-height: 1.05;
+  color: var(--text);
+  text-shadow: 0 12px 32px rgba(0,0,0,.28);
+}
+
+.subtitle{
+  margin: 10px 0 0;
+  letter-spacing: -0.02em;
+  font-size: clamp(18px, 2vw, 30px);
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 10px 26px rgba(0,0,0,.25);
+}
+
+/* loading 텍스트(색이 흰->주황->흰) + 아주 약한 숨결 펄스 */
+.loader-text{
+  position: absolute;
+  bottom: clamp(26px, 5vh, 56px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  letter-spacing: 0.30em;
+  text-transform: lowercase;
+  color: #fff;
+
+  animation:
+    loadingColor 2s ease-in-out infinite,
+    loadingBreathe 2.4s ease-in-out infinite;
+}
+
+@keyframes loadingColor{
+  0%   { color: #ffffff; }
+  40%  { color: #ffd2b8; }
+  70%  { color: var(--orange); }
+  100% { color: #ffffff; }
+}
+
+@keyframes loadingBreathe{
+  0%, 100% { opacity: .86; transform: translateX(-50%) scale(1); }
+  50%      { opacity: 1;   transform: translateX(-50%) scale(1.03); }
+}
+
+/* 모션 최소화 선호 */
+@media (prefers-reduced-motion: reduce){
+  .rogi, .rogi__idle, .rogi__exhale, .loader-text{
+    animation: none !important;
+  }
+}

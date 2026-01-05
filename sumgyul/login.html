@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>login</title>
+  <link rel="stylesheet" href="./css/login.css" />
+</head>
+<body>
+  <main class="login">
+    <section class="panel" aria-label="로그인">
+
+      <div class="logo-wrap">
+        <img class="logo" src="./images/logo.png" alt="로고" />
+      </div>
+
+      <form class="form" id="loginForm" autocomplete="on" novalidate>
+        <label class="field">
+          <input id="idInput" type="text" name="id" placeholder="아이디 또는 이메일을 입력해 주세요" autocomplete="username" />
+        </label>
+
+        <label class="field">
+          <input id="pwInput" type="password" name="pw" placeholder="비밀번호를 입력해주세요." autocomplete="current-password" />
+        </label>
+
+        <div class="options" role="group" aria-label="로그인 옵션">
+          <label class="radio">
+            <input type="radio" name="loginOpt" value="auto" checked />
+            <span class="dot" aria-hidden="true">
+              <svg class="check" viewBox="0 0 12 10" aria-hidden="true">
+                <path d="M1 5.2 L4.2 8.4 L11 1.6" />
+              </svg>
+            </span>
+            <span class="txt">자동 로그인</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="loginOpt" value="save" />
+            <span class="dot" aria-hidden="true">
+              <svg class="check" viewBox="0 0 12 10" aria-hidden="true">
+                <path d="M1 5.2 L4.2 8.4 L11 1.6" />
+              </svg>
+            </span>
+            <span class="txt">아이디저장</span>
+          </label>
+        </div>
+
+        <p class="error" id="errorMsg" aria-live="polite"></p>
+
+        <button class="btn btn--primary" type="submit" id="loginBtn">로그인</button>
+        <button class="btn btn--outline" type="button" id="joinBtn">회원가입</button>
+
+        <nav class="links" aria-label="도움말 링크">
+          <button class="link-btn" type="button" id="openIdModal">아이디찾기</button>
+          <span class="sep">|</span>
+          <button class="link-btn" type="button" id="openPwModal">비밀번호 찾기</button>
+          <span class="sep">|</span>
+          <button class="link-btn" type="button" data-go="home">둘러보기</button>
+        </nav>
+
+        <div class="divider" role="separator" aria-label="또는">
+          <span>or</span>
+        </div>
+
+        <div class="social" aria-label="소셜 로그인">
+          <button class="social-btn" type="button" data-social="kakao" aria-label="카카오">
+            <img src="./images/logo_kakao.svg" alt="카카오계정 연동하기" />
+          </button>
+          <button class="social-btn" type="button" data-social="naver" aria-label="네이버">
+            <img src="./images/logo_naver.svg" alt="네이버계정 연동하기" />
+          </button>
+          <button class="social-btn" type="button" data-social="facebook" aria-label="페이스북">
+            <img src="./images/logo_facebook.svg" alt="페이스북계정 연동하기" />
+          </button>
+          <button class="social-btn" type="button" data-social="apple" aria-label="애플">
+            <img src="./images/logo_apple.svg" alt="애플계정 연동하기" />
+          </button>
+          <button class="social-btn" type="button" data-social="google" aria-label="구글">
+            <img src="./images/logo_google.svg" alt="구글계정 연동하기" />
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- =========================
+        아이디 찾기 모달
+       ========================= -->
+  <div class="modal" id="idModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close="idModal" tabindex="-1"></div>
+
+    <section class="modal__sheet" role="dialog" aria-modal="true" aria-labelledby="idModalTitle">
+      <header class="modal__header">
+        <h2 class="modal__title" id="idModalTitle">아이디 찾기</h2>
+        <button type="button" class="modal__close" data-close="idModal" aria-label="닫기">×</button>
+      </header>
+
+      <form class="modal__body" id="idFindForm" novalidate>
+        <!-- STEP 1: 입력 화면 -->
+        <div id="idStepForm">
+          <label class="m-field">
+            <span class="m-label">이름</span>
+            <input class="m-input" type="text" name="name" placeholder="이름을 입력해주세요" required />
+          </label>
+
+          <label class="m-field">
+            <span class="m-label">이메일</span>
+            <input class="m-input" type="email" name="email" placeholder="example@email.com" required />
+          </label>
+
+          <label class="m-field">
+            <span class="m-label">휴대폰 번호</span>
+            <input class="m-input" type="tel" name="phone" inputmode="numeric" placeholder="01012345678 (숫자만)" required />
+          </label>
+
+          <p class="m-error" id="idFindMsg" aria-live="polite"></p>
+
+          <div class="modal__actions">
+            <button type="submit" class="m-btn m-btn--primary">조회하기</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: 결과 화면 (처음엔 무조건 숨김) -->
+        <div class="m-result" id="idStepResult" style="display:none;">
+          <div class="m-result__title">조회 결과</div>
+          <div class="m-result__box">
+            가입된 아이디: <b id="foundId">exampleId</b>
+          </div>
+
+          <button type="button" class="m-btn m-btn--outline" id="idGoLoginBtn">
+            로그인으로 돌아가기
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- =========================
+       비밀번호 찾기 모달
+       ========================= -->
+  <div class="modal" id="pwModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close="pwModal" tabindex="-1"></div>
+
+    <section class="modal__sheet" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle">
+      <header class="modal__header">
+        <h2 class="modal__title" id="pwModalTitle">비밀번호 찾기</h2>
+        <button type="button" class="modal__close" data-close="pwModal" aria-label="닫기">×</button>
+      </header>
+
+      <div class="modal__body">
+        <!-- STEP 1 -->
+        <form id="pwVerifyForm" class="m-step" novalidate>
+          <label class="m-field">
+            <span class="m-label">아이디 또는 이메일</span>
+            <input class="m-input" type="text" name="account" placeholder="아이디 또는 이메일 입력" required />
+          </label>
+
+          <label class="m-field">
+            <span class="m-label">휴대폰 번호</span>
+            <input class="m-input" type="tel" name="phone" inputmode="numeric" placeholder="01012345678 (숫자만)" required />
+          </label>
+
+          <p class="m-error" id="pwVerifyMsg" aria-live="polite"></p>
+
+          <div class="modal__actions">
+            <button type="submit" class="m-btn m-btn--primary">본인 확인</button>
+          </div>
+
+          <p class="m-sub">
+            * 데모 버전: 실제 서비스에선 인증번호/본인인증 API가 여기에 붙습니다.
+          </p>
+        </form>
+
+        <!-- STEP 2 -->
+        <form id="pwResetForm" class="m-step" novalidate hidden>
+          <label class="m-field">
+            <span class="m-label">새 비밀번호</span>
+            <input class="m-input" type="password" name="newPw" placeholder="8자 이상" minlength="8" required />
+          </label>
+
+          <label class="m-field">
+            <span class="m-label">새 비밀번호 확인</span>
+            <input class="m-input" type="password" name="newPw2" placeholder="비밀번호 재입력" minlength="8" required />
+          </label>
+
+          <p class="m-error" id="pwResetMsg" aria-live="polite"></p>
+
+          <div class="modal__actions">
+            <button type="submit" class="m-btn m-btn--primary">비밀번호 재설정</button>
+            <button type="button" class="m-btn m-btn--outline" id="pwBackBtn">이전</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="./js/login.js"></script>
+</body>
+</html>

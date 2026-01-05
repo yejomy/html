@@ -1,0 +1,279 @@
+@charset "UTF-8";
+
+/* Pretendard */
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root{
+  --bg: #f6f4f0;
+  --line: rgba(0,0,0,.10);
+  --text: #2b2b2b;
+  --muted: rgba(43,43,43,.55);
+
+  --accent: #E06A2E; /* 오렌지(체크/포인트) */
+  --btn: #3f6f63;    /* 민트(주컬러) */
+
+  --input-bg: rgba(255,255,255,.65);
+  --radius: 10px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+*{ box-sizing: border-box; }
+html, body{ width:100%; height:100%; margin:0; }
+
+body{
+  font-family: 'Pretendard', system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* container */
+.app{
+  min-height: 100svh;
+  width: 100%;
+  padding: calc(18px + var(--safe-top)) 18px calc(18px + var(--safe-bottom));
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  overflow: auto;
+}
+
+/* top */
+.top{
+  width: min(420px, 100%);
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+  margin-bottom: 6px;
+}
+.top__brand{
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+}
+.top__logo{
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+}
+
+/* card */
+.card{
+  width: min(420px, 100%);
+  background: transparent;
+}
+
+.page-title{
+  margin: 10px 0 14px;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.form{
+  display: grid;
+  gap: 12px;
+}
+
+.field{
+  display: grid;
+  gap: 6px;
+  position: relative;
+}
+
+.label{
+  font-size: 13px;
+  font-weight: 800;
+  color: #222;
+}
+
+.input{
+  width: 100%;
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  padding: 0 38px 0 14px; /* ✅ 우측 체크 공간 확보 */
+  font-size: 14.5px;
+  outline: none;
+}
+
+.input::placeholder{ color: rgba(43,43,43,.35); font-weight: 600; }
+
+/* focus: 주컬러 민트 */
+.input:focus{
+  background: #fff;
+  border-color: rgba(63,111,99,1);
+  box-shadow: 0 0 0 3px rgba(63,111,99,.18);
+}
+
+.hint{
+  font-size: 12px;
+  color: rgba(43,43,43,.45);
+}
+
+.error{
+  min-height: 18px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e54848;
+}
+
+/* 입력 완료 상태: 민트 톤 */
+.input.is-filled{
+  background: rgba(63,111,99,0.06);
+  border-color: rgba(63,111,99,0.45);
+}
+.input.is-filled:focus{
+  background: #fff;
+  border-color: rgba(63,111,99,1);
+  box-shadow: 0 0 0 3px rgba(63,111,99,0.18);
+}
+
+/* ✅ 우측 체크 아이콘: 기본 숨김(이게 없어서 항상 보였음) */
+.field-check{
+  position: absolute;
+  right: 12px;
+  top: 38px;                 /* ✅ input 중앙에 딱 맞게 (label+gap 영향 제거) */
+  transform: translateY(-50%);
+  font-size: 18px;
+  font-weight: 900;
+  color: #222;
+  opacity: 0;                /* ✅ 기본 숨김 */
+  transition: opacity .15s ease;
+  pointer-events: none;
+}
+.field-check.is-on{ opacity: 1; }
+
+/* terms */
+.terms{
+  margin-top: 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255,255,255,.55);
+  display: grid;
+  gap: 10px;
+}
+
+.terms__list{
+  display: grid;
+  gap: 8px;
+  padding-left: 4px;
+}
+
+/* ✅ 약관 체크: 오렌지 원형 + 흰 V, 정중앙 고정 */
+.check{
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: rgba(43,43,43,.75);
+  font-weight: 700;
+}
+
+.check input{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+
+  border: 2px solid rgba(43,43,43,.22);
+  background: #fff;
+
+  cursor: pointer;
+  position: relative;
+
+  display: inline-grid;
+  place-items: center;
+}
+
+.check input:checked{
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ✅ 정중앙 V */
+.check input:checked::after{
+  content: "";
+  position: absolute;
+
+  width: 8px;
+  height: 5px;
+
+  border-left: 2.2px solid #fff;
+  border-bottom: 2.2px solid #fff;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -55%) rotate(-45deg); /* 살짝 위로 보정 */
+  border-radius: 1px;
+}
+
+/* buttons */
+.btn{
+  height: 52px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn--primary{
+  background: var(--btn);
+  color: #fff;
+}
+
+.btn--primary.is-disabled{
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.btn--primary:active{ transform: translateY(1px); }
+
+/* bottom */
+.bottom{
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.bottom__link{
+  margin-left: 6px;
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+}
+.bottom__link:active{ opacity: .7; }

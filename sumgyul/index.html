@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>숨결록</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <!-- 배경 -->
+  <div class="bg" aria-hidden="true"></div>
+
+  <!-- 로기 레이어: idle/exhale 2장 겹치기 -->
+  <div class="rogi" aria-hidden="true">
+    <div class="rogi__frame rogi__idle"></div>
+    <div class="rogi__frame rogi__exhale"></div>
+  </div>
+
+  <!-- UI -->
+  <main class="wrap" role="status" aria-live="polite" aria-label="로딩 중">
+    <section class="hero">
+      <h1 class="title">숨결록</h1>
+      <p class="subtitle">당신의 숨결을 남겨요</p>
+    </section>
+
+    <div class="loader-text" aria-label="로딩 중">loading</div>
+  </main>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>

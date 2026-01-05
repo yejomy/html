@@ -1,0 +1,190 @@
+@charset "utf-8";
+
+/* 폰트 */
+@font-face {
+  font-family: 'RomanticGumi';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/GumiRomanceTTF.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+/* ✅ 여기만 네 이미지로 바꾸면 됨 */
+:root{
+  --img1: url("../images/Onboarding1.png");
+  --img2: url("../images/Onboarding2.png");
+  --img3: url("../images/Onboarding3.png");
+
+  --bg: #f6f4f0;
+  --text: #2b2b2b;
+  --muted: rgba(43,43,43,.55);
+
+  --accent: #e06a2e; /* 주황 */
+  --dot-off: #cfcfcf;
+
+  --skip: rgba(180,180,180,.9); /* 스샷처럼 연한 회색 */
+}
+
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  font-family: 'RomanticGumi', system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  overflow: hidden;
+}
+
+/* ✅ 웹앱 풀스크린 */
+.onboarding{
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 슬라이드 */
+.slides{
+  position: absolute;
+  inset: 0;
+}
+
+.slide{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+  background: var(--bg);
+}
+
+.slide.active{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 1~2번: 위 이미지 + 아래 텍스트 */
+.image{
+  height: 58vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.image-1{ background-image: var(--img1); }
+.image-2{ background-image: var(--img2); }
+.image-3{ background-image: var(--img3); }
+
+.content{
+  height: calc(100vh - 58vh);
+  padding: 36px 24px 120px;
+  text-align: center;
+  color: var(--text);
+}
+
+.content h1{
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  font-size: clamp(28px, 3.2vw, 40px);
+}
+
+.content p{
+  margin: 12px 0 0;
+  font-weight: 700;
+  font-size: clamp(13px, 1.4vw, 16px);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ✅ 3번: 이미지 풀스크린 */
+.slide.full{
+  background: #000;
+}
+
+.fullimg{
+  height: 100vh;
+}
+
+.overlay{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 92px);
+  padding: 0 24px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 10px 26px rgba(0,0,0,.38);
+}
+
+.overlay h1{
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  font-size: clamp(26px, 3vw, 38px);
+}
+
+.overlay p{
+  margin: 10px 0 0;
+  font-weight: 700;
+  opacity: .9;
+  line-height: 1.6;
+  font-size: clamp(13px, 1.3vw, 16px);
+}
+
+/* ===============================
+   ✅ 하단 바: 스샷처럼 "왼쪽 dots / 오른쪽 SKIP"
+   =============================== */
+.bottombar{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom, 0px);
+
+  height: 64px;
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+/* dots: 왼쪽 */
+.dots{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 스샷 느낌: 비활성은 동그라미, 활성은 길쭉한 pill */
+.dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--dot-off);
+  opacity: .9;
+}
+
+.dot.active{
+  width: 28px;
+  background: var(--accent);
+}
+
+/* SKIP: 오른쪽 끝 */
+.skip{
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--skip);
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.skip:active{
+  opacity: .6;
+}

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>home</title>
+  <link rel="stylesheet" href="./css/home.css" />
+</head>
+<body>
+  <div class="shell">
+
+    <main class="page" id="page">
+
+      <!-- HERO -->
+      <section class="hero" aria-label="오늘 나의 기분">
+        <img class="hero__bg" src="./images/home_banner.png" alt="" aria-hidden="true"/>
+
+        <div class="hero__inner">
+
+          <!-- 상단 메뉴/알람 -->
+          <header class="hero__topbar">
+            <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
+              <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg"/>
+            </button>
+
+            <button class="iconBtn" type="button" aria-label="알림">
+              <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg"/>
+            </button>
+          </header>
+
+          <!-- 날짜 -->
+          <div class="hero__date">
+            <div class="hero__dateTop">Today</div>
+            <div class="hero__dateBottom" id="todayDate">25.11.20</div>
+          </div>
+
+          <!-- 타이틀 + 로기 -->
+          <div class="hero__headline">
+            <h1 class="hero__title">오늘 나의 <span class="hero__accent">기분</span>은</h1>
+            <div class="hero__rogi" aria-label="로기 감정">
+              <img src="./images/felling_happy.png" alt="로기감정"/>
+            </div>
+          </div>
+
+          <!-- 카드 2개 -->
+          <div class="hero__cards">
+            <article class="quoteCard">
+              <p class="quoteCard__label">로기가 건네는 오늘의 말</p>
+              <p class="quoteCard__text"> <strong>“오늘은 조금 천천히 가도 괜찮아요”</strong></p>
+            </article>
+
+            <!-- 새로고침마다 4개 중 랜덤 1개: "이미지만" -->
+            <article class="actionCard" id="actionCard" role="button" tabindex="0" aria-label="오늘의 안정 카드">
+  <div class="actionCard__icon" id="actionIconWrap">
+    <img class="actionImg" data-key="breath" src="./images/home_card1.png" alt="" aria-hidden="true">
+    <img class="actionImg" data-key="color"  src="./images/home_card2.png" alt="" aria-hidden="true">
+    <img class="actionImg" data-key="tap"    src="./images/home_card3.png" alt="" aria-hidden="true">
+    <img class="actionImg" data-key="scan"   src="./images/home_card4.png" alt="" aria-hidden="true">
+  </div>
+</article>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SHEET -->
+      <section class="sheet" aria-label="콘텐츠">
+
+        <!-- 오늘의 작은성취 -->
+        <header class="sectionHd">
+          <h2 class="sectionHd__title">오늘의 작은성취 3가지</h2>
+        </header>
+
+        <div class="hScroll" aria-label="작은성취 가로 스크롤" id="achScroll">
+          <div class="hScroll__track" id="achTrack">
+
+            <div class="achCard" data-ach="0">
+              <button class="achCard__btn" type="button" aria-label="작은성취 1">
+                <div class="achCard__media ratio-3x2">
+                  <img class="achCard__img" src="./images/home_mission1.png" alt="미션카드1" aria-hidden="true" />
+                  <div class="achCard__overlayTxt">미지근한 물 한잔 마시기</div>
+                  <div class="achCard__doneLayer">
+                    <div class="achCard__check">✓</div>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+            <div class="achCard" data-ach="1">
+              <button class="achCard__btn" type="button" aria-label="작은성취 2">
+                <div class="achCard__media ratio-3x2">
+                  <img class="achCard__img" src="./images/home_mission2.png" alt="미션카드2" aria-hidden="true" />
+                  <div class="achCard__overlayTxt">나에게 5초 칭찬하기</div>
+                  <div class="achCard__doneLayer">
+                    <div class="achCard__check">✓</div>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+            <div class="achCard" data-ach="2">
+              <button class="achCard__btn" type="button" aria-label="작은성취 3">
+                <div class="achCard__media ratio-3x2">
+                  <img class="achCard__img" src="./images/home_mission3.png" alt="미션카드3" aria-hidden="true" />
+                  <div class="achCard__overlayTxt">1분 숨 고르기</div>
+                  <div class="achCard__doneLayer">
+                    <div class="achCard__check">✓</div>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 최근 나의 이야기 -->
+        <header class="sectionHd sectionHd--mt">
+          <h2 class="sectionHd__title">최근 나의 이야기</h2>
+        </header>
+
+        <div class="hScroll" aria-label="최근 나의 이야기" id="storyScroll">
+          <div class="hScroll__track hScroll__track--story" id="storyTrack">
+
+            <article class="storyCard">
+              <div class="storyCard__imgWrap">
+                <img class="storyCard__img" src="./images/home_diary1.png" alt="일기1" aria-hidden="true" />
+              </div>
+              <p class="storyCard__txt">오늘 무기력했지만 끝까지 버텼다 아...</p>
+              <div class="storyCard__meta">
+                <span class="storyCard__date">25.11.19</span>
+                <span class="storyCard__dot">|</span>
+                <span class="storyCard__mood">기분: soso</span>
+              </div>
+            </article>
+
+            <article class="storyCard">
+              <div class="storyCard__imgWrap">
+                <img class="storyCard__img" src="./images/home_diary2.png" alt="일기2" aria-hidden="true" />
+              </div>
+              <p class="storyCard__txt">오랜만에 공황도 없고 불안도 없고 하...</p>
+              <div class="storyCard__meta">
+                <span class="storyCard__date">25.11.10</span>
+                <span class="storyCard__dot">|</span>
+                <span class="storyCard__mood">기분: good</span>
+              </div>
+            </article>
+
+            <article class="storyCard">
+              <div class="storyCard__imgWrap">
+                <img class="storyCard__img" src="./images/home_diary3.png" alt="일기3" aria-hidden="true" />
+              </div>
+              <p class="storyCard__txt">퇴근길엔 그냥 바람만 쐬고 싶었다...</p>
+              <div class="storyCard__meta">
+                <span class="storyCard__date">25.11.03</span>
+                <span class="storyCard__dot">|</span>
+                <span class="storyCard__mood">기분: bad</span>
+              </div>
+            </article>
+
+            <article class="storyCard">
+              <div class="storyCard__imgWrap">
+                <img class="storyCard__img" src="./images/home_diary4.png" alt="일기4" aria-hidden="true" />
+              </div>
+              <p class="storyCard__txt">어쩌다 공황장애가 찾아온 걸까...</p>
+              <div class="storyCard__meta">
+                <span class="storyCard__date">25.10.31</span>
+                <span class="storyCard__dot">|</span>
+                <span class="storyCard__mood">기분: happy</span>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+        <!-- 정보 -->
+        <header class="sectionHd sectionHd--mt">
+          <h2 class="sectionHd__title">불안·공황 장애란 무엇인가요?</h2>
+        </header>
+
+        <div class="gridInfo" aria-label="정보 카드 그리드">
+          <button class="infoCard" type="button" aria-label="정보 1">
+            <div class="infoCard__img ratio-2x3">
+              <img src="./images/home_infor1.png" alt="공황정보1" aria-hidden="true" />
+              <div class="infoCard__shade"></div>
+              <div class="infoCard__txt">
+                <div class="infoCard__t1">저도 공황 장애인가요?</div>
+                <div class="infoCard__t2">공황장애 대표 증상 10가지</div>
+              </div>
+            </div>
+          </button>
+
+          <button class="infoCard" type="button" aria-label="정보 2">
+            <div class="infoCard__img ratio-2x3">
+              <img src="./images/home_infor2.png" alt="공황정보2" aria-hidden="true" />
+              <div class="infoCard__shade"></div>
+              <div class="infoCard__txt">
+                <div class="infoCard__t1">어떻게 치료 하나요?</div>
+                <div class="infoCard__t2">치료방법 (병원/센터)</div>
+              </div>
+            </div>
+          </button>
+
+          <button class="infoCard" type="button" aria-label="정보 3">
+            <div class="infoCard__img ratio-2x3">
+              <img src="./images/home_infor3.png" alt="공황정보3" aria-hidden="true" />
+              <div class="infoCard__shade"></div>
+              <div class="infoCard__txt">
+                <div class="infoCard__t1">불안 공황이 뭐라달요?</div>
+                <div class="infoCard__t2">불안장애·공황장애 차이</div>
+              </div>
+            </div>
+          </button>
+
+          <button class="infoCard" type="button" aria-label="정보 4">
+            <div class="infoCard__img ratio-2x3">
+              <img src="./images/home_infor4.png" alt="공황정보4" aria-hidden="true" />
+              <div class="infoCard__shade"></div>
+              <div class="infoCard__txt">
+                <div class="infoCard__t1">약을 꼭 먹어야 하나요?</div>
+                <div class="infoCard__t2">약물복용에 대한 궁금증</div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!-- 가이드 배너 -->
+        <button class="guideBanner" id="openGuideBtn" type="button" aria-label="숨결록 가이드 열기">
+          <div class="guideBanner__left">
+            <div class="guideBanner__title">숨결록 가이드</div>
+            <div class="guideBanner__sub">숨결록이 뭐에요?</div>
+            <div class="guideBanner__sub2">궁금한건 언제든지 로기에게 물어봐요</div>
+          </div>
+
+          <div class="guideBanner__right">
+            <div class="guideBanner__ellipse" aria-hidden="true"></div>
+            <img class="guideBanner__char" src="./images/home_rogi.png" alt="로기캐릭터" aria-hidden="true"/>
+          </div>
+        </button>
+
+      </section>
+    </main>
+
+    <!-- GUIDE BOTTOM SHEET -->
+    <div class="overlay" id="guideOverlay" aria-hidden="true">
+      <div class="overlay__bg" data-close="guide"></div>
+
+      <section class="sheetPop" role="dialog" aria-modal="true" aria-label="숨결록 가이드">
+        <header class="sheetPop__hd">
+          <button class="sheetPop__back" type="button" id="closeGuideBtn" aria-label="뒤로가기">
+            <span class="backChevron" aria-hidden="true"></span>
+          </button>
+          <div class="sheetPop__title">숨결록 가이드</div>
+          <div class="sheetPop__spacer" aria-hidden="true"></div>
+        </header>
+
+        <div class="sheetPop__body" id="guideBody">
+          <div class="acc">
+            <button class="acc__head is-open" type="button" aria-expanded="true">숨결록이 뭔가요?</button>
+            <div class="acc__panel is-open">
+              <div class="acc__card">
+                <div class="acc__imgCircle">
+                  <img src="./images/home_guide1.png" alt="가이드" aria-hidden="true" />
+                </div>
+                <p class="acc__p">
+                  숨결록은 불안·공황을 겪는 사용자가 호흡, 루틴, 기록, 소통을 통해
+                  내 균형을 찾을 수 있도록 돕는 마음 관리 앱이에요.
+                  일상 속 작은 안정 순간을 쌓아가며, 스스로의 감정 패턴을 이해하고
+                  회복력을 높일 수 있도록 도와드려요.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="acc">
+            <button class="acc__head" type="button" aria-expanded="false">어떻게 도움을 주나요?</button>
+            <div class="acc__panel"><div class="acc__simple">루틴 추천, 기록 분석, 안정 훈련 컨텐츠를 제공해요.</div></div>
+          </div>
+
+          <div class="acc">
+            <button class="acc__head" type="button" aria-expanded="false">하루 루틴을 안정적으로 만들어요</button>
+            <div class="acc__panel"><div class="acc__simple">작은 성취를 쌓아 “가능한 하루”를 만드는 데 집중해요.</div></div>
+          </div>
+
+          <div class="acc">
+            <button class="acc__head" type="button" aria-expanded="false">혼자가 아닌 경험을 만들어요</button>
+            <div class="acc__panel"><div class="acc__simple">커뮤니티와 가이드를 통해 연결감을 느끼게 해요.</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB BAR -->
+    <nav class="tabWrap" aria-label="하단 탭">
+      <div class="tabbar">
+
+        <button class="tab is-active" type="button" data-tab="home" aria-current="page">
+          <img class="tabImg" src="./images/icon_home_on.svg" alt="홈" aria-hidden="true"/>
+          <span class="tab__label">홈</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="stability">
+          <img class="tabImg" src="./images/icon_stability.svg" alt="안정" aria-hidden="true"/>
+          <span class="tab__label">안정</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="record">
+          <img class="tabImg" src="./images/icon_record.svg" alt="기록" aria-hidden="true"/>
+          <span class="tab__label">기록</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="community">
+          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true"/>
+          <span class="tab__label">커뮤니티</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="my">
+          <img class="tabImg" src="./images/icon_my.svg" alt="my" aria-hidden="true"/>
+          <span class="tab__label">MY</span>
+        </button>
+
+      </div>
+    </nav>
+
+    <!--  LEFT DRAWER -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
+
+  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
+    <header class="drawer__hd">
+      <div class="drawer__profile">
+        <div class="drawer__avatar" aria-hidden="true">
+          
+          <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+        </div>
+        <div class="drawer__who">
+          <div class="drawer__name">숨결록</div>
+          <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
+        </div>
+      </div>
+
+      <button class="drawer__x" type="button" data-close="drawer" aria-label="닫기">×</button>
+    </header>
+
+    <div class="drawer__body">
+      <button class="drawer__cta" type="button">
+        <span class="drawer__ctaT1">오늘 기록하기</span>
+        <span class="drawer__ctaT2">감정/일기를 바로 남겨요</span>
+      </button>
+
+      <nav class="drawer__nav" aria-label="메뉴 목록">
+        <button class="drawer__item" type="button">
+          <span class="drawer__dot" aria-hidden="true"></span>
+          <span class="drawer__txt">내 정보</span>
+          <span class="drawer__chev" aria-hidden="true"></span>
+        </button>
+
+        <button class="drawer__item" type="button">
+          <span class="drawer__dot" aria-hidden="true"></span>
+          <span class="drawer__txt">알림 설정</span>
+          <span class="drawer__chev" aria-hidden="true"></span>
+        </button>
+
+        <button class="drawer__item" type="button">
+          <span class="drawer__dot" aria-hidden="true"></span>
+          <span class="drawer__txt">도움말</span>
+          <span class="drawer__chev" aria-hidden="true"></span>
+        </button>
+
+        <button class="drawer__item drawer__item--danger" type="button">
+          <span class="drawer__dot" aria-hidden="true"></span>
+          <span class="drawer__txt">로그아웃</span>
+          <span class="drawer__chev" aria-hidden="true"></span>
+        </button>
+      </nav>
+    </div>
+
+    <footer class="drawer__ft">
+      <div class="drawer__ver">v1.0</div>
+    </footer>
+  </aside>
+</div>
+
+    <!-- ✅ MODAL (안정 카드 클릭 시 열림) -->
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="modal-dim" data-close="true"></div>
+
+      <div class="modal-sheet" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <div class="modal-title">안정 카드</div>
+          <button class="modal-close" type="button" data-close="true" aria-label="닫기">닫기</button>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-p">
+            지금 이 순간에 집중해보자. 천천히 숨을 쉬어도 괜찮아
+          </p>
+        </div>
+
+        <div class="modal-foot">
+          <button class="modal-cta" type="button" data-close="true">확인</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="./js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>stability</title>
+  <link rel="stylesheet" href="./css/stability.css" />
+</head>
+<body>
+  <div class="shell">
+    <main class="page">
+
+      <!-- TOP HERO -->
+      <section class="topHero" aria-label="상단 영역">
+        <img class="topHero__bg" src="./images/stableback.png" alt="" aria-hidden="true">
+
+        <div class="topHero__inner">
+          <header class="topHero__bar">
+            <button class="iconBtn iconBtn--left" id="openDrawerBtn" type="button" aria-label="메뉴">
+              <img src="./images/icon_menu.svg" class="iconImg" alt="" aria-hidden="true">
+            </button>
+
+            <div></div>
+
+            <button class="iconBtn iconBtn--right" type="button" aria-label="알림">
+              <img src="./images/icon_alram.svg" class="iconImg" alt="" aria-hidden="true">
+            </button>
+          </header>
+
+          <div class="topHero__copy">
+            숨결록이 <span class="topHero__accent">당신의 마음</span>을 지켜줄게요
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTENT SHEET -->
+      <section class="sheet" aria-label="콘텐츠">
+
+        <!-- 안정 SOS 키트 -->
+        <header class="sectionHd">
+          <h2 class="sectionHd__title">안정 SOS 키트</h2>
+        </header>
+
+        <!-- ✅ 오토플레이는 화면에 보일 때만 -->
+        <div class="kit" aria-label="안정 SOS 키트 슬라이더" id="kit">
+          <div class="kit__viewport" id="kitViewport">
+            <div class="kit__track" id="kitTrack">
+
+              <article class="kitCard">
+                <div class="kitCard__media">
+                  <img class="kitCard__img" src="./images/stable_kit_1.png" alt="호흡하기" aria-hidden="true">
+                  <div class="kitCard__overlay">
+                    <div class="kitCard__t1">호흡하기</div>
+                    <div class="kitCard__t2">4초 들이마시고<br>7초 멈췄다가<br>8초 내쉬어요</div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="kitCard">
+                <div class="kitCard__media">
+                  <img class="kitCard__img" src="./images/stable_kit_2.png" alt="주변 색 찾기" aria-hidden="true">
+                  <div class="kitCard__overlay">
+                    <div class="kitCard__t1">주변 색 찾기</div>
+                    <div class="kitCard__t2">눈에 보이는 색 5가지를<br>천천히 찾아보세요</div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="kitCard">
+                <div class="kitCard__media">
+                  <img class="kitCard__img" src="./images/stable_kit_3.png" alt="두드리기" aria-hidden="true">
+                  <div class="kitCard__overlay">
+                    <div class="kitCard__t1">두드리기</div>
+                    <div class="kitCard__t2">가볍게 손끝으로<br>어깨/쇄골을 톡톡</div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="kitCard">
+                <div class="kitCard__media">
+                  <img class="kitCard__img" src="./images/stable_kit_4.png" alt="시각 스캔" aria-hidden="true">
+                  <div class="kitCard__overlay">
+                    <div class="kitCard__t1">시각 스캔</div>
+                    <div class="kitCard__t2">앞에 보이는 5가지를<br>차분히 관찰해요</div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <div class="kitDots" id="kitDots" aria-hidden="true"></div>
+        </div>
+
+        <!-- 불안에서 벗어나는 작은방법 -->
+        <header class="sectionHd sectionHd--mt">
+          <h2 class="sectionHd__title">불안에서 벗어나는 작은방법</h2>
+        </header>
+
+        <div class="tips">
+          <button class="tipCard" type="button" aria-label="작은 루틴 유지하기">
+            <div class="tipCard__left">
+              <div class="tipCard__head">
+                <span class="tipCard__icon">
+                  <img src="./images/stable_clock.svg" alt="" aria-hidden="true">
+                </span>
+                <div class="tipCard__title">작은 루틴 유지하기</div>
+              </div>
+              <div class="tipCard__desc">
+                아침 스트레칭, 물 한잔처럼 작은 루틴이<br>
+                불안을 낮추는 데 도움이 돼요.
+              </div>
+            </div>
+          </button>
+
+          <button class="tipCard" type="button" aria-label="불안 신호 기록하기">
+            <div class="tipCard__left">
+              <div class="tipCard__head">
+                <span class="tipCard__icon">
+                  <img src="./images/stable_book.svg" alt="" aria-hidden="true">
+                </span>
+                <div class="tipCard__title">불안 신호 기록하기</div>
+              </div>
+              <div class="tipCard__desc">
+                언제/어디서/어떤 생각이 올라오는지<br>
+                가볍게 메모해보세요.
+              </div>
+            </div>
+          </button>
+
+          <button class="tipCard" type="button" aria-label="전문가 도움">
+            <div class="tipCard__left">
+              <div class="tipCard__head">
+                <span class="tipCard__icon">
+                  <img src="./images/stable_doctor.svg" alt="" aria-hidden="true">
+                </span>
+                <div class="tipCard__title">전문가 도움</div>
+              </div>
+              <div class="tipCard__desc">
+                혼자 버티기 힘들면 전문가 도움을 받는 건<br>
+                아주 자연스러운 선택이에요.
+              </div>
+            </div>
+          </button>
+
+          <button class="tipCard" type="button" aria-label="몸을 이완시키기">
+            <div class="tipCard__left">
+              <div class="tipCard__head">
+                <span class="tipCard__icon">
+                  <img src="./images/stable_yoga.svg" alt="" aria-hidden="true">
+                </span>
+                <div class="tipCard__title">몸을 이완시키기</div>
+              </div>
+              <div class="tipCard__desc">
+                목/어깨를 천천히 돌리고 숨을 길게 내쉬며<br>
+                몸의 긴장을 풀어봐요.
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!-- 이미지 2장 카드 -->
+        <div class="twoGrid sectionHd--mt" aria-label="추천">
+          <button class="twoCard" type="button" aria-label="불안에 좋은 음식">
+            <div class="twoCard__media">
+              <img src="./images/stable_food.png" alt="" aria-hidden="true">
+              <div class="twoCard__label">불안에 좋은 음식들</div>
+            </div>
+          </button>
+
+          <button class="twoCard" type="button" aria-label="마음을 안정시키는 환경">
+            <div class="twoCard__media">
+              <img src="./images/stable_room.png" alt="" aria-hidden="true">
+              <div class="twoCard__label">마음을 안정시키는 환경</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- 음악 플레이어 -->
+        <header class="sectionHd sectionHd--mt">
+          <h2 class="sectionHd__title">마음이 쉬어가는 음악</h2>
+        </header>
+
+        <div class="player" aria-label="음악 플레이어">
+          <div class="player__cover">
+            <img src="./images/music_cover.png" alt="커버" aria-hidden="true">
+          </div>
+
+          <div class="player__meta">
+            <div class="player__title">우리 사랑은</div>
+            <div class="player__artist">찰리빈맥스</div>
+          </div>
+
+          <div id="ytPlayer" class="ytPlayer" aria-hidden="true"></div>
+
+          <div class="player__progress">
+            <span class="player__time" id="curTime">0:00</span>
+            <input class="player__range" id="seek" type="range" min="0" max="100" value="0" aria-label="재생 위치">
+            <span class="player__time" id="durTime">0:00</span>
+          </div>
+
+          <div class="player__controls" aria-label="컨트롤">
+            <button class="pBtn" type="button" id="btnPrev" aria-label="이전">
+              <img src="./images/icon_prev.svg" alt="" aria-hidden="true">
+            </button>
+
+            <button class="pBtn pBtn--play" type="button" id="btnPlay" aria-label="재생/일시정지">
+              <img src="./images/icon_play.svg" alt="" aria-hidden="true" id="playIcon">
+            </button>
+
+            <button class="pBtn" type="button" id="btnNext" aria-label="다음">
+              <img src="./images/icon_next.svg" alt="" aria-hidden="true">
+            </button>
+
+            <button class="pBtn" type="button" id="btnRepeat" aria-label="반복">
+              <img src="./images/icon_repeat.svg" alt="" aria-hidden="true">
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- TAB BAR -->
+    <nav class="tabWrap" aria-label="하단 탭">
+      <div class="tabbar">
+        <button class="tab" type="button" data-tab="home">
+          <img class="tabImg" src="./images/icon_home.svg" alt="" aria-hidden="true"/>
+          <span class="tab__label">홈</span>
+        </button>
+
+        <button class="tab is-active" type="button" data-tab="stability" aria-current="page">
+          <img class="tabImg" src="./images/icon_stability_on.svg" alt="" aria-hidden="true"/>
+          <span class="tab__label">안정</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="record">
+          <img class="tabImg" src="./images/icon_record.svg" alt="" aria-hidden="true"/>
+          <span class="tab__label">기록</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="community">
+          <img class="tabImg" src="./images/icon_community.svg" alt="" aria-hidden="true"/>
+          <span class="tab__label">커뮤니티</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="my">
+          <img class="tabImg" src="./images/icon_my.svg" alt="" aria-hidden="true"/>
+          <span class="tab__label">MY</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <script src="./js/stability.js"></script>
+</body>
+</html>
