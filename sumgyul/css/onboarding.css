@@ -1,14 +1,32 @@
 @charset "utf-8";
 
-/* 폰트 */
-@font-face {
-  font-family: 'RomanticGumi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/GumiRomanceTTF.woff2') format('woff2');
-  font-weight: normal;
-  font-display: swap;
+/* =========================
+   Pretendard
+   (Title=700 / Subtitle=600 / Body=400)
+   ========================= */
+@font-face{
+  font-family:'Pretendard';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+  font-weight:400;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Pretendard';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+  font-weight:600;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Pretendard';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+  font-weight:700;
+  font-display:swap;
 }
 
-/* ✅ 여기만 네 이미지로 바꾸면 됨 */
+/* =========================
+   Tokens
+   ✅ 여기만 네 이미지로 바꾸면 됨
+   ========================= */
 :root{
   --img1: url("../images/Onboarding1.png");
   --img2: url("../images/Onboarding2.png");
@@ -18,173 +36,173 @@
   --text: #2b2b2b;
   --muted: rgba(43,43,43,.55);
 
-  --accent: #e06a2e; /* 주황 */
+  --accent: #e06a2e;
   --dot-off: #cfcfcf;
 
-  --skip: rgba(180,180,180,.9); /* 스샷처럼 연한 회색 */
+  --skip: rgba(180,180,180,.9);
 }
 
-*{ box-sizing: border-box; }
-html, body{ height: 100%; }
+/* =========================
+   Reset
+   ========================= */
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
 body{
-  margin: 0;
-  font-family: 'RomanticGumi', system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  overflow: hidden;
+  margin:0;
+  font-family:'Pretendard', system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-weight:400;
+  color: var(--text);
+  background: var(--bg);
+  overflow:hidden;
+}
+button{
+  font: inherit;
+  color: inherit;
+}
+button:focus-visible{
+  outline: 3px solid rgba(224,106,46,.25);
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 
-/* ✅ 웹앱 풀스크린 */
+/* =========================
+   Typography System
+   ========================= */
+.title{ font-weight:700; letter-spacing:-0.03em; }
+.subtitle{ font-weight:600; letter-spacing:-0.01em; }
+.body{ font-weight:400; line-height:1.6; }
+
+.title--lg{ font-size: clamp(28px, 3.2vw, 40px); }
+.subtitle--sm{ font-size: 12px; letter-spacing: .04em; }
+.body--md{ font-size: clamp(13px, 1.4vw, 16px); }
+
+/* =========================
+   Layout
+   ========================= */
 .onboarding{
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
+  width:100vw;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
 }
 
-/* 슬라이드 */
+/* Slides stack */
 .slides{
-  position: absolute;
-  inset: 0;
+  position:absolute;
+  inset:0;
 }
 
 .slide{
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
   transition: opacity .35s ease;
   background: var(--bg);
 }
 
-.slide.active{
-  opacity: 1;
-  pointer-events: auto;
+.slide.is-active{
+  opacity:1;
+  pointer-events:auto;
 }
 
-/* 1~2번: 위 이미지 + 아래 텍스트 */
-.image{
-  height: 58vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* =========================
+   Slide variants
+   ========================= */
+/* 1~2: top image + bottom copy */
+.slide__image{
+  height:58vh;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 }
+.slide__image--1{ background-image: var(--img1); }
+.slide__image--2{ background-image: var(--img2); }
+.slide__image--3{ background-image: var(--img3); }
 
-.image-1{ background-image: var(--img1); }
-.image-2{ background-image: var(--img2); }
-.image-3{ background-image: var(--img3); }
-
-.content{
+.slide__content{
   height: calc(100vh - 58vh);
-  padding: 36px 24px 120px;
-  text-align: center;
-  color: var(--text);
+  padding: 36px 24px 120px; /* bottom space for bottombar */
+  text-align:center;
 }
 
-.content h1{
-  margin: 0;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  font-size: clamp(28px, 3.2vw, 40px);
-}
-
-.content p{
+.slide__content .body{
   margin: 12px 0 0;
-  font-weight: 700;
-  font-size: clamp(13px, 1.4vw, 16px);
-  line-height: 1.6;
   color: var(--muted);
 }
 
-/* ✅ 3번: 이미지 풀스크린 */
-.slide.full{
-  background: #000;
+/* 3: full image */
+.slide--full{
+  background:#000;
+}
+.slide__image--full{
+  height:100vh;
 }
 
-.fullimg{
-  height: 100vh;
-}
-
-.overlay{
-  position: absolute;
-  left: 0;
-  right: 0;
+.slide__overlay{
+  position:absolute;
+  left:0;
+  right:0;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 92px);
   padding: 0 24px;
-  text-align: center;
-  color: #fff;
+  text-align:center;
+  color:#fff;
   text-shadow: 0 10px 26px rgba(0,0,0,.38);
 }
-
-.overlay h1{
-  margin: 0;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  font-size: clamp(26px, 3vw, 38px);
-}
-
-.overlay p{
+.slide__overlay .body{
   margin: 10px 0 0;
-  font-weight: 700;
-  opacity: .9;
-  line-height: 1.6;
-  font-size: clamp(13px, 1.3vw, 16px);
+  opacity:.9;
 }
 
-/* ===============================
-   ✅ 하단 바: 스샷처럼 "왼쪽 dots / 오른쪽 SKIP"
-   =============================== */
+/* =========================
+   Bottom bar (dots + skip)
+   ========================= */
 .bottombar{
-  position: fixed;
-  left: 0;
-  right: 0;
+  position:fixed;
+  left:0;
+  right:0;
   bottom: env(safe-area-inset-bottom, 0px);
-
-  height: 64px;
+  height:64px;
   padding: 0 24px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-  z-index: 9999;
-  pointer-events: auto;
+  z-index: 1000;
 }
 
-/* dots: 왼쪽 */
+/* dots */
 .dots{
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-/* 스샷 느낌: 비활성은 동그라미, 활성은 길쭉한 pill */
 .dot{
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
+  border:0;
   background: var(--dot-off);
-  opacity: .9;
+  opacity:.9;
+
+  width:10px;
+  height:10px;
+  border-radius:999px;
+
+  padding:0;
 }
 
-.dot.active{
-  width: 28px;
+.dot.is-active{
+  width:28px;
   background: var(--accent);
 }
 
-/* SKIP: 오른쪽 끝 */
+/* skip */
 .skip{
-  border: none;
-  background: transparent;
+  border:0;
+  background:transparent;
   padding: 10px 0;
-
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .04em;
   color: var(--skip);
-
-  cursor: pointer;
-  user-select: none;
+  cursor:pointer;
+  user-select:none;
 }
-
-.skip:active{
-  opacity: .6;
-}
+.skip:active{ opacity:.6; }

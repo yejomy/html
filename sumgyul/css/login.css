@@ -1,91 +1,76 @@
 @charset "utf-8";
 
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
-    font-weight: 100;
-    font-display: swap;
+/* =========================================
+   Pretendard
+   - Title: 700 (Bold)
+   - Subtitle: 600 (SemiBold)
+   - Body: 400 (Regular)
+========================================= */
+@font-face{
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face{
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face{
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
 }
 
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
-    font-weight: 200;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
-    font-weight: 300;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
-    font-weight: 500;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
-    font-weight: 600;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
-    font-weight: 700;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
-    font-weight: 800;
-    font-display: swap;
-}
-
-
+/* =========================================
+   Design Tokens
+========================================= */
 :root{
   --bg: #f6f4f0;
   --line: rgba(0,0,0,.10);
   --text: #2b2b2b;
   --muted: rgba(43,43,43,.55);
+
   --accent: #E06A2E;
   --btn: #3f6f63;
+
   --radius: 10px;
 
   /* spacing guide */
   --gap-top: 100px;
   --gap-36: 36px;
-  --gap-16: 16px;
   --gap-24: 24px;
+  --gap-16: 16px;
   --gap-8: 8px;
 }
 
+/* =========================================
+   Reset / Base
+========================================= */
 *{ box-sizing: border-box; }
 html, body{ height: 100%; }
 
 body{
   margin: 0;
-  font-family: 'Pretendard', -apple-system, "Apple SD Gothic Neo", sans-serif;
+  font-family: "Pretendard", -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif;
+  font-weight: 400;               /*  Body: Regular */
   background: var(--bg);
   color: var(--text);
   overflow: hidden;
 }
 
-/* ✅ 화면 정중앙 */
+button,
+input{
+  font: inherit;
+  color: inherit;
+}
+
+/* =========================================
+   Layout
+========================================= */
 .login{
   min-height: 100vh;
   display: grid;
@@ -98,7 +83,9 @@ body{
   margin-top: -20px;
 }
 
-/* 로고 */
+/* =========================================
+   Brand
+========================================= */
 .logo-wrap{
   display: grid;
   place-items: center;
@@ -112,7 +99,9 @@ body{
   object-fit: contain;
 }
 
-/* inputs */
+/* =========================================
+   Fields
+========================================= */
 .field{
   display: block;
   margin-bottom: 10px;
@@ -126,12 +115,14 @@ body{
   border: 1px solid var(--line);
   background: rgba(255,255,255,.65);
   outline: none;
+
   font-size: 14px;
+  font-weight: 400;               /* Body: Regular */
 }
 
 .field input::placeholder{
   color: rgba(43,43,43,.35);
-  font-weight: 600;
+  font-weight: 400;               /*  placeholder도 Regular */
 }
 
 .field input:focus{
@@ -139,7 +130,9 @@ body{
   box-shadow: 0 0 0 3px rgba(224,106,46,.12);
 }
 
-/* options */
+/* =========================================
+   Options (Radio)
+========================================= */
 .options{
   display: flex;
   gap: 22px;
@@ -152,11 +145,13 @@ body{
   display: inline-flex;
   align-items: center;
   gap: 8px;
+
   cursor: pointer;
   user-select: none;
+
   font-size: 13px;
   color: rgba(43,43,43,.72);
-  font-weight: 800;
+  font-weight: 600;               /* Subtitle: SemiBold */
 }
 
 .radio input{
@@ -170,8 +165,10 @@ body{
   height: 16px;
   border-radius: 999px;
   border: 2px solid rgba(43,43,43,.22);
+
   display: grid;
   place-items: center;
+
   transition: border-color .15s ease, background .15s ease;
 }
 
@@ -182,6 +179,7 @@ body{
   opacity: 0;
   transform: translateY(-.2px);
 }
+
 .radio .check path{
   fill: none;
   stroke: #fff;
@@ -190,7 +188,7 @@ body{
   stroke-linejoin: round;
 }
 
-/*  선택 시 오렌지 + 체크 표시 */
+/* 선택 시 오렌지 + 체크 표시 */
 .radio input:checked + .dot{
   border-color: var(--accent);
   background: var(--accent);
@@ -199,23 +197,30 @@ body{
   opacity: 1;
 }
 
-/* error */
+/* =========================================
+   Error
+========================================= */
 .error{
   margin: -18px 0 14px;
   min-height: 18px;
+
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 400;               /*  Body: Regular */
   color: #c23b2a;
 }
 
-/* buttons */
+/* =========================================
+   Buttons
+========================================= */
 .btn{
   width: 100%;
   height: 52px;
   border-radius: 12px;
+
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 600;               /* 버튼은 SemiBold */
   letter-spacing: .02em;
+
   cursor: pointer;
 }
 
@@ -236,7 +241,9 @@ body{
 .btn--outline:hover{ background: rgba(63,111,99,.06); }
 .btn--outline:active{ opacity: .85; }
 
-/* links */
+/* =========================================
+   Links
+========================================= */
 .links{
   display: flex;
   justify-content: center;
@@ -249,28 +256,33 @@ body{
   border: none;
   background: transparent;
   padding: 0;
+
   cursor: pointer;
-  font-weight: 800;
   font-size: 12px;
+  font-weight: 400;               /*  Body: Regular */
   color: rgba(43,43,43,.55);
 }
 .link-btn:hover{ text-decoration: underline; }
 
 .sep{
   opacity: .35;
-  font-weight: 800;
   font-size: 12px;
+  font-weight: 400;               /* Body: Regular */
 }
 
-/* divider */
+/* =========================================
+   Divider
+========================================= */
 .divider{
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 12px;
   align-items: center;
+
   color: rgba(43,43,43,.35);
-  font-weight: 900;
   font-size: 12px;
+  font-weight: 400;               /*  Body: Regular */
+
   margin-bottom: var(--gap-16);
 }
 
@@ -278,11 +290,14 @@ body{
 .divider::after{
   content: "";
   height: 1px;
-  background: rgba(0,0,0,.10);
+  background: var(--line);
 }
+
 .divider span{ transform: translateY(-1px); }
 
-/* socials (images) */
+/* =========================================
+   Social (images)
+========================================= */
 .social{
   display: flex;
   justify-content: center;
@@ -297,6 +312,7 @@ body{
   border: none;
   background: transparent;
   padding: 0;
+
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -309,9 +325,9 @@ body{
   display: block;
 }
 
-/* =========================
-    Modal (ID/PW 찾기 공용)
-   ========================= */
+/* =========================================
+   Modal (ID/PW 찾기 공용)
+========================================= */
 .modal{
   position: fixed;
   inset: 0;
@@ -331,9 +347,10 @@ body{
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+
   width: min(420px, 92vw);
   background: rgba(246,244,240,.98);
-  border: 1px solid rgba(0,0,0,.10);
+  border: 1px solid var(--line);
   border-radius: 16px;
   box-shadow: 0 18px 60px rgba(0,0,0,.25);
   overflow: hidden;
@@ -343,14 +360,16 @@ body{
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 14px 16px;
   border-bottom: 1px solid rgba(0,0,0,.08);
 }
 
 .modal__title{
   margin: 0;
+
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;               /*  Title: Bold */
   letter-spacing: -0.02em;
   color: rgba(43,43,43,.92);
 }
@@ -358,9 +377,11 @@ body{
 .modal__close{
   width: 34px;
   height: 34px;
+
   border: none;
   background: transparent;
   border-radius: 10px;
+
   cursor: pointer;
   font-size: 22px;
   line-height: 1;
@@ -374,22 +395,33 @@ body{
   gap: 12px;
 }
 
+/* modal fields */
 .m-field{ display: grid; gap: 6px; }
+
 .m-label{
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;               /* Subtitle: SemiBold */
   color: rgba(43,43,43,.85);
 }
+
 .m-input{
   width: 100%;
   height: 48px;
   padding: 0 14px;
+
   border-radius: 12px;
-  border: 1px solid rgba(0,0,0,.10);
+  border: 1px solid var(--line);
   background: rgba(255,255,255,.70);
   outline: none;
+
   font-size: 14px;
+  font-weight: 400;               /*  Body: Regular */
 }
+
+.m-input::placeholder{
+  font-weight: 400;
+}
+
 .m-input:focus{
   background: #fff;
   border-color: rgba(63,111,99,1);
@@ -399,8 +431,9 @@ body{
 .m-error{
   margin: 0;
   min-height: 18px;
+
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 400;               /* Body: Regular */
   color: #c23b2a;
 }
 
@@ -410,18 +443,21 @@ body{
   margin-top: 4px;
 }
 
+/* modal buttons */
 .m-btn{
   width: 100%;
   height: 48px;
   border-radius: 12px;
+
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 600;               /*  Subtitle: SemiBold */
   cursor: pointer;
+
   border: 1px solid transparent;
 }
 
 .m-btn--primary{
-  background: #3f6f63;
+  background: var(--btn);
   color: #fff;
 }
 .m-btn--primary:active{ opacity: .92; }
@@ -433,26 +469,32 @@ body{
 }
 .m-btn--outline:hover{ background: rgba(63,111,99,.06); }
 
+/* modal result */
 .m-result{
   margin-top: 6px;
   display: grid;
   gap: 10px;
 }
+
 .m-result__title{
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 600;               /*  Subtitle: SemiBold */
   color: rgba(43,43,43,.85);
 }
+
 .m-result__box{
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(0,0,0,.10);
+  border: 1px solid var(--line);
   background: rgba(255,255,255,.75);
+
+  font-weight: 400;               /*  Body: Regular */
 }
 
 .m-sub{
   margin: 0;
   font-size: 12px;
+  font-weight: 400;               /* Body: Regular */
   color: rgba(43,43,43,.45);
   line-height: 1.4;
 }

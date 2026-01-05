@@ -45,19 +45,19 @@
           <!-- 카드 2개 -->
           <div class="hero__cards">
             <article class="quoteCard">
-              <p class="quoteCard__label">로기가 건네는 오늘의 말</p>
+              <p class="quoteCard__label">로기가 건네는 오늘의 말</p> <br>
               <p class="quoteCard__text"> <strong>“오늘은 조금 천천히 가도 괜찮아요”</strong></p>
             </article>
 
             <!-- 새로고침마다 4개 중 랜덤 1개: "이미지만" -->
             <article class="actionCard" id="actionCard" role="button" tabindex="0" aria-label="오늘의 안정 카드">
-  <div class="actionCard__icon" id="actionIconWrap">
-    <img class="actionImg" data-key="breath" src="./images/home_card1.png" alt="" aria-hidden="true">
-    <img class="actionImg" data-key="color"  src="./images/home_card2.png" alt="" aria-hidden="true">
-    <img class="actionImg" data-key="tap"    src="./images/home_card3.png" alt="" aria-hidden="true">
-    <img class="actionImg" data-key="scan"   src="./images/home_card4.png" alt="" aria-hidden="true">
-  </div>
-</article>
+              <div class="actionCard__icon" id="actionIconWrap">
+                <img class="actionImg" data-key="breath" src="./images/home_card1.png" alt="" aria-hidden="true">
+                <img class="actionImg" data-key="color"  src="./images/home_card2.png" alt="" aria-hidden="true">
+                <img class="actionImg" data-key="tap"    src="./images/home_card3.png" alt="" aria-hidden="true">
+                <img class="actionImg" data-key="scan"   src="./images/home_card4.png" alt="" aria-hidden="true">
+              </div>
+            </article>
           </div>
 
         </div>
@@ -322,65 +322,64 @@
     </nav>
 
     <!--  LEFT DRAWER -->
-<div class="drawer" id="drawer" aria-hidden="true">
-  <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
-  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
-    <header class="drawer__hd">
-      <div class="drawer__profile">
-        <div class="drawer__avatar" aria-hidden="true">
-          
-          <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+      <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
+        <header class="drawer__hd">
+          <div class="drawer__profile">
+            <div class="drawer__avatar" aria-hidden="true">
+              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+            </div>
+            <div class="drawer__who">
+              <div class="drawer__name">숨결록</div>
+              <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
+            </div>
+          </div>
+
+          <button class="drawer__x" type="button" data-close="drawer" aria-label="닫기">×</button>
+        </header>
+
+        <div class="drawer__body">
+          <button class="drawer__cta" type="button">
+            <span class="drawer__ctaT1">오늘 기록하기</span>
+            <span class="drawer__ctaT2">감정/일기를 바로 남겨요</span>
+          </button>
+
+          <nav class="drawer__nav" aria-label="메뉴 목록">
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">내 정보</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">알림 설정</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">도움말</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item drawer__item--danger" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">로그아웃</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+          </nav>
         </div>
-        <div class="drawer__who">
-          <div class="drawer__name">숨결록</div>
-          <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
-        </div>
-      </div>
 
-      <button class="drawer__x" type="button" data-close="drawer" aria-label="닫기">×</button>
-    </header>
-
-    <div class="drawer__body">
-      <button class="drawer__cta" type="button">
-        <span class="drawer__ctaT1">오늘 기록하기</span>
-        <span class="drawer__ctaT2">감정/일기를 바로 남겨요</span>
-      </button>
-
-      <nav class="drawer__nav" aria-label="메뉴 목록">
-        <button class="drawer__item" type="button">
-          <span class="drawer__dot" aria-hidden="true"></span>
-          <span class="drawer__txt">내 정보</span>
-          <span class="drawer__chev" aria-hidden="true"></span>
-        </button>
-
-        <button class="drawer__item" type="button">
-          <span class="drawer__dot" aria-hidden="true"></span>
-          <span class="drawer__txt">알림 설정</span>
-          <span class="drawer__chev" aria-hidden="true"></span>
-        </button>
-
-        <button class="drawer__item" type="button">
-          <span class="drawer__dot" aria-hidden="true"></span>
-          <span class="drawer__txt">도움말</span>
-          <span class="drawer__chev" aria-hidden="true"></span>
-        </button>
-
-        <button class="drawer__item drawer__item--danger" type="button">
-          <span class="drawer__dot" aria-hidden="true"></span>
-          <span class="drawer__txt">로그아웃</span>
-          <span class="drawer__chev" aria-hidden="true"></span>
-        </button>
-      </nav>
+        <footer class="drawer__ft">
+          <div class="drawer__ver">v1.0</div>
+        </footer>
+      </aside>
     </div>
 
-    <footer class="drawer__ft">
-      <div class="drawer__ver">v1.0</div>
-    </footer>
-  </aside>
-</div>
-
-    <!-- ✅ MODAL (안정 카드 클릭 시 열림) -->
+    <!-- MODAL -->
     <div class="modal" id="modal" aria-hidden="true">
       <div class="modal-dim" data-close="true"></div>
 

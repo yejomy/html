@@ -5,7 +5,7 @@
 
   const TOTAL = slides.length;
   const INTERVAL_MS = 4000;
-  const SWIPE_THRESHOLD = 50; // px (이 이상 움직이면 스와이프로 인정)
+  const SWIPE_THRESHOLD = 50; // px
 
   let idx = 0;
   let timer = null;
@@ -15,28 +15,31 @@
   let startY = 0;
   let dragging = false;
 
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
   function goLogin() {
     stopAuto();
     window.location.href = "./login.html";
   }
 
   function render(nextIdx) {
-    idx = Math.max(0, Math.min(TOTAL - 1, nextIdx));
+    idx = clamp(nextIdx, 0, TOTAL - 1);
 
     slides.forEach((s, i) => {
-      s.classList.toggle("active", i === idx);
-      s.setAttribute("aria-hidden", i === idx ? "false" : "true");
+      const active = i === idx;
+      s.classList.toggle("is-active", active);
+      s.setAttribute("aria-hidden", active ? "false" : "true");
     });
 
-    dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+    dots.forEach((d, i) => {
+      d.classList.toggle("is-active", i === idx);
+      d.setAttribute("aria-current", i === idx ? "true" : "false");
+    });
   }
 
   function next() {
-    if (idx < TOTAL - 1) {
-      render(idx + 1);
-    } else {
-      goLogin();
-    }
+    if (idx < TOTAL - 1) render(idx + 1);
+    else goLogin();
   }
 
   function prev() {
@@ -45,29 +48,29 @@
 
   function startAuto() {
     stopAuto();
-    timer = setInterval(() => {
-      next();
-    }, INTERVAL_MS);
+    timer = setInterval(next, INTERVAL_MS);
   }
 
   function stopAuto() {
-    if (timer) clearInterval(timer);
+    if (!timer) return;
+    clearInterval(timer);
     timer = null;
   }
 
-  // dots 클릭 이동
-  dots.forEach((dot, i) => {
+  // dots click
+  dots.forEach((dot) => {
     dot.addEventListener("click", () => {
-      render(i);
-      startAuto(); // 타이머 리셋
+      const to = Number(dot.dataset.dot);
+      render(Number.isFinite(to) ? to : 0);
+      startAuto();
     });
   });
 
-  // SKIP
-  skipBtn.addEventListener("click", goLogin);
+  // skip
+  skipBtn?.addEventListener("click", goLogin);
 
   // =========================
-  // Swipe / Drag (touch + mouse)
+  // Swipe / Drag
   // =========================
   const swipeTarget = document.querySelector(".onboarding");
 
@@ -84,41 +87,37 @@
     const dx = x - startX;
     const dy = y - startY;
 
-    // 세로 스크롤 제스처는 무시(가로로만 처리)
+    // vertical gesture ignore
     if (Math.abs(dy) > Math.abs(dx)) return;
 
     if (dx <= -SWIPE_THRESHOLD) {
-      // 왼쪽으로 스와이프 = 다음
       next();
       startAuto();
-    } else if (dx >= SWIPE_THRESHOLD) {
-      // 오른쪽으로 스와이프 = 이전
+      return;
+    }
+
+    if (dx >= SWIPE_THRESHOLD) {
       prev();
       startAuto();
     }
   }
 
   // touch
-  swipeTarget.addEventListener("touchstart", (e) => {
+  swipeTarget?.addEventListener("touchstart", (e) => {
     const t = e.touches[0];
     onStart(t.clientX, t.clientY);
   }, { passive: true });
 
-  swipeTarget.addEventListener("touchend", (e) => {
+  swipeTarget?.addEventListener("touchend", (e) => {
     const t = e.changedTouches[0];
     onEnd(t.clientX, t.clientY);
   });
 
-  // mouse (desktop drag)
-  swipeTarget.addEventListener("mousedown", (e) => {
-    onStart(e.clientX, e.clientY);
-  });
+  // mouse
+  swipeTarget?.addEventListener("mousedown", (e) => onStart(e.clientX, e.clientY));
+  window.addEventListener("mouseup", (e) => onEnd(e.clientX, e.clientY));
 
-  window.addEventListener("mouseup", (e) => {
-    onEnd(e.clientX, e.clientY);
-  });
-
-  // 탭 비활성화 시 타이머 정지/재개
+  // tab visibility
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stopAuto();
     else startAuto();

@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="shell">
+
     <main class="page">
 
       <!-- TOP HERO -->
@@ -15,15 +16,14 @@
         <img class="topHero__bg" src="./images/stableback.png" alt="" aria-hidden="true">
 
         <div class="topHero__inner">
-          <header class="topHero__bar">
-            <button class="iconBtn iconBtn--left" id="openDrawerBtn" type="button" aria-label="메뉴">
-              <img src="./images/icon_menu.svg" class="iconImg" alt="" aria-hidden="true">
+          <!-- home처럼 좌/우 끝 정렬 -->
+          <header class="hero__topbar">
+            <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
+              <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg"/>
             </button>
 
-            <div></div>
-
-            <button class="iconBtn iconBtn--right" type="button" aria-label="알림">
-              <img src="./images/icon_alram.svg" class="iconImg" alt="" aria-hidden="true">
+            <button class="iconBtn" type="button" aria-label="알림">
+              <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg"/>
             </button>
           </header>
 
@@ -41,7 +41,7 @@
           <h2 class="sectionHd__title">안정 SOS 키트</h2>
         </header>
 
-        <!-- ✅ 오토플레이는 화면에 보일 때만 -->
+        <!-- 오토플레이는 화면에 보일 때만 + 가로만 이동 -->
         <div class="kit" aria-label="안정 SOS 키트 슬라이더" id="kit">
           <div class="kit__viewport" id="kitViewport">
             <div class="kit__track" id="kitTrack">
@@ -92,106 +92,91 @@
           <div class="kitDots" id="kitDots" aria-hidden="true"></div>
         </div>
 
-        <!-- 불안에서 벗어나는 작은방법 -->
+        <!-- 불안에서 벗어나는 작은방법 (✅ 방법론.png처럼) -->
         <header class="sectionHd sectionHd--mt">
           <h2 class="sectionHd__title">불안에서 벗어나는 작은방법</h2>
         </header>
 
-        <div class="tips">
-          <button class="tipCard" type="button" aria-label="작은 루틴 유지하기">
-            <div class="tipCard__left">
-              <div class="tipCard__head">
-                <span class="tipCard__icon">
-                  <img src="./images/stable_clock.svg" alt="" aria-hidden="true">
-                </span>
-                <div class="tipCard__title">작은 루틴 유지하기</div>
-              </div>
-              <div class="tipCard__desc">
-                아침 스트레칭, 물 한잔처럼 작은 루틴이<br>
-                불안을 낮추는 데 도움이 돼요.
+        <!--  디자인 시안 구조로 교체 -->
+        <div class="methodList" aria-label="불안에서 벗어나는 작은방법">
+          <!-- 1 -->
+          <article class="methodCard methodCard--accent methodCard--iconLeft">
+            <div class="methodIcon methodIcon--clock">
+              <img src="./images/stable_clock.svg" alt="" aria-hidden="true">
+            </div>
+            <div class="methodBody">
+              <div class="methodTitle">작은 루틴 유지하기</div>
+              <div class="methodDesc">
+                아침 스트레칭 규칙적인 식사 같은 작은 루틴이 신체 리듬을 안정시키고
+                하루 전체의 불안을 크게 낮춰줘요. 하루를 완벽히 보내려고 하기보단 지킬…
               </div>
             </div>
-          </button>
+          </article>
 
-          <button class="tipCard" type="button" aria-label="불안 신호 기록하기">
-            <div class="tipCard__left">
-              <div class="tipCard__head">
-                <span class="tipCard__icon">
-                  <img src="./images/stable_book.svg" alt="" aria-hidden="true">
-                </span>
-                <div class="tipCard__title">불안 신호 기록하기</div>
-              </div>
-              <div class="tipCard__desc">
-                언제/어디서/어떤 생각이 올라오는지<br>
-                가볍게 메모해보세요.
-              </div>
-            </div>
-          </button>
+          <div class="methodDivider" aria-hidden="true"></div>
 
-          <button class="tipCard" type="button" aria-label="전문가 도움">
-            <div class="tipCard__left">
-              <div class="tipCard__head">
-                <span class="tipCard__icon">
-                  <img src="./images/stable_doctor.svg" alt="" aria-hidden="true">
-                </span>
-                <div class="tipCard__title">전문가 도움</div>
-              </div>
-              <div class="tipCard__desc">
-                혼자 버티기 힘들면 전문가 도움을 받는 건<br>
-                아주 자연스러운 선택이에요.
+          <!-- 2 -->
+          <article class="methodCard methodCard--iconRight">
+            <div class="methodBody">
+              <div class="methodTitle">불안 신호 기록하기</div>
+              <div class="methodDesc">
+                불안이 올라오는 상황과 생각의 흐름을 가볍게 기록하면 “왜 불안했는지”
+                패턴이 보여요. 반복을 알게 되면 불안은 훨씬 덜 낯설어지고 대응도…
               </div>
             </div>
-          </button>
+            <div class="methodIcon methodIcon--paper">
+              <img src="./images/stable_book.svg" alt="" aria-hidden="true">
+            </div>
+          </article>
 
-          <button class="tipCard" type="button" aria-label="몸을 이완시키기">
-            <div class="tipCard__left">
-              <div class="tipCard__head">
-                <span class="tipCard__icon">
-                  <img src="./images/stable_yoga.svg" alt="" aria-hidden="true">
-                </span>
-                <div class="tipCard__title">몸을 이완시키기</div>
-              </div>
-              <div class="tipCard__desc">
-                목/어깨를 천천히 돌리고 숨을 길게 내쉬며<br>
-                몸의 긴장을 풀어봐요.
+          <div class="methodDivider" aria-hidden="true"></div>
+
+          <!-- 3 -->
+          <article class="methodCard methodCard--accent methodCard--iconLeft">
+            <div class="methodIcon methodIcon--doctor">
+              <img src="./images/stable_doctor.svg" alt="" aria-hidden="true">
+            </div>
+            <div class="methodBody">
+              <div class="methodTitle">자극 줄이기</div>
+              <div class="methodDesc">
+                불안이 올라오는 날엔 카페인, 에너지 드링크, 알코올 같은 자극 물질을
+                잠시 줄여 보세요. 작은 조절이 심장/긴장감과 신경계 과민함을 크게 완화시킵…
               </div>
             </div>
-          </button>
+          </article>
+
+          <div class="methodDivider" aria-hidden="true"></div>
+
+          <!-- 4 -->
+          <article class="methodCard methodCard--iconRight">
+            <div class="methodBody">
+              <div class="methodTitle">몸을 이완시키기</div>
+              <div class="methodDesc">
+                불안은 몸의 긴장에서 먼저 시작되는 경우가 많아요. 어깨를 털손히 돌리거나
+                심호흡을 하며 천천히 풀어주면 신경계가 빠르게 안정돼요. 몸이 이완되면 마음도 훨씬 자연…
+              </div>
+            </div>
+            <div class="methodIcon methodIcon--yoga">
+              <img src="./images/stable_yoga.svg" alt="" aria-hidden="true">
+            </div>
+          </article>
         </div>
 
-        <!-- 이미지 2장 카드 -->
-        <div class="twoGrid sectionHd--mt" aria-label="추천">
-          <button class="twoCard" type="button" aria-label="불안에 좋은 음식">
-            <div class="twoCard__media">
-              <img src="./images/stable_food.png" alt="" aria-hidden="true">
-              <div class="twoCard__label">불안에 좋은 음식들</div>
-            </div>
-          </button>
-
-          <button class="twoCard" type="button" aria-label="마음을 안정시키는 환경">
-            <div class="twoCard__media">
-              <img src="./images/stable_room.png" alt="" aria-hidden="true">
-              <div class="twoCard__label">마음을 안정시키는 환경</div>
-            </div>
-          </button>
-        </div>
-
-        <!-- 음악 플레이어 -->
+        <!-- 음악 -->
         <header class="sectionHd sectionHd--mt">
           <h2 class="sectionHd__title">마음이 쉬어가는 음악</h2>
         </header>
 
-        <div class="player" aria-label="음악 플레이어">
-          <div class="player__cover">
-            <img src="./images/music_cover.png" alt="커버" aria-hidden="true">
+        <!-- 깨진 커버/아이콘 제거, 영상(유튜브) “보이는 플레이어”로 교체 -->
+        <div class="player" aria-label="영상/음악 플레이어">
+          <div class="playerVideo">
+            <div id="ytPlayer" class="ytPlayerVisible" aria-label="YouTube Player"></div>
           </div>
 
           <div class="player__meta">
-            <div class="player__title">우리 사랑은</div>
-            <div class="player__artist">찰리빈맥스</div>
+            <div class="player__title" id="mediaTitle">안정 영상</div>
+            <div class="player__artist" id="mediaSub">앱 안에서 바로 재생</div>
           </div>
-
-          <div id="ytPlayer" class="ytPlayer" aria-hidden="true"></div>
 
           <div class="player__progress">
             <span class="player__time" id="curTime">0:00</span>
@@ -199,57 +184,113 @@
             <span class="player__time" id="durTime">0:00</span>
           </div>
 
+          <!-- 텍스트 버튼(엑박 방지) -->
           <div class="player__controls" aria-label="컨트롤">
-            <button class="pBtn" type="button" id="btnPrev" aria-label="이전">
-              <img src="./images/icon_prev.svg" alt="" aria-hidden="true">
-            </button>
-
-            <button class="pBtn pBtn--play" type="button" id="btnPlay" aria-label="재생/일시정지">
-              <img src="./images/icon_play.svg" alt="" aria-hidden="true" id="playIcon">
-            </button>
-
-            <button class="pBtn" type="button" id="btnNext" aria-label="다음">
-              <img src="./images/icon_next.svg" alt="" aria-hidden="true">
-            </button>
-
-            <button class="pBtn" type="button" id="btnRepeat" aria-label="반복">
-              <img src="./images/icon_repeat.svg" alt="" aria-hidden="true">
-            </button>
+            <button class="pTxtBtn" type="button" id="btnPrev" aria-label="이전">⏮</button>
+            <button class="pTxtBtn pTxtBtn--play" type="button" id="btnPlay" aria-label="재생/일시정지">▶</button>
+            <button class="pTxtBtn" type="button" id="btnNext" aria-label="다음">⏭</button>
+            <button class="pIconBtn" type="button" id="btnRepeat" aria-label="반복 재생">
+            <svg viewBox="0 0 24 24" class="pIcon" aria-hidden="true">
+            <path d="M17 1l4 4-4 4V6H7a4 4 0 000 8h1v2H7a6 6 0 010-12h10V1z"/>
+            <path d="M7 23l-4-4 4-4v3h10a4 4 0 000-8h-1V8h1a6 6 0 010 12H7v3z"/>
+           </svg>
+         </button>
           </div>
         </div>
 
       </section>
     </main>
 
-    <!-- TAB BAR -->
+    <!-- TAB BAR (✅ home이랑 동일 구조/크기) -->
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
+
         <button class="tab" type="button" data-tab="home">
-          <img class="tabImg" src="./images/icon_home.svg" alt="" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true"/>
           <span class="tab__label">홈</span>
         </button>
 
         <button class="tab is-active" type="button" data-tab="stability" aria-current="page">
-          <img class="tabImg" src="./images/icon_stability_on.svg" alt="" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_stability_on.svg" alt="안정" aria-hidden="true"/>
           <span class="tab__label">안정</span>
         </button>
 
         <button class="tab" type="button" data-tab="record">
-          <img class="tabImg" src="./images/icon_record.svg" alt="" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_record.svg" alt="기록" aria-hidden="true"/>
           <span class="tab__label">기록</span>
         </button>
 
         <button class="tab" type="button" data-tab="community">
-          <img class="tabImg" src="./images/icon_community.svg" alt="" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true"/>
           <span class="tab__label">커뮤니티</span>
         </button>
 
         <button class="tab" type="button" data-tab="my">
-          <img class="tabImg" src="./images/icon_my.svg" alt="" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_my.svg" alt="my" aria-hidden="true"/>
           <span class="tab__label">MY</span>
         </button>
+
       </div>
     </nav>
+
+    <!-- ✅ LEFT DRAWER (home과 동일 마크업 복붙) -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
+
+      <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
+        <header class="drawer__hd">
+          <div class="drawer__profile">
+            <div class="drawer__avatar" aria-hidden="true">
+              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+            </div>
+            <div class="drawer__who">
+              <div class="drawer__name">숨결록</div>
+              <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
+            </div>
+          </div>
+
+          <button class="drawer__x" type="button" data-close="drawer" aria-label="닫기">×</button>
+        </header>
+
+        <div class="drawer__body">
+          <button class="drawer__cta" type="button">
+            <span class="drawer__ctaT1">오늘 기록하기</span>
+            <span class="drawer__ctaT2">감정/일기를 바로 남겨요</span>
+          </button>
+
+          <nav class="drawer__nav" aria-label="메뉴 목록">
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">내 정보</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">알림 설정</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">도움말</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item drawer__item--danger" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">로그아웃</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
+
+        <footer class="drawer__ft">
+          <div class="drawer__ver">v1.0</div>
+        </footer>
+      </aside>
+    </div>
+
   </div>
 
   <script src="./js/stability.js"></script>

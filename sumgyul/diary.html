@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>diary</title>
+  <link rel="stylesheet" href="./css/diary.css" />
+</head>
+<body>
+  <div class="shell">
+    <main class="page">
+
+      <!-- TOP HERO (record/home와 동일한 topbar 위치/사이즈) -->
+      <section class="hero" aria-label="일기 상단">
+        <div class="hero__inner">
+
+          <header class="hero__topbar">
+            <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
+              <!-- TODO: 네 SVG로 교체 -->
+              <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg" />
+            </button>
+
+            <div class="topbar__right">
+              <button class="iconBtn" id="openSearchBtn" type="button" aria-label="검색">
+                <!-- TODO: 네 SVG로 교체 -->
+                <img src="./images/icon_search.svg" alt="" aria-hidden="true" class="iconImg" />
+              </button>
+              <button class="iconBtn" type="button" aria-label="알림">
+                <!-- TODO: 네 SVG로 교체 -->
+                <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg" />
+              </button>
+            </div>
+          </header>
+
+          <div class="hero__titleRow">
+            <h1 class="hero__title">일기 쓰기</h1>
+            <div class="hero__date" id="diaryDateLabel">YYYY-MM-DD</div>
+          </div>
+
+          <p class="hero__sub">
+            오늘의 마음을 있는 그대로 적어도 괜찮아요.  
+            기록은 “회복의 증거”가 될 수 있어요.
+          </p>
+        </div>
+      </section>
+
+      <!-- SHEET -->
+      <section class="sheet" aria-label="일기 입력">
+
+        <!-- 감정 선택 -->
+        <section class="card" aria-label="오늘의 감정">
+          <div class="card__head">
+            <h2 class="card__title">오늘의 감정</h2>
+            <div class="card__meta">한 가지만 선택</div>
+          </div>
+
+          <div class="emojiRow" id="emojiRow" aria-label="감정 이모티콘 선택">
+            <!-- TODO: 네가 SVG/이미지로 교체 (원하는 만큼) -->
+            <button class="emojiBtn" type="button" data-emoji="happy" aria-label="행복">
+              <img class="emojiImg" src="./images/felling_happy.png" alt="행복" />
+              <span class="emojiTxt">행복</span>
+            </button>
+            <button class="emojiBtn" type="button" data-emoji="angry" aria-label="화남">
+              <img class="emojiImg" src="./images/felling_angry.png" alt="화남" />
+              <span class="emojiTxt">화남</span>
+            </button>
+            <button class="emojiBtn" type="button" data-emoji="sad" aria-label="슬픔">
+              <img class="emojiImg" src="./images/felling_sad.png" alt="" />
+              <span class="emojiTxt">슬픔</span>
+            </button>
+            <button class="emojiBtn" type="button" data-emoji="anxious" aria-label="불안">
+              <img class="emojiImg" src="./images/feeling_unrest.png" alt="" />
+              <span class="emojiTxt">불안</span>
+            </button>
+            <button class="emojiBtn" type="button" data-emoji="panic" aria-label="무기력">
+              <img class="emojiImg" src="./images/felling_lethargy.png" alt="무기력" />
+              <span class="emojiTxt">무기력</span>
+            </button>
+            <button class="emojiBtn" type="button" data-emoji="worry" aria-label="걱정">
+              <img class="emojiImg" src="./images/felling_worry.png" alt="걱정" />
+              <span class="emojiTxt">걱정</span>
+            </button>
+          </div>
+
+          <div class="fieldRow">
+            <label class="field">
+              <span class="field__label">강도</span>
+              <input class="range" id="intensity" type="range" min="0" max="10" value="5" />
+            </label>
+            <div class="rangeVal" id="intensityVal">5/10</div>
+          </div>
+        </section>
+
+        <!-- 증상(복수 선택) -->
+        <section class="card" aria-label="오늘의 상태">
+          <div class="card__head">
+            <h2 class="card__title">오늘의 상태</h2>
+            <div class="card__meta">복수 선택 가능</div>
+          </div>
+
+          <div class="checkGrid">
+            <label class="chk"><input class="chk__input" type="checkbox" value="불안감" /><span class="chk__label">불안감</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="심장 두근거림" /><span class="chk__label">심장 두근거림</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="호흡 곤란" /><span class="chk__label">호흡 곤란</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="어지러움" /><span class="chk__label">어지러움</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="가슴 답답함" /><span class="chk__label">가슴 답답함</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="불면" /><span class="chk__label">불면</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="무기력" /><span class="chk__label">무기력</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="집중 어려움" /><span class="chk__label">집중 어려움</span></label>
+            <label class="chk"><input class="chk__input" type="checkbox" value="신체화(몸통증)" /><span class="chk__label">신체화</span></label>
+          </div>
+        </section>
+
+        <!-- 트리거 -->
+        <section class="card" aria-label="트리거">
+          <div class="card__head">
+            <h2 class="card__title">오늘의 트리거</h2>
+            <div class="card__meta">선택</div>
+          </div>
+
+          <div class="tagGrid" id="triggerTags">
+            <button class="tag" type="button" data-tag="수면부족">수면부족</button>
+            <button class="tag" type="button" data-tag="과호흡">과호흡</button>
+            <button class="tag" type="button" data-tag="카페인">카페인</button>
+            <button class="tag" type="button" data-tag="업무/학업">업무/학업</button>
+            <button class="tag" type="button" data-tag="대인관계">대인관계</button>
+            <button class="tag" type="button" data-tag="소음/혼잡">소음/혼잡</button>
+            <button class="tag" type="button" data-tag="건강염려">건강염려</button>
+          </div>
+
+          <label class="field mt10">
+            <span class="field__label">추가 메모(선택)</span>
+            <input class="field__input" id="triggerNote" type="text" placeholder="예: 지하철에서 숨이 막히는 느낌" />
+          </label>
+        </section>
+
+        <!-- 본문 -->
+        <section class="card" aria-label="오늘 기록">
+          <div class="card__head">
+            <h2 class="card__title">오늘 하루</h2>
+            <div class="card__meta">자세히 적어보기</div>
+          </div>
+
+          <label class="field">
+            <span class="field__label">무슨 일이 있었나요?</span>
+            <textarea class="textarea" id="eventText" placeholder="상황을 사실 위주로 적어봐요"></textarea>
+          </label>
+
+          <label class="field mt10">
+            <span class="field__label">그때 떠오른 생각은?</span>
+            <textarea class="textarea" id="thoughtText" placeholder="예: 또 쓰러지면 어떡하지…"></textarea>
+          </label>
+
+          <label class="field mt10">
+            <span class="field__label">몸의 반응은?</span>
+            <textarea class="textarea" id="bodyText" placeholder="호흡, 심장, 긴장감 등"></textarea>
+          </label>
+
+          <label class="field mt10">
+            <span class="field__label">내가 한 도움 되는 행동</span>
+            <textarea class="textarea" id="copeText" placeholder="예: 물 마시기, 천천히 걷기, 호흡하기"></textarea>
+          </label>
+
+          <label class="field mt10">
+            <span class="field__label">오늘의 작은 칭찬</span>
+            <input class="field__input" id="praiseText" type="text" placeholder="예: 그래도 출근한 나, 진짜 대단해" />
+          </label>
+        </section>
+
+        <!-- 그림일기 자동 생성 -->
+        <section class="card" aria-label="그림일기 카드">
+          <div class="card__head">
+            <h2 class="card__title">그림일기 카드</h2>
+            <div class="card__meta">자동 생성</div>
+          </div>
+
+          <p class="hint">
+            저장하면 오늘 기록을 바탕으로 카드 이미지가 자동으로 만들어져요. (PNG 저장 가능)
+          </p>
+
+          <div class="canvasWrap">
+            <canvas id="cardCanvas" width="960" height="540" aria-label="그림일기 캔버스"></canvas>
+          </div>
+
+          <div class="btnRow">
+            <button class="secondaryBtn" id="regenBtn" type="button">카드 다시 만들기</button>
+            <button class="secondaryBtn" id="downloadBtn" type="button">PNG 저장</button>
+          </div>
+        </section>
+
+        <!-- 저장 -->
+        <section class="ctaBar" aria-label="저장">
+          <button class="primaryBtn" id="saveBtn" type="button">일기 저장</button>
+          <div class="hint" id="saveHint" aria-live="polite"></div>
+        </section>
+
+      </section>
+    </main>
+
+    <!-- TAB BAR (home/record와 동일 규칙) -->
+    <nav class="tabWrap" aria-label="하단 탭">
+      <div class="tabbar">
+        <button class="tab" type="button" data-tab="home">
+          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true"/>
+          <span class="tab__label">홈</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="stability">
+          <img class="tabImg" src="./images/icon_stability.svg" alt="안정" aria-hidden="true"/>
+          <span class="tab__label">안정</span>
+        </button>
+
+        <button class="tab is-active" type="button" data-tab="record" aria-current="page">
+          <img class="tabImg" src="./images/icon_record_on.svg" alt="기록" aria-hidden="true"/>
+          <span class="tab__label">기록</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="community">
+          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true"/>
+          <span class="tab__label">커뮤니티</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="my">
+          <img class="tabImg" src="./images/icon_my.svg" alt="MY" aria-hidden="true"/>
+          <span class="tab__label">MY</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Drawer (home/record와 동일) -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
+
+      <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
+        <header class="drawer__hd">
+          <div class="drawer__profile">
+            <div class="drawer__avatar" aria-hidden="true">
+              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+            </div>
+            <div class="drawer__who">
+              <div class="drawer__name">숨결록</div>
+              <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
+            </div>
+          </div>
+
+          <button class="drawer__x" type="button" data-close="drawer" aria-label="닫기">×</button>
+        </header>
+
+        <div class="drawer__body">
+          <button class="drawer__cta" type="button" id="drawerWriteBtn">
+            <span class="drawer__ctaT1">오늘 기록하기</span>
+            <span class="drawer__ctaT2">감정/일기를 바로 남겨요</span>
+          </button>
+
+          <nav class="drawer__nav" aria-label="메뉴 목록">
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">내 정보</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">알림 설정</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">도움말</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+
+            <button class="drawer__item drawer__item--danger" type="button">
+              <span class="drawer__dot" aria-hidden="true"></span>
+              <span class="drawer__txt">로그아웃</span>
+              <span class="drawer__chev" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
+
+        <footer class="drawer__ft">
+          <div class="drawer__ver">v1.0</div>
+        </footer>
+      </aside>
+    </div>
+
+    <!-- SEARCH MODAL (record와 동일 개념) -->
+    <div class="modal" id="searchModal" aria-hidden="true">
+      <div class="modal-dim" data-close="search"></div>
+
+      <div class="modal-sheet" role="dialog" aria-modal="true" aria-label="일기 검색">
+        <div class="modal-head">
+          <div class="modal-title">일기 검색</div>
+          <button class="modal-close" type="button" data-close="search" aria-label="닫기">닫기</button>
+        </div>
+
+        <div class="modal-body">
+          <label class="field">
+            <span class="field__label">검색어</span>
+            <input class="field__input" id="searchInput" type="text" placeholder="키워드로 검색해요" />
+          </label>
+
+          <div class="hint" id="searchHint" aria-live="polite"></div>
+          <div class="resultList" id="searchResults" aria-label="검색 결과"></div>
+        </div>
+
+        <div class="modal-foot">
+          <button class="modal-cta" type="button" data-close="search">확인</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="./js/diary.js"></script>
+</body>
+</html>

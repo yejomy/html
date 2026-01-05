@@ -1,6 +1,6 @@
 (() => {
   /* =========================
-     탭 이동
+     0) 탭 이동 (home과 동일)
      ========================= */
   const routes = {
     home: "./home.html",
@@ -21,8 +21,37 @@
   });
 
   /* =========================
-     ✅ SOS KIT: 핑퐁 오토플레이 + 화면에 보일 때만 실행
-     1-2-3-4-3-2-1-2-3-4...
+     1) LEFT DRAWER (home과 동일)
+     ========================= */
+  const openDrawerBtn = document.getElementById("openDrawerBtn");
+  const drawer = document.getElementById("drawer");
+
+  function openDrawer() {
+    if (!drawer) return;
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  openDrawerBtn?.addEventListener("click", openDrawer);
+
+  drawer?.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close='drawer']")) closeDrawer();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
+  });
+
+  /* =========================
+     2) SOS KIT: 핑퐁 오토플레이 + 화면에 보일 때만 + 가로만 이동
      ========================= */
   const kitRoot = document.getElementById("kit");
   const viewport = document.getElementById("kitViewport");
@@ -35,8 +64,8 @@
     let dir = 1;
     let timer = null;
 
-    let isUserInteracting = false; // 터치/드래그 중
-    let isKitVisible = true;        // 화면에 보이는 중
+    let isUserInteracting = false;
+    let isKitVisible = true;
     let isPageVisible = !document.hidden;
 
     // dots
@@ -56,19 +85,16 @@
       dots.forEach((d, idx) => d.classList.toggle("is-active", idx === i));
     };
 
-    // ✅ 세로 스크롤 건드리지 않고 "가로만" 이동
+    // ✅ 세로 스크롤 절대 건드리지 않음 (scrollIntoView 금지)
     const goTo = (i, byUser = false) => {
       index = Math.max(0, Math.min(i, slides.length - 1));
-      const target = slides[index];
-      const left = target.offsetLeft;
-
+      const left = slides[index].offsetLeft;
       viewport.scrollTo({ left, behavior: "smooth" });
-
       setDot(index);
       if (byUser) restart();
     };
 
-    // 스크롤 위치로 index 갱신
+    // scroll position -> index
     const updateIndexByScroll = () => {
       const center = viewport.scrollLeft + viewport.clientWidth / 2;
       let best = 0;
@@ -117,10 +143,10 @@
       if (isKitVisible && isPageVisible) start();
     };
 
-    // ✅ 첫 진입: 1장만 보이게 고정
+    // 첫 진입은 1장 고정
     goTo(0, false);
 
-    // 사용자 드래그/터치 시 잠깐 멈춤
+    // user interaction -> stop autoplay temporarily
     const interactOn = () => { isUserInteracting = true; };
     const interactOff = () => { isUserInteracting = false; };
 
@@ -129,11 +155,10 @@
     viewport.addEventListener("mousedown", () => { interactOn(); stop(); });
     window.addEventListener("mouseup", () => { interactOff(); restart(); });
 
-    // ✅ 화면에 보일 때만 오토플레이 (IntersectionObserver)
+    // ✅ 화면에 보일 때만
     const io = new IntersectionObserver(
       (entries) => {
         const e = entries[0];
-        // 0.45 이상 보일 때만 "보인다"로 판정
         isKitVisible = e.isIntersecting && e.intersectionRatio >= 0.45;
         if (isKitVisible) start();
         else stop();
@@ -142,148 +167,165 @@
     );
     io.observe(kitRoot);
 
-    // ✅ 탭 전환/백그라운드로 가면 멈추기
+    // 탭이 백그라운드면 stop
     document.addEventListener("visibilitychange", () => {
       isPageVisible = !document.hidden;
       if (isPageVisible && isKitVisible) start();
       else stop();
     });
 
-    // 초기 상태 반영
     start();
   }
 
-  /* =========================
-     ✅ 음악: 유튜브 링크 앱 내 재생
-     ========================= */
-  const YOUTUBE_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+/* =========================
+   3) ✅ 영상 재생 (YouTube IFrame Player API)
+   ========================= */
 
-  const getYoutubeId = (url) => {
-    try {
-      const u = new URL(url);
-      if (u.hostname.includes("youtu.be")) return u.pathname.replace("/", "");
-      if (u.searchParams.get("v")) return u.searchParams.get("v");
-      if (u.pathname.includes("/shorts/")) return u.pathname.split("/shorts/")[1].split("?")[0];
-      return "";
-    } catch {
-      return "";
-    }
-  };
+const YOUTUBE_URL = "https://www.youtube.com/watch?v=PhL1u3Hn4ok&list=RDPhL1u3Hn4ok&start_radio=1";
 
-  const videoId = getYoutubeId(YOUTUBE_URL);
+const getYoutubeParams = (url) => {
+  try {
+    const u = new URL(url);
+    const videoId =
+      u.searchParams.get("v") ||
+      (u.hostname.includes("youtu.be") ? u.pathname.replace("/", "") : "") ||
+      (u.pathname.includes("/shorts/") ? u.pathname.split("/shorts/")[1].split("?")[0] : "");
 
-  const btnPlay = document.getElementById("btnPlay");
-  const playIcon = document.getElementById("playIcon");
-  const seek = document.getElementById("seek");
-  const curTime = document.getElementById("curTime");
-  const durTime = document.getElementById("durTime");
-  const btnRepeat = document.getElementById("btnRepeat");
-  const btnPrev = document.getElementById("btnPrev");
-  const btnNext = document.getElementById("btnNext");
+    const list = u.searchParams.get("list") || ""; // RD... 같은 플레이리스트
+    return { videoId, list };
+  } catch {
+    return { videoId: "", list: "" };
+  }
+};
 
-  const fmt = (s) => {
-    if (!isFinite(s) || s < 0) return "0:00";
-    const m = Math.floor(s / 60);
-    const ss = Math.floor(s % 60).toString().padStart(2, "0");
-    return `${m}:${ss}`;
-  };
+const { videoId, list } = getYoutubeParams(YOUTUBE_URL);
 
-  const setPlayIcon = (playing) => {
-    if (!playIcon) return;
-    playIcon.src = playing ? "./images/icon_pause.svg" : "./images/icon_play.svg";
-  };
+const btnPlay = document.getElementById("btnPlay");
+const btnRepeat = document.getElementById("btnRepeat");
+const btnPrev = document.getElementById("btnPrev");
+const btnNext = document.getElementById("btnNext");
+const seek = document.getElementById("seek");
+const curTime = document.getElementById("curTime");
+const durTime = document.getElementById("durTime");
 
-  let ytPlayer = null;
-  let uiTimer = null;
-  let isLoop = false;
-  let isSeeking = false;
+const fmt = (s) => {
+  if (!isFinite(s) || s < 0) return "0:00";
+  const m = Math.floor(s / 60);
+  const ss = Math.floor(s % 60).toString().padStart(2, "0");
+  return `${m}:${ss}`;
+};
 
-  const tag = document.createElement("script");
-  tag.src = "https://www.youtube.com/iframe_api";
-  document.head.appendChild(tag);
+let ytPlayer = null;
+let uiTimer = null;
+let isLoop = false;
+let isSeeking = false;
+
+function showPlayerError(msg) {
+  const mediaSub = document.getElementById("mediaSub");
+  if (mediaSub) mediaSub.textContent = msg;
+  if (btnPlay) btnPlay.disabled = true;
+}
+
+if (!videoId) {
+  showPlayerError("유튜브 링크/ID가 올바르지 않아요");
+} else {
+  // API 로드
+  if (!window.__YT_API_LOADING__) {
+    window.__YT_API_LOADING__ = true;
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  }
 
   window.onYouTubeIframeAPIReady = () => {
-    if (!videoId) return;
+    // ✅ 핵심: videoId는 필수, list는 있으면 같이 넣기
+    const playerVars = {
+      controls: 0,
+      rel: 0,
+      modestbranding: 1,
+      playsinline: 1,
+      origin: window.location.origin || undefined,
+    };
+
+    // 라디오/믹스(list)까지 같이 재생하고 싶으면 listType/list를 세팅
+    // (list가 RD...로 들어오면 보통 동작함. 단, 유튜브 정책/지역/저작권 따라 막힐 수 있음)
+    if (list) {
+      playerVars.listType = "playlist";
+      playerVars.list = list;
+    }
 
     ytPlayer = new YT.Player("ytPlayer", {
       videoId,
-      playerVars: {
-        controls: 0,
-        rel: 0,
-        modestbranding: 1,
-        playsinline: 1,
-      },
+      playerVars,
       events: {
         onReady: () => {
-          setTimeout(updateDuration, 400);
-          startUiLoop();
+          // duration은 로딩 직후 0일 수 있음
+          setTimeout(() => {
+            const d = ytPlayer.getDuration?.() ?? 0;
+            if (durTime) durTime.textContent = fmt(d);
+          }, 600);
+
+          if (uiTimer) clearInterval(uiTimer);
+          uiTimer = setInterval(() => {
+            if (!ytPlayer) return;
+            const d = ytPlayer.getDuration?.() ?? 0;
+            const t = ytPlayer.getCurrentTime?.() ?? 0;
+
+            if (!isSeeking && seek) {
+              seek.value = String(d > 0 ? (t / d) * 100 : 0);
+            }
+            if (curTime) curTime.textContent = fmt(t);
+            if (durTime && durTime.textContent === "0:00") durTime.textContent = fmt(d);
+          }, 250);
         },
+
         onStateChange: (e) => {
           const playing = e.data === YT.PlayerState.PLAYING;
-          setPlayIcon(playing);
+          if (btnPlay) btnPlay.textContent = playing ? "⏸" : "▶";
 
           if (e.data === YT.PlayerState.ENDED) {
             if (isLoop) {
               ytPlayer.seekTo(0, true);
               ytPlayer.playVideo();
             } else {
-              setPlayIcon(false);
+              if (btnPlay) btnPlay.textContent = "▶";
             }
+          }
+        },
+
+        onError: (e) => {
+          const code = e?.data;
+          if (code === 101 || code === 150) {
+            showPlayerError("이 영상은 외부 재생(임베드)이 막혀있어요. 다른 영상으로 바꿔줘!");
+          } else if (code === 100) {
+            showPlayerError("영상이 삭제되었거나 비공개예요.");
+          } else {
+            showPlayerError(`유튜브 재생 오류(code: ${code})`);
           }
         }
       }
     });
   };
 
-  const updateDuration = () => {
-    if (!ytPlayer || !durTime) return;
-    const d = ytPlayer.getDuration?.() ?? 0;
-    durTime.textContent = fmt(d);
-  };
-
-  const startUiLoop = () => {
-    stopUiLoop();
-    uiTimer = setInterval(() => {
-      if (!ytPlayer) return;
-
-      const d = ytPlayer.getDuration?.() ?? 0;
-      const t = ytPlayer.getCurrentTime?.() ?? 0;
-
-      if (!isSeeking && seek) {
-        const p = d > 0 ? (t / d) * 100 : 0;
-        seek.value = String(p);
-      }
-      if (curTime) curTime.textContent = fmt(t);
-      if (durTime && (durTime.textContent === "0:00")) {
-        durTime.textContent = fmt(d);
-      }
-    }, 250);
-  };
-
-  const stopUiLoop = () => {
-    if (uiTimer) clearInterval(uiTimer);
-    uiTimer = null;
-  };
-
+  // ✅ 유튜브는 사용자 제스처가 있어야 재생되는 경우가 많음 → 버튼 클릭으로만 재생
   btnPlay?.addEventListener("click", () => {
     if (!ytPlayer) return;
     const st = ytPlayer.getPlayerState?.();
-    if (st === YT.PlayerState.PLAYING) {
-      ytPlayer.pauseVideo();
-      setPlayIcon(false);
-    } else {
-      ytPlayer.playVideo();
-      setPlayIcon(true);
-    }
+    if (st === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+    else ytPlayer.playVideo();
+  });
+
+  // ✅ playlist가 있으면 다음/이전은 실제로 넘길 수 있음
+  btnNext?.addEventListener("click", () => {
+    if (!ytPlayer) return;
+    if (list && ytPlayer.nextVideo) ytPlayer.nextVideo();
+    else ytPlayer.seekTo(0, true);
   });
 
   btnPrev?.addEventListener("click", () => {
     if (!ytPlayer) return;
-    ytPlayer.seekTo(0, true);
-  });
-  btnNext?.addEventListener("click", () => {
-    if (!ytPlayer) return;
-    ytPlayer.seekTo(0, true);
+    if (list && ytPlayer.previousVideo) ytPlayer.previousVideo();
+    else ytPlayer.seekTo(0, true);
   });
 
   seek?.addEventListener("input", () => { isSeeking = true; });
@@ -299,4 +341,6 @@
     isLoop = !isLoop;
     btnRepeat.classList.toggle("is-on", isLoop);
   });
+}
+
 })();

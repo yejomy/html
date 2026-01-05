@@ -9,46 +9,59 @@
 <body>
   <main class="onboarding" aria-label="온보딩">
 
-    <section class="slides" aria-live="polite">
+    <section class="slides" aria-live="polite" aria-label="온보딩 슬라이드">
+
       <!-- Slide 1 -->
-      <article class="slide active" data-index="0" aria-hidden="false">
-        <div class="image image-1" role="img" aria-label="온보딩 이미지 1"></div>
-        <div class="content">
-          <h1>쉼의 허락</h1>
-          <p>불안은 잠시 흔들림일 뿐이에요<br/>오늘은 조금 쉬어도 괜찮아요</p>
+      <article class="slide is-active" data-index="0" aria-hidden="false">
+        <div class="slide__image slide__image--1" role="img" aria-label="온보딩 이미지 1"></div>
+
+        <div class="slide__content">
+          <h1 class="title title--lg">쉼의 허락</h1>
+          <p class="body body--md">
+            불안은 잠시 흔들림일 뿐이에요<br />
+            오늘은 조금 쉬어도 괜찮아요
+          </p>
         </div>
       </article>
 
       <!-- Slide 2 -->
       <article class="slide" data-index="1" aria-hidden="true">
-        <div class="image image-2" role="img" aria-label="온보딩 이미지 2"></div>
-        <div class="content">
-          <h1>함께 연습하기</h1>
-          <p>불안은 혼자 감당하는 게 아니에요<br/>우리, 함께 연습해봐요</p>
+        <div class="slide__image slide__image--2" role="img" aria-label="온보딩 이미지 2"></div>
+
+        <div class="slide__content">
+          <h1 class="title title--lg">함께 연습하기</h1>
+          <p class="body body--md">
+            불안은 혼자 감당하는 게 아니에요<br />
+            우리, 함께 연습해봐요
+          </p>
         </div>
       </article>
 
       <!-- Slide 3 (FULL IMAGE) -->
-      <article class="slide full" data-index="2" aria-hidden="true">
-        <div class="image image-3 fullimg" role="img" aria-label="온보딩 이미지 3"></div>
+      <article class="slide slide--full" data-index="2" aria-hidden="true">
+        <div class="slide__image slide__image--3 slide__image--full" role="img" aria-label="온보딩 이미지 3"></div>
 
         <!-- 텍스트 필요없으면 이 블록 삭제해도 됨 -->
-        <div class="overlay">
-          <h1>혼자가 아닌 나</h1>
-          <p>당신은 혼자가 아니에요<br/>여기엔 같은 길을 걷는 사람들이 함께 있어요</p>
+        <div class="slide__overlay" aria-label="온보딩 안내">
+          <h1 class="title title--lg">혼자가 아닌 나</h1>
+          <p class="body body--md">
+            당신은 혼자가 아니에요<br />
+            여기엔 같은 길을 걷는 사람들이 함께 있어요
+          </p>
         </div>
       </article>
+
     </section>
 
-    <!-- ✅ 하단 바: 왼쪽 dots / 오른쪽 SKIP (스샷처럼) -->
+    <!-- 하단 바: 왼쪽 dots / 오른쪽 SKIP -->
     <footer class="bottombar" aria-label="하단 컨트롤">
       <div class="dots" aria-label="페이지 표시">
-        <span class="dot active" aria-hidden="true"></span>
-        <span class="dot" aria-hidden="true"></span>
-        <span class="dot" aria-hidden="true"></span>
+        <button class="dot is-active" type="button" aria-label="1페이지" data-dot="0"></button>
+        <button class="dot" type="button" aria-label="2페이지" data-dot="1"></button>
+        <button class="dot" type="button" aria-label="3페이지" data-dot="2"></button>
       </div>
 
-      <button class="skip" id="skipBtn" type="button">SKIP</button>
+      <button class="skip subtitle subtitle--sm" id="skipBtn" type="button">SKIP</button>
     </footer>
 
   </main>

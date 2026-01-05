@@ -1,57 +1,77 @@
 @charset "UTF-8";
 
-/* Pretendard */
-@font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+/* =========================================
+   Pretendard
+   - Title: 700
+   - Subtitle: 600
+   - Body: 400
+========================================= */
+@font-face{
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
-@font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+@font-face{
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-display: swap;
 }
-@font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+@font-face{
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }
 
+/* =========================================
+   Tokens
+========================================= */
 :root{
   --bg: #f6f4f0;
   --line: rgba(0,0,0,.10);
   --text: #2b2b2b;
   --muted: rgba(43,43,43,.55);
 
-  --accent: #E06A2E; /* 오렌지(체크/포인트) */
-  --btn: #3f6f63;    /* 민트(주컬러) */
+  --accent: #E06A2E;
+  --btn: #3f6f63;
 
-  --input-bg: rgba(255,255,255,.65);
   --radius: 10px;
+
+  /* spacing guide (원본 유지) */
+  --gap-top: 100px;
+  --gap-36: 36px;
+  --gap-24: 24px;
+  --gap-16: 16px;
+  --gap-8: 8px;
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* =========================================
+   Reset / Base
+========================================= */
 *{ box-sizing: border-box; }
 html, body{ width:100%; height:100%; margin:0; }
 
 body{
-  font-family: 'Pretendard', system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: "Pretendard", system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-weight: 400;
   background: var(--bg);
   color: var(--text);
 }
 
-/* container */
+button,
+input{
+  font: inherit;
+  color: inherit;
+}
+
+/* =========================================
+   Layout
+========================================= */
 .app{
   min-height: 100svh;
   width: 100%;
@@ -62,7 +82,9 @@ body{
   overflow: auto;
 }
 
-/* top */
+/* =========================================
+   Top
+========================================= */
 .top{
   width: min(420px, 100%);
   display: flex;
@@ -70,12 +92,14 @@ body{
   padding-top: 6px;
   margin-bottom: 6px;
 }
+
 .top__brand{
   width: 56px;
   height: 56px;
   display: grid;
   place-items: center;
 }
+
 .top__logo{
   width: 56px;
   height: 56px;
@@ -83,20 +107,23 @@ body{
   display: block;
 }
 
-/* card */
+/* =========================================
+   Card / Title
+========================================= */
 .card{
   width: min(420px, 100%);
-  background: transparent;
 }
 
 .page-title{
   margin: 10px 0 14px;
-  text-align: left;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700; /* ✅ Title */
   letter-spacing: -0.02em;
 }
 
+/* =========================================
+   Form
+========================================= */
 .form{
   display: grid;
   gap: 12px;
@@ -105,29 +132,33 @@ body{
 .field{
   display: grid;
   gap: 6px;
-  position: relative;
+  position: relative; /* field-check 기준 */
 }
 
 .label{
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600; /* ✅ Subtitle */
   color: #222;
 }
 
 .input{
   width: 100%;
   height: 48px;
+  padding: 0 38px 0 14px; /* 우측 체크 여백 */
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: var(--input-bg);
-  padding: 0 38px 0 14px; /* ✅ 우측 체크 공간 확보 */
-  font-size: 14.5px;
+  background: rgba(255,255,255,.65);
   outline: none;
+
+  font-size: 14.5px;
+  font-weight: 400; /* ✅ Body */
 }
 
-.input::placeholder{ color: rgba(43,43,43,.35); font-weight: 600; }
+.input::placeholder{
+  color: rgba(43,43,43,.35);
+  font-weight: 400; /* ✅ Body */
+}
 
-/* focus: 주컬러 민트 */
 .input:focus{
   background: #fff;
   border-color: rgba(63,111,99,1);
@@ -136,17 +167,18 @@ body{
 
 .hint{
   font-size: 12px;
+  font-weight: 400; /* ✅ Body */
   color: rgba(43,43,43,.45);
 }
 
 .error{
   min-height: 18px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 400; /* ✅ Body */
   color: #e54848;
 }
 
-/* 입력 완료 상태: 민트 톤 */
+/* 입력 완료 상태(원본 기능 유지) */
 .input.is-filled{
   background: rgba(63,111,99,0.06);
   border-color: rgba(63,111,99,0.45);
@@ -157,22 +189,24 @@ body{
   box-shadow: 0 0 0 3px rgba(63,111,99,0.18);
 }
 
-/* ✅ 우측 체크 아이콘: 기본 숨김(이게 없어서 항상 보였음) */
+/* 우측 체크 아이콘(원본 기능 유지) */
 .field-check{
   position: absolute;
   right: 12px;
-  top: 38px;                 /* ✅ input 중앙에 딱 맞게 (label+gap 영향 제거) */
+  top: 38px;               /* label+gap 고려한 원본 느낌 유지 */
   transform: translateY(-50%);
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 600;        /* ✅ Subtitle */
   color: #222;
-  opacity: 0;                /* ✅ 기본 숨김 */
+  opacity: 0;
   transition: opacity .15s ease;
   pointer-events: none;
 }
 .field-check.is-on{ opacity: 1; }
 
-/* terms */
+/* =========================================
+   Terms
+========================================= */
 .terms{
   margin-top: 4px;
   padding: 12px;
@@ -189,33 +223,30 @@ body{
   padding-left: 4px;
 }
 
-/* ✅ 약관 체크: 오렌지 원형 + 흰 V, 정중앙 고정 */
 .check{
   display: inline-flex;
   gap: 8px;
   align-items: center;
   font-size: 13px;
+  font-weight: 400; /* ✅ Body */
   color: rgba(43,43,43,.75);
-  font-weight: 700;
 }
 
+.check b{
+  font-weight: 600; /* ✅ Subtitle */
+}
+
+/* 체크박스: 원형 오렌지 + V */
 .check input{
   appearance: none;
   -webkit-appearance: none;
-  -moz-appearance: none;
-
   width: 16px;
   height: 16px;
   border-radius: 999px;
-
   border: 2px solid rgba(43,43,43,.22);
   background: #fff;
-
   cursor: pointer;
   position: relative;
-
-  display: inline-grid;
-  place-items: center;
 }
 
 .check input:checked{
@@ -223,29 +254,27 @@ body{
   border-color: var(--accent);
 }
 
-/* ✅ 정중앙 V */
 .check input:checked::after{
   content: "";
   position: absolute;
-
   width: 8px;
   height: 5px;
-
   border-left: 2.2px solid #fff;
   border-bottom: 2.2px solid #fff;
-
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -55%) rotate(-45deg); /* 살짝 위로 보정 */
+  transform: translate(-50%, -55%) rotate(-45deg);
   border-radius: 1px;
 }
 
-/* buttons */
+/* =========================================
+   Button
+========================================= */
 .btn{
   height: 52px;
   border-radius: 12px;
-  font-weight: 800;
   font-size: 15px;
+  font-weight: 600; /* ✅ Subtitle */
   cursor: pointer;
   border: 1px solid transparent;
 }
@@ -262,18 +291,21 @@ body{
 
 .btn--primary:active{ transform: translateY(1px); }
 
-/* bottom */
+/* =========================================
+   Bottom
+========================================= */
 .bottom{
   margin: 6px 0 0;
   text-align: center;
   font-size: 13px;
+  font-weight: 400; /* ✅ Body */
   color: var(--muted);
 }
 
 .bottom__link{
   margin-left: 6px;
   color: var(--accent);
-  font-weight: 800;
+  font-weight: 600; /* ✅ Subtitle */
   text-decoration: none;
 }
 .bottom__link:active{ opacity: .7; }

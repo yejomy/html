@@ -12,12 +12,12 @@
   }
 
   /* =========================================================
-     2) ✅ 안정 카드: HTML img 4개 중 랜덤 1개만 보이기
-        - HTML에 <img class="actionImg" data-key="breath" ...> 이런식으로 되어있어야 함
+     2) 안정 카드: 4개 이미지 중 랜덤 1개만 보이기
      ========================================================= */
-  const actionImgs = Array.from(document.querySelectorAll("#actionIconWrap .actionImg"));
+  const actionImgs = Array.from(
+    document.querySelectorAll("#actionIconWrap .actionImg")
+  );
 
-  // 카드별 모달 문구 (원하는대로 수정 가능)
   const ACTION_MODAL = {
     breath: {
       title: "숨쉬기",
@@ -29,7 +29,7 @@
     },
     tap: {
       title: "두드리기",
-      body: "턱/이마/어깨를 를 손끝으로 가볍게 톡톡 두드려봐요.\n몸의 감각에 집중하면 긴장이 풀려요",
+      body: "턱/이마/어깨를 손끝으로 가볍게 톡톡 두드려봐요.\n몸의 감각에 집중하면 긴장이 풀려요",
     },
     scan: {
       title: "시각스캔",
@@ -42,21 +42,17 @@
   function pickRandomActionCard() {
     if (!actionImgs.length) return;
 
-    // 다 숨기고
     actionImgs.forEach((img) => img.classList.remove("is-active"));
 
-    // 랜덤 pick
     const pick = actionImgs[Math.floor(Math.random() * actionImgs.length)];
     pick.classList.add("is-active");
-
-    // 현재 선택된 키 저장 (모달 내용용)
     currentActionKey = pick.dataset.key || null;
   }
 
   pickRandomActionCard();
 
   /* =========================================================
-     3) ✅ 모달 열기/닫기 + "선택된 카드에 맞는 내용" 넣기
+     3) 모달 열기/닫기 + 선택된 카드에 맞는 내용 넣기
      ========================================================= */
   const actionCard = document.getElementById("actionCard");
   const modal = document.getElementById("modal");
@@ -67,14 +63,14 @@
   function openModal() {
     if (!modal) return;
 
-    // 선택된 카드 키에 맞춰 모달 텍스트 변경
-    const data = (currentActionKey && ACTION_MODAL[currentActionKey]) || {
-      title: "안정 카드",
-      body: "지금 이 순간에 집중해보자. 천천히 숨을 쉬어도 괜찮아 ",
-    };
+    const data =
+      (currentActionKey && ACTION_MODAL[currentActionKey]) || {
+        title: "안정 카드",
+        body: "지금 이 순간에 집중해보자. 천천히 숨을 쉬어도 괜찮아",
+      };
 
     if (modalTitleEl) modalTitleEl.textContent = data.title;
-    if (modalP) modalP.textContent = data.body; // \n 포함됨 (줄바꿈 보이려면 CSS에 white-space 처리 추천)
+    if (modalP) modalP.textContent = data.body;
 
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
@@ -97,7 +93,6 @@
   });
 
   modal?.addEventListener("click", (e) => {
-    // dim / 닫기버튼 / 확인버튼 전부 data-close="true"로 닫힘
     if (e.target.closest("[data-close='true']")) closeModal();
   });
 
@@ -105,22 +100,40 @@
     if (e.key === "Escape" && modal?.classList.contains("is-open")) closeModal();
   });
 
-  /* =========================================================
-     4) 오늘의 작은성취: 클릭하면 체크 + 완료 카드는 맨 뒤로
-     ========================================================= */
-  const achTrack = document.getElementById("achTrack");
+/* =========================================================
+   4) 오늘의 작은성취: 클릭하면 체크 토글 + 원래 순서 복구
+   ========================================================= */
+const achTrack = document.getElementById("achTrack");
 
-  function markAchDone(cardEl) {
-    cardEl.classList.add("is-done");
-    achTrack?.appendChild(cardEl);
+// 초기 순서 기억(원복용)
+const initialAchOrder = Array.from(achTrack?.children ?? []);
+
+function restoreAchOrder() {
+  if (!achTrack) return;
+  initialAchOrder.forEach((el) => achTrack.appendChild(el));
+}
+
+function setAchDone(cardEl, done) {
+  cardEl.classList.toggle("is-done", done);
+
+  if (done) {
+    achTrack?.appendChild(cardEl); // 완료면 맨 뒤로
+  } else {
+    // ✅ 해제면 원래 순서로 복구(완료카드는 다시 뒤로)
+    restoreAchOrder();
+    Array.from(achTrack.children).forEach((el) => {
+      if (el.classList.contains("is-done")) achTrack.appendChild(el);
+    });
   }
+}
 
-  achTrack?.addEventListener("click", (e) => {
-    const card = e.target.closest(".achCard");
-    if (!card) return;
-    if (card.classList.contains("is-done")) return;
-    markAchDone(card);
-  });
+achTrack?.addEventListener("click", (e) => {
+  const card = e.target.closest(".achCard");
+  if (!card) return;
+
+  const isDone = card.classList.contains("is-done");
+  setAchDone(card, !isDone);
+});
 
   /* =========================================================
      5) 가이드 바텀시트
@@ -174,39 +187,38 @@
     });
   });
 
-  /*  LEFT DRAWER (햄버거) */
-const openDrawerBtn = document.getElementById("openDrawerBtn");
-const drawer = document.getElementById("drawer");
+  /* =========================================================
+     6) LEFT DRAWER (햄버거)
+     ========================================================= */
+  const openDrawerBtn = document.getElementById("openDrawerBtn");
+  const drawer = document.getElementById("drawer");
 
-function openDrawer() {
-  if (!drawer) return;
-  drawer.classList.add("is-open");
-  drawer.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-}
+  function openDrawer() {
+    if (!drawer) return;
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
 
-function closeDrawer() {
-  if (!drawer) return;
-  drawer.classList.remove("is-open");
-  drawer.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
 
-openDrawerBtn?.addEventListener("click", openDrawer);
+  openDrawerBtn?.addEventListener("click", openDrawer);
 
-drawer?.addEventListener("click", (e) => {
-  // dim 클릭 or X버튼 클릭 닫기
-  if (e.target.closest("[data-close='drawer']")) closeDrawer();
-});
+  drawer?.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close='drawer']")) closeDrawer();
+  });
 
-// ESC 닫기 (가이드/모달 열려있으면 걔네가 먼저 닫히게 조건 추가 가능)
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
-});
-
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
+  });
 
   /* =========================================================
-     6) 탭 이동
+     7) 탭 이동
      ========================================================= */
   const routes = {
     home: "./home.html",

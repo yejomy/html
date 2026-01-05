@@ -6,88 +6,148 @@
   <title>회원가입</title>
   <link rel="stylesheet" href="./css/join.css" />
 </head>
-<body>
-  <main class="app join">
 
+<body>
+  <!-- =========================================
+       Join
+  ========================================== -->
+  <main class="app join" aria-label="회원가입">
+
+    <!-- Brand -->
     <header class="top" aria-label="상단">
       <div class="top__brand">
         <img class="top__logo" src="./images/logo.png" alt="로고" />
       </div>
     </header>
 
-    <section class="card" aria-label="회원가입">
-      <h1 class="page-title">회원가입</h1>
+    <!-- Form Card -->
+    <section class="card" aria-label="회원가입 입력">
+      <h1 class="page-title"></h1>
 
       <form id="joinForm" class="form" novalidate>
+        <!-- Name -->
         <label class="field">
           <span class="label">이름</span>
-          <input class="input" type="text" name="name" placeholder="이름을 입력해주세요" required />
-          <span class="hint">실명으로 입력하면 추천/기록 공유에 도움이 돼요.</span>
+          <input
+            class="input"
+            type="text"
+            name="name"
+            placeholder="이름을 입력해주세요"
+            required
+          />
         </label>
 
+        <!-- Email -->
         <label class="field">
           <span class="label">이메일</span>
-          <input class="input" type="email" name="email" placeholder="example@email.com" autocomplete="email" required />
+          <input
+            class="input"
+            type="email"
+            name="email"
+            placeholder="example@email.com"
+            autocomplete="email"
+            required
+          />
+          <span class="hint">예: test@email.com</span>
         </label>
 
+        <!-- Username -->
         <label class="field">
           <span class="label">아이디</span>
-          <input class="input" type="text" name="username" placeholder="영문/숫자 4~16자" minlength="4" maxlength="16" required />
+          <input
+            class="input"
+            type="text"
+            name="username"
+            placeholder="영문/숫자 4~16자"
+            minlength="4"
+            maxlength="16"
+            required
+          />
         </label>
 
+        <!-- Password -->
         <label class="field">
           <span class="label">비밀번호</span>
-          <input class="input" type="password" name="password" placeholder="8자 이상 (영문+숫자 조합 권장)" minlength="8" autocomplete="new-password" required />
+          <input
+            class="input"
+            type="password"
+            name="password"
+            placeholder="8자 이상 (영문/숫자 조합 권장)"
+            minlength="8"
+            autocomplete="new-password"
+            required
+          />
         </label>
 
+        <!-- Password Confirm -->
         <label class="field">
           <span class="label">비밀번호 확인</span>
-          <input class="input" type="password" name="password2" placeholder="비밀번호를 다시 입력해주세요" minlength="8" autocomplete="new-password" required />
+          <input
+            class="input"
+            type="password"
+            name="password2"
+            placeholder="비밀번호를 다시 입력해주세요"
+            minlength="8"
+            autocomplete="new-password"
+            required
+          />
           <span id="pwMsg" class="error" aria-live="polite"></span>
         </label>
 
+        <!-- Phone -->
         <label class="field">
           <span class="label">휴대폰 번호</span>
-          <input class="input" type="tel" name="phone" placeholder="01012345678 (숫자만)" inputmode="numeric" required />
+          <input
+            class="input"
+            type="tel"
+            name="phone"
+            placeholder="01012345678 (숫자만)"
+            inputmode="numeric"
+            required
+          />
           <span class="hint">숫자 11자리로 입력해주세요. (예: 01012345678)</span>
         </label>
 
-        <div class="terms">
+        <!-- Terms -->
+        <section class="terms" aria-label="약관 동의">
           <label class="check">
             <input type="checkbox" id="allAgree" />
             <span><b>전체 동의</b></span>
           </label>
 
-          <div class="terms__list">
+          <div class="terms__list" aria-label="약관 목록">
             <label class="check">
-              <input type="checkbox" class="agree" data-required="true" />
+              <input class="agree" type="checkbox" data-required="true" />
               <span>(필수) 이용약관 동의</span>
             </label>
 
             <label class="check">
-              <input type="checkbox" class="agree" data-required="true" />
+              <input class="agree" type="checkbox" data-required="true" />
               <span>(필수) 개인정보 처리방침 동의</span>
             </label>
 
             <label class="check">
-              <input type="checkbox" class="agree" data-required="false" />
-              <span>(선택) 마케팅 정보 수신 동의</span>
+              <input class="agree" type="checkbox" data-required="false" />
+              <span>(선택) 마케팅 수신 동의</span>
             </label>
           </div>
 
           <span id="termsMsg" class="error" aria-live="polite"></span>
-        </div>
+        </section>
 
+        <!-- Submit -->
         <button id="submitBtn" class="btn btn--primary is-disabled" type="submit" disabled>
           회원가입 완료
         </button>
 
-        <p class="bottom">
+        <!-- Bottom -->
+        <footer class="bottom" aria-label="로그인 안내">
           이미 계정이 있나요?
           <a href="#" id="goLogin" class="bottom__link">로그인</a>
-        </p>
+        </footer>
       </form>
     </section>
+
   </main>
 
   <script src="./js/join.js"></script>
