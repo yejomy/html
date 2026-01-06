@@ -33,10 +33,12 @@
               </button>
             </div>
 
-            <!-- ✅ 검색폼 (my처럼: input + 돋보기 + X / topbar 한줄) -->
+            <!-- ✅ 검색폼 (input + 돋보기 + X) -->
             <form class="topSearch is-hidden" id="topSearchForm" role="search" aria-label="검색">
+              <label class="visually-hidden" for="topSearchInput"></label>
               <input
                 id="topSearchInput"
+                name="q"
                 class="topSearchInput"
                 type="search"
                 placeholder="검색어를 입력하세요"
@@ -53,7 +55,7 @@
 
           <!-- ✅ 검색 결과(페이지 내 표시) -->
           <section class="searchInline is-hidden" id="searchInline" aria-label="일기 검색 결과">
-            <div class="hint" id="searchHint" aria-live="polite"></div>
+            <div class="hint" id="searchHint" role="status" aria-live="polite"></div>
             <div class="resultList" id="searchResults"></div>
           </section>
 
@@ -69,7 +71,7 @@
               <div class="calDow is-sun">Sun</div>
               <div class="calDow">Mon</div>
               <div class="calDow">Tue</div>
-              <div class="calDow">Wen</div>
+              <div class="calDow">Wed</div>
               <div class="calDow">Thu</div>
               <div class="calDow">Fri</div>
               <div class="calDow">Sat</div>
@@ -92,23 +94,23 @@
         <!-- 오늘의 감정 카드 -->
         <section class="card" aria-label="오늘의 감정">
           <div class="card__row">
-            <div class="emojiGrid" aria-label="감정 이모티콘">
-              <button class="emojiBtn" type="button" data-emoji="happy" aria-label="감정 happy">
+            <div class="emojiGrid" aria-label="감정 선택">
+              <button class="emojiBtn" type="button" data-emoji="happy" aria-label="감정 불안">
                 <img class="emojiImg" src="./images/feeling_unrest.png" alt="불안" />
               </button>
-              <button class="emojiBtn" type="button" data-emoji="sad" aria-label="감정 sad">
+              <button class="emojiBtn" type="button" data-emoji="sad" aria-label="감정 화남">
                 <img class="emojiImg" src="./images/felling_angry.png" alt="화남" />
               </button>
-              <button class="emojiBtn" type="button" data-emoji="neutral" aria-label="감정 neutral">
+              <button class="emojiBtn" type="button" data-emoji="neutral" aria-label="감정 행복">
                 <img class="emojiImg" src="./images/felling_happy.png" alt="행복" />
               </button>
-              <button class="emojiBtn" type="button" data-emoji="anxious" aria-label="감정 anxious">
+              <button class="emojiBtn" type="button" data-emoji="anxious" aria-label="감정 무기력">
                 <img class="emojiImg" src="./images/felling_lethargy.png" alt="무기력" />
               </button>
-              <button class="emojiBtn" type="button" data-emoji="tired" aria-label="감정 tired">
+              <button class="emojiBtn" type="button" data-emoji="tired" aria-label="감정 슬픔">
                 <img class="emojiImg" src="./images/felling_sad.png" alt="슬픔" />
               </button>
-              <button class="emojiBtn" type="button" data-emoji="panic" aria-label="감정 panic">
+              <button class="emojiBtn" type="button" data-emoji="panic" aria-label="감정 걱정">
                 <img class="emojiImg" src="./images/felling_worry.png" alt="걱정" />
               </button>
             </div>
@@ -146,13 +148,19 @@
             </label>
           </div>
 
-          <div class="divider"></div>
+          <div class="divider" aria-hidden="true"></div>
 
           <div class="card__title2">오늘 하루를 기록해요</div>
-          <textarea class="diaryInput" id="diaryInput" placeholder="오늘 있었던 일을 간단히 적어봐요"></textarea>
+
+          <label class="visually-hidden" for="diaryInput">오늘 하루 기록</label>
+          <textarea
+            class="diaryInput"
+            id="diaryInput"
+            placeholder="오늘 있었던 일을 간단히 적어봐요"
+          ></textarea>
 
           <button class="primaryBtn" id="saveBtn" type="button">확인</button>
-          <div class="hint" id="saveHint" aria-live="polite"></div>
+          <div class="hint" id="saveHint" role="status" aria-live="polite"></div>
         </section>
 
         <!-- 이번주 나의 감정 -->
@@ -195,7 +203,7 @@
               </div>
             </div>
 
-            <div class="weekMood__illu" aria-label="일러스트 자리">
+            <div class="weekMood__illu" aria-label="일러스트">
               <img src="./images/record_charac.png" alt="" aria-hidden="true" />
             </div>
           </div>
@@ -245,27 +253,27 @@
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
         <button class="tab" type="button" data-tab="home">
-          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_home.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">홈</span>
         </button>
 
         <button class="tab" type="button" data-tab="stability">
-          <img class="tabImg" src="./images/icon_stability.svg" alt="안정" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_stability.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">안정</span>
         </button>
 
         <button class="tab is-active" type="button" data-tab="record" aria-current="page">
-          <img class="tabImg" src="./images/icon_record_on.svg" alt="기록" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_record_on.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">기록</span>
         </button>
 
         <button class="tab" type="button" data-tab="community">
-          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_community.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">커뮤니티</span>
         </button>
 
         <button class="tab" type="button" data-tab="my">
-          <img class="tabImg" src="./images/icon_my.svg" alt="MY" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_my.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">MY</span>
         </button>
       </div>

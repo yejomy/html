@@ -1,44 +1,44 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>login</title>
-  <link rel="stylesheet" href="./css/login.css" />
+  <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
   <main class="login">
     <section class="panel" aria-label="로그인">
 
       <div class="logo-wrap">
-        <img class="logo" src="./images/logo.png" alt="로고" />
+        <img class="logo" src="./images/logo.png" alt="로고">
       </div>
 
       <form class="form" id="loginForm" autocomplete="on" novalidate>
         <label class="field">
-          <input id="idInput" type="text" name="id" placeholder="아이디 또는 이메일을 입력해 주세요" autocomplete="username" />
+          <input id="idInput" type="text" name="id" placeholder="아이디 또는 이메일을 입력해 주세요" autocomplete="username">
         </label>
 
         <label class="field">
-          <input id="pwInput" type="password" name="pw" placeholder="비밀번호를 입력해주세요." autocomplete="current-password" />
+          <input id="pwInput" type="password" name="pw" placeholder="비밀번호를 입력해주세요." autocomplete="current-password">
         </label>
 
         <div class="options" role="group" aria-label="로그인 옵션">
           <label class="radio">
-            <input type="radio" name="loginOpt" value="auto" checked />
+            <input type="radio" name="loginOpt" value="auto" checked>
             <span class="dot" aria-hidden="true">
               <svg class="check" viewBox="0 0 12 10" aria-hidden="true">
-                <path d="M1 5.2 L4.2 8.4 L11 1.6" />
+                <path d="M1 5.2 L4.2 8.4 L11 1.6"></path>
               </svg>
             </span>
             <span class="txt">자동 로그인</span>
           </label>
 
           <label class="radio">
-            <input type="radio" name="loginOpt" value="save" />
+            <input type="radio" name="loginOpt" value="save">
             <span class="dot" aria-hidden="true">
               <svg class="check" viewBox="0 0 12 10" aria-hidden="true">
-                <path d="M1 5.2 L4.2 8.4 L11 1.6" />
+                <path d="M1 5.2 L4.2 8.4 L11 1.6"></path>
               </svg>
             </span>
             <span class="txt">아이디저장</span>
@@ -62,21 +62,22 @@
           <span>or</span>
         </div>
 
-        <div class="social" aria-label="소셜 로그인">
+        <!-- ✅ div aria-label 에러 방지: role="group" 추가 -->
+        <div class="social" role="group" aria-label="소셜 로그인">
           <button class="social-btn" type="button" data-social="kakao" aria-label="카카오">
-            <img src="./images/logo_kakao.svg" alt="카카오계정 연동하기" />
+            <img src="./images/logo_kakao.svg" alt="카카오계정 연동하기">
           </button>
           <button class="social-btn" type="button" data-social="naver" aria-label="네이버">
-            <img src="./images/logo_naver.svg" alt="네이버계정 연동하기" />
+            <img src="./images/logo_naver.svg" alt="네이버계정 연동하기">
           </button>
           <button class="social-btn" type="button" data-social="facebook" aria-label="페이스북">
-            <img src="./images/logo_facebook.svg" alt="페이스북계정 연동하기" />
+            <img src="./images/logo_facebook.svg" alt="페이스북계정 연동하기">
           </button>
           <button class="social-btn" type="button" data-social="apple" aria-label="애플">
-            <img src="./images/logo_apple.svg" alt="애플계정 연동하기" />
+            <img src="./images/logo_apple.svg" alt="애플계정 연동하기">
           </button>
           <button class="social-btn" type="button" data-social="google" aria-label="구글">
-            <img src="./images/logo_google.svg" alt="구글계정 연동하기" />
+            <img src="./images/logo_google.svg" alt="구글계정 연동하기">
           </button>
         </div>
       </form>
@@ -96,21 +97,20 @@
       </header>
 
       <form class="modal__body" id="idFindForm" novalidate>
-        <!-- STEP 1: 입력 화면 -->
         <div id="idStepForm">
           <label class="m-field">
             <span class="m-label">이름</span>
-            <input class="m-input" type="text" name="name" placeholder="이름을 입력해주세요" required />
+            <input class="m-input" type="text" name="name" placeholder="이름을 입력해주세요" required>
           </label>
 
           <label class="m-field">
             <span class="m-label">이메일</span>
-            <input class="m-input" type="email" name="email" placeholder="example@email.com" required />
+            <input class="m-input" type="email" name="email" placeholder="example@email.com" required>
           </label>
 
           <label class="m-field">
             <span class="m-label">휴대폰 번호</span>
-            <input class="m-input" type="tel" name="phone" inputmode="numeric" placeholder="01012345678 (숫자만)" required />
+            <input class="m-input" type="tel" name="phone" inputmode="numeric" placeholder="01012345678 (숫자만)" required>
           </label>
 
           <p class="m-error" id="idFindMsg" aria-live="polite"></p>
@@ -120,7 +120,6 @@
           </div>
         </div>
 
-        <!-- STEP 2: 결과 화면 (처음엔 무조건 숨김) -->
         <div class="m-result" id="idStepResult" style="display:none;">
           <div class="m-result__title">조회 결과</div>
           <div class="m-result__box">
@@ -148,16 +147,15 @@
       </header>
 
       <div class="modal__body">
-        <!-- STEP 1 -->
         <form id="pwVerifyForm" class="m-step" novalidate>
           <label class="m-field">
             <span class="m-label">아이디 또는 이메일</span>
-            <input class="m-input" type="text" name="account" placeholder="아이디 또는 이메일 입력" required />
+            <input class="m-input" type="text" name="account" placeholder="아이디 또는 이메일 입력" required>
           </label>
 
           <label class="m-field">
             <span class="m-label">휴대폰 번호</span>
-            <input class="m-input" type="tel" name="phone" inputmode="numeric" placeholder="01012345678 (숫자만)" required />
+            <input class="m-input" type="tel" name="phone" inputmode="numeric" placeholder="01012345678 (숫자만)" required>
           </label>
 
           <p class="m-error" id="pwVerifyMsg" aria-live="polite"></p>
@@ -171,16 +169,15 @@
           </p>
         </form>
 
-        <!-- STEP 2 -->
         <form id="pwResetForm" class="m-step" novalidate hidden>
           <label class="m-field">
             <span class="m-label">새 비밀번호</span>
-            <input class="m-input" type="password" name="newPw" placeholder="8자 이상" minlength="8" required />
+            <input class="m-input" type="password" name="newPw" placeholder="8자 이상" minlength="8" required>
           </label>
 
           <label class="m-field">
             <span class="m-label">새 비밀번호 확인</span>
-            <input class="m-input" type="password" name="newPw2" placeholder="비밀번호 재입력" minlength="8" required />
+            <input class="m-input" type="password" name="newPw2" placeholder="비밀번호 재입력" minlength="8" required>
           </label>
 
           <p class="m-error" id="pwResetMsg" aria-live="polite"></p>

@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>stability</title>
-  <link rel="stylesheet" href="./css/stability.css" />
+  <link rel="stylesheet" href="./css/stability.css">
 </head>
 <body>
   <div class="shell">
@@ -19,11 +19,11 @@
           <!-- home처럼 좌/우 끝 정렬 -->
           <header class="hero__topbar">
             <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
-              <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg"/>
+              <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg">
             </button>
 
             <button class="iconBtn" type="button" aria-label="알림">
-              <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg"/>
+              <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg">
             </button>
           </header>
 
@@ -48,7 +48,8 @@
 
               <article class="kitCard">
                 <div class="kitCard__media">
-                  <img class="kitCard__img" src="./images/stable_kit_1.png" alt="호흡하기" aria-hidden="true">
+                  <!-- ✅ 의미있는 이미지: aria-hidden 제거 -->
+                  <img class="kitCard__img" src="./images/stable_kit_1.png" alt="호흡하기">
                   <div class="kitCard__overlay">
                     <div class="kitCard__t1">호흡하기</div>
                     <div class="kitCard__t2">4초 들이마시고<br>7초 멈췄다가<br>8초 내쉬어요</div>
@@ -58,7 +59,7 @@
 
               <article class="kitCard">
                 <div class="kitCard__media">
-                  <img class="kitCard__img" src="./images/stable_kit_2.png" alt="주변 색 찾기" aria-hidden="true">
+                  <img class="kitCard__img" src="./images/stable_kit_2.png" alt="주변 색 찾기">
                   <div class="kitCard__overlay">
                     <div class="kitCard__t1">주변 색 찾기</div>
                     <div class="kitCard__t2">눈에 보이는 색 5가지를<br>천천히 찾아보세요</div>
@@ -68,7 +69,7 @@
 
               <article class="kitCard">
                 <div class="kitCard__media">
-                  <img class="kitCard__img" src="./images/stable_kit_3.png" alt="두드리기" aria-hidden="true">
+                  <img class="kitCard__img" src="./images/stable_kit_3.png" alt="두드리기">
                   <div class="kitCard__overlay">
                     <div class="kitCard__t1">두드리기</div>
                     <div class="kitCard__t2">가볍게 손끝으로<br>어깨/쇄골을 톡톡</div>
@@ -78,7 +79,7 @@
 
               <article class="kitCard">
                 <div class="kitCard__media">
-                  <img class="kitCard__img" src="./images/stable_kit_4.png" alt="시각 스캔" aria-hidden="true">
+                  <img class="kitCard__img" src="./images/stable_kit_4.png" alt="시각 스캔">
                   <div class="kitCard__overlay">
                     <div class="kitCard__t1">시각 스캔</div>
                     <div class="kitCard__t2">앞에 보이는 5가지를<br>차분히 관찰해요</div>
@@ -92,12 +93,11 @@
           <div class="kitDots" id="kitDots" aria-hidden="true"></div>
         </div>
 
-        <!-- 불안에서 벗어나는 작은방법 (✅ 방법론.png처럼) -->
+        <!-- 불안에서 벗어나는 작은방법 -->
         <header class="sectionHd sectionHd--mt">
           <h2 class="sectionHd__title">불안에서 벗어나는 작은방법</h2>
         </header>
 
-        <!--  디자인 시안 구조로 교체 -->
         <div class="methodList" aria-label="불안에서 벗어나는 작은방법">
           <!-- 1 -->
           <article class="methodCard methodCard--accent methodCard--iconLeft">
@@ -167,10 +167,10 @@
           <h2 class="sectionHd__title">마음이 쉬어가는 음악</h2>
         </header>
 
-        <!-- 깨진 커버/아이콘 제거, 영상(유튜브) “보이는 플레이어”로 교체 -->
         <div class="player" aria-label="영상/음악 플레이어">
           <div class="playerVideo">
-            <div id="ytPlayer" class="ytPlayerVisible" aria-label="YouTube Player"></div>
+            <!-- ✅ div + aria-label 태클 방지: role 추가 -->
+            <div id="ytPlayer" class="ytPlayerVisible" role="region" aria-label="YouTube Player"></div>
           </div>
 
           <div class="player__meta">
@@ -184,55 +184,56 @@
             <span class="player__time" id="durTime">0:00</span>
           </div>
 
-          <!-- 텍스트 버튼(엑박 방지) -->
           <div class="player__controls" aria-label="컨트롤">
             <button class="pTxtBtn" type="button" id="btnPrev" aria-label="이전">⏮</button>
             <button class="pTxtBtn pTxtBtn--play" type="button" id="btnPlay" aria-label="재생/일시정지">▶</button>
             <button class="pTxtBtn" type="button" id="btnNext" aria-label="다음">⏭</button>
+
             <button class="pIconBtn" type="button" id="btnRepeat" aria-label="반복 재생">
-            <svg viewBox="0 0 24 24" class="pIcon" aria-hidden="true">
-            <path d="M17 1l4 4-4 4V6H7a4 4 0 000 8h1v2H7a6 6 0 010-12h10V1z"/>
-            <path d="M7 23l-4-4 4-4v3h10a4 4 0 000-8h-1V8h1a6 6 0 010 12H7v3z"/>
-           </svg>
-         </button>
+              <svg viewBox="0 0 24 24" class="pIcon" aria-hidden="true">
+                <path d="M17 1l4 4-4 4V6H7a4 4 0 000 8h1v2H7a6 6 0 010-12h10V1z"></path>
+                <path d="M7 23l-4-4 4-4v3h10a4 4 0 000-8h-1V8h1a6 6 0 010 12H7v3z"></path>
+              </svg>
+            </button>
           </div>
         </div>
 
       </section>
     </main>
 
-    <!-- TAB BAR ( home이랑 동일 구조/크기) -->
+    <!-- TAB BAR -->
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
 
         <button class="tab" type="button" data-tab="home">
-          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true">
           <span class="tab__label">홈</span>
         </button>
 
         <button class="tab is-active" type="button" data-tab="stability" aria-current="page">
-          <img class="tabImg" src="./images/icon_stability_on.svg" alt="안정" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_stability_on.svg" alt="안정" aria-hidden="true">
           <span class="tab__label">안정</span>
         </button>
 
         <button class="tab" type="button" data-tab="record">
-          <img class="tabImg" src="./images/icon_record.svg" alt="기록" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_record.svg" alt="기록" aria-hidden="true">
           <span class="tab__label">기록</span>
         </button>
 
         <button class="tab" type="button" data-tab="community">
-          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true">
           <span class="tab__label">커뮤니티</span>
         </button>
 
         <button class="tab" type="button" data-tab="my">
-          <img class="tabImg" src="./images/icon_my.svg" alt="my" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_my.svg" alt="my" aria-hidden="true">
           <span class="tab__label">MY</span>
         </button>
 
       </div>
     </nav>
-    <!--  LEFT DRAWER -->
+
+    <!-- LEFT DRAWER -->
     <div class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
@@ -289,6 +290,7 @@
         </footer>
       </aside>
     </div>
+
   </div>
 
   <script src="./js/stability.js"></script>

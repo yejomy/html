@@ -5,9 +5,11 @@
    ========================================================= */
 
 @font-face {
-  font-family: 'RomanticGumi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/GumiRomanceTTF.woff2') format('woff2');
-  font-weight: normal;
+  font-family: "RomanticGumi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/GumiRomanceTTF.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -16,6 +18,7 @@
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2")
     format("woff2");
   font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
@@ -23,6 +26,7 @@
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2")
     format("woff2");
   font-weight: 600;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
@@ -30,17 +34,9 @@
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2")
     format("woff2");
   font-weight: 700;
+  font-style: normal;
   font-display: swap;
 }
-
-/* (선택) home에서 RomanticGumi를 썼다면 stability도 동일하게 포함 가능
-@font-face {
-  font-family: 'RomanticGumi';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/GumiRomanceTTF.woff2') format('woff2');
-  font-weight: normal;
-  font-display: swap;
-}
-*/
 
 /* =========================================================
    Tokens (home.css와 동일한 시스템)
@@ -84,7 +80,7 @@
   --lh-caption: 1.4;
 
   /* Components */
-  --tab-h: 68px; /* ✅ home과 동일 */
+  --tab-h: 68px;
   --btn-h: 52px;
   --btn-h-sm: 48px;
   --input-h: 48px;
@@ -98,10 +94,12 @@
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: var(--ff);
@@ -122,13 +120,17 @@ body {
   background: var(--bg);
   position: relative;
 }
+
 .page {
   min-height: 100vh;
 }
 
 button {
+  font: inherit;
+  color: inherit;
   cursor: pointer;
 }
+
 button:disabled {
   cursor: default;
 }
@@ -143,6 +145,7 @@ button:disabled {
   overflow: hidden;
   background: #3d766c;
 }
+
 .topHero__bg {
   position: absolute;
   inset: 0;
@@ -151,6 +154,7 @@ button:disabled {
   object-fit: cover;
   display: block;
 }
+
 .topHero__inner {
   position: relative;
   height: 100%;
@@ -158,7 +162,7 @@ button:disabled {
   color: #fff;
 }
 
-/* ✅ 상단 메뉴/알람: home.css와 "완전 동일" */
+/* 상단 메뉴/알람 */
 .hero__topbar {
   position: absolute;
   top: 12px;
@@ -169,14 +173,16 @@ button:disabled {
   align-items: center;
   z-index: 5;
 }
+
 .iconBtn {
-  width: 44px; /* ✅ home과 동일 */
-  height: 44px; /* ✅ home과 동일 */
+  width: 44px;
+  height: 44px;
   border: 0;
   background: transparent;
   display: grid;
   place-items: center;
 }
+
 .iconImg {
   width: 18px;
   height: 18px;
@@ -184,19 +190,17 @@ button:disabled {
   display: block;
 }
 
-/* 히어로 문구 (H1 룰 적용) */
+/* 히어로 문구 */
 .topHero__copy {
   position: absolute;
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   width: 100%;
   text-align: center;
 
-  
-  font-family: 'RomanticGumi', 'Pretendard', sans-serif;
-  font-weight: normal; /* ⚠️ 구미낭만체는 normal이 안전 */
+  font-family: "RomanticGumi", "Pretendard", sans-serif;
+  font-weight: 400;
 
   font-size: var(--fs-h1);
   line-height: var(--lh-title);
@@ -204,6 +208,7 @@ button:disabled {
   text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   pointer-events: none;
 }
+
 .topHero__accent {
   color: #ff8a66;
   font-weight: inherit;
@@ -221,16 +226,17 @@ button:disabled {
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Section header */
 .sectionHd {
   margin: 8px 2px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .sectionHd--mt {
   margin-top: 18px;
 }
+
 .sectionHd__title {
   margin: 0;
   font-size: var(--fs-h2);
@@ -245,20 +251,24 @@ button:disabled {
 .kit {
   margin-top: 6px;
 }
+
 .kit__viewport {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
   border-radius: 26px;
 }
+
 .kit__viewport::-webkit-scrollbar {
   display: none;
 }
+
 .kit__track {
   display: flex;
   gap: 0;
   padding: 0;
 }
+
 .kitCard {
   flex: 0 0 auto;
   width: 100%;
@@ -274,6 +284,7 @@ button:disabled {
   box-shadow: var(--shadow-sm);
   background: #fff;
 }
+
 .kitCard__img {
   position: absolute;
   inset: 0;
@@ -282,24 +293,27 @@ button:disabled {
   object-fit: cover;
   display: block;
 }
+
 .kitCard__overlay {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: min(56%, 210px);
-  padding: 10px 10px;
+  padding: 10px;
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(2px);
   text-align: center;
 }
+
 .kitCard__t1 {
   font-size: var(--fs-card-title);
   font-weight: var(--fw-title);
   line-height: var(--lh-title);
   color: #2a4a41;
 }
+
 .kitCard__t2 {
   margin-top: 6px;
   font-size: var(--fs-caption);
@@ -314,12 +328,14 @@ button:disabled {
   gap: 7px;
   margin-top: 8px;
 }
+
 .kitDot {
   width: 6px;
   height: 6px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.18);
 }
+
 .kitDot.is-active {
   background: #f1762c;
 }
@@ -336,42 +352,46 @@ button:disabled {
 
 .methodCard {
   background: #fff;
-  padding: 14px 14px;
+  padding: 14px;
   display: flex;
   align-items: flex-start;
   gap: 12px;
 }
+
 .methodDivider {
   height: 1px;
   background: rgba(31, 42, 37, 0.08);
 }
 
-/* 좌/우 교차 */
 .methodCard--iconLeft {
   flex-direction: row;
 }
+
 .methodCard--iconRight {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .methodCard--iconRight .methodBody {
   order: 1;
 }
+
 .methodCard--iconRight .methodIcon {
   order: 2;
 }
 
-/* 타이포 룰 */
 .methodBody {
   flex: 1 1 auto;
   min-width: 0;
 }
+
 .methodTitle {
   font-size: var(--fs-sub);
-  font-weight: var(--fw-title); /* 타이틀 성격이라 700 */
+  font-weight: var(--fw-title);
   line-height: var(--lh-title);
   color: #1f2a25;
 }
+
 .methodDesc {
   margin-top: 6px;
   font-size: var(--fs-caption);
@@ -380,12 +400,10 @@ button:disabled {
   color: rgba(31, 42, 37, 0.7);
 }
 
-/* 강조 */
 .methodCard--accent .methodTitle {
   color: #f1762c;
 }
 
-/* 아이콘 */
 .methodIcon {
   width: 56px;
   height: 56px;
@@ -396,15 +414,18 @@ button:disabled {
   place-items: center;
   overflow: hidden;
 }
+
 .methodIcon img {
   width: 44px;
   height: 44px;
   object-fit: contain;
   display: block;
 }
+
 .methodIcon--clock {
   background: rgba(80, 130, 150, 0.12);
 }
+
 .methodIcon--paper,
 .methodIcon--doctor,
 .methodIcon--yoga {
@@ -425,11 +446,12 @@ button:disabled {
 
 .playerVideo {
   width: 100%;
-  aspect-ratio: 16/10;
+  aspect-ratio: 16 / 10;
   border-radius: 14px;
   overflow: hidden;
   background: #111;
 }
+
 .ytPlayerVisible {
   width: 100%;
   height: 100%;
@@ -438,11 +460,13 @@ button:disabled {
 .player__meta {
   margin-top: 10px;
 }
+
 .player__title {
   font-size: var(--fs-card-title);
   font-weight: var(--fw-title);
   line-height: var(--lh-title);
 }
+
 .player__artist {
   margin-top: 2px;
   font-size: var(--fs-caption);
@@ -458,6 +482,7 @@ button:disabled {
   gap: 8px;
   align-items: center;
 }
+
 .player__time {
   font-size: var(--fs-tab);
   font-weight: var(--fw-body);
@@ -465,6 +490,7 @@ button:disabled {
   opacity: 0.85;
   text-align: center;
 }
+
 .player__range {
   width: 100%;
 }
@@ -489,6 +515,7 @@ button:disabled {
   display: grid;
   place-items: center;
 }
+
 .pTxtBtn--play {
   width: 54px;
   height: 54px;
@@ -508,24 +535,28 @@ button:disabled {
   place-items: center;
   transition: background 0.2s ease, transform 0.15s ease;
 }
+
 .pIconBtn:active {
   transform: scale(0.94);
 }
+
 .pIcon {
   width: 18px;
   height: 18px;
   fill: rgba(255, 255, 255, 0.7);
   transition: fill 0.2s ease;
 }
+
 .pIconBtn.is-on {
   background: #fff;
 }
+
 .pIconBtn.is-on .pIcon {
   fill: #2b2721;
 }
 
 /* =========================================================
-   TAB BAR (✅ home.css와 "완전 동일" 규칙)
+   TAB BAR
    ========================================================= */
 .tabWrap {
   position: fixed;
@@ -539,7 +570,7 @@ button:disabled {
 }
 
 .tabbar {
-  height: var(--tab-h); /* ✅ 68px */
+  height: var(--tab-h);
   background: var(--tabBg);
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   display: grid;
@@ -551,7 +582,7 @@ button:disabled {
 .tab {
   border: 0;
   background: none;
-  height: 44px; /* ✅ 터치영역 */
+  height: 44px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -564,16 +595,18 @@ button:disabled {
   line-height: var(--lh-caption);
   color: var(--tabGray);
 }
+
 .tab.is-active {
   color: var(--tabActive);
 }
 
 .tabImg {
-  width: 22px; /* ✅ home과 동일 */
-  height: 22px; /* ✅ home과 동일 */
+  width: 22px;
+  height: 22px;
   object-fit: contain;
   display: block;
 }
+
 .tab__label {
   font-size: var(--fs-tab);
   font-weight: var(--fw-sub);
@@ -581,7 +614,7 @@ button:disabled {
 }
 
 /* =========================================================
-   LEFT DRAWER (home과 동일 스타일 세트)
+   LEFT DRAWER
    ========================================================= */
 .drawer {
   position: fixed;
@@ -589,6 +622,7 @@ button:disabled {
   display: none;
   z-index: 2600;
 }
+
 .drawer.is-open {
   display: block;
 }
@@ -615,6 +649,7 @@ button:disabled {
   transform: translateX(-100%);
   animation: drawerIn 0.22s ease-out forwards;
 }
+
 @keyframes drawerIn {
   to {
     transform: translateX(0);
@@ -637,6 +672,7 @@ button:disabled {
   gap: 10px;
   min-width: 0;
 }
+
 .drawer__avatar {
   width: 42px;
   height: 42px;
@@ -645,6 +681,7 @@ button:disabled {
   background: #f4f0ea;
   flex: 0 0 auto;
 }
+
 .drawer__avatar img {
   width: 100%;
   height: 100%;
@@ -655,12 +692,14 @@ button:disabled {
 .drawer__who {
   min-width: 0;
 }
+
 .drawer__name {
   font-size: var(--fs-card-title);
   font-weight: var(--fw-title);
   line-height: var(--lh-title);
   color: #2d5a51;
 }
+
 .drawer__sub {
   margin-top: 3px;
   font-size: var(--fs-caption);
@@ -688,11 +727,11 @@ button:disabled {
   overflow: auto;
   height: calc(100% - 72px - 46px);
 }
+
 .drawer__body::-webkit-scrollbar {
   display: none;
 }
 
-/* 버튼 규칙 반영: 높이 52 / radius 12 / 폰트 15~16 600 */
 .drawer__cta {
   width: 100%;
   height: var(--btn-h);
@@ -703,17 +742,18 @@ button:disabled {
   color: #fff;
   text-align: left;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .drawer__ctaT1 {
   display: block;
   font-weight: var(--fw-sub);
   font-size: 15px;
   line-height: var(--lh-title);
 }
+
 .drawer__ctaT2 {
   display: block;
   margin-top: 4px;
@@ -735,12 +775,13 @@ button:disabled {
   border: 1px solid rgba(31, 42, 37, 0.08);
   background: #fff;
   border-radius: 16px;
-  padding: 12px 12px;
+  padding: 12px;
   display: flex;
   align-items: center;
   gap: 10px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
+
 .drawer__item--danger .drawer__txt {
   color: #d85b3a;
 }
@@ -752,6 +793,7 @@ button:disabled {
   background: rgba(45, 90, 81, 0.25);
   flex: 0 0 auto;
 }
+
 .drawer__txt {
   flex: 1 1 auto;
   text-align: left;
@@ -760,6 +802,7 @@ button:disabled {
   line-height: var(--lh-title);
   color: rgba(31, 42, 37, 0.85);
 }
+
 .drawer__chev {
   width: 10px;
   height: 10px;
@@ -792,9 +835,11 @@ textarea {
   font-weight: var(--fw-body);
   border-radius: var(--radius);
 }
+
 ::placeholder {
   font-weight: var(--fw-body);
 }
+
 .error {
   font-size: var(--fs-error);
   font-weight: var(--fw-body);

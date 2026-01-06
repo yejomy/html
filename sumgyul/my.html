@@ -8,62 +8,90 @@
 </head>
 <body>
   <div class="shell">
-    <main class="page">
+    <main class="page" id="mainContent">
 
-      <!-- HERO (상단 이미지: HTML로 넣기) -->
+      <!-- HERO -->
       <section class="hero" aria-label="마이페이지 상단">
-        <!-- ✅ 네 배경 이미지로 교체 -->
         <img class="heroBg" src="./images/stableback.png" alt="" aria-hidden="true" />
         <div class="heroShade" aria-hidden="true"></div>
 
         <div class="hero__inner">
-          <!-- TOPBAR (community와 동일 구조/위치) -->
+          <!-- TOPBAR -->
           <header class="hero__topbar">
-            <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
+            <button
+              class="iconBtn"
+              id="openDrawerBtn"
+              type="button"
+              aria-label="메뉴"
+              aria-controls="drawer"
+              aria-expanded="false"
+            >
               <img src="./images/icon_menu.svg" class="iconImg" alt="" aria-hidden="true" />
             </button>
 
-            <!-- 기본 타이틀 -->
             <div class="topbarCenter" id="topbarTitle">
-              <div class="topbar__centerTitle">MY</div>
+              <div class="topbar__centerTitle" aria-live="polite">MY</div>
             </div>
 
-            <!-- ✅ 상단 검색 폼 (기본 숨김) -->
-            <form class="topbarCenter topSearch is-hidden" id="topSearchForm" role="search" aria-label="검색">
+            <!-- 검색 폼 (label + name 추가) -->
+            <form
+              class="topbarCenter topSearch is-hidden"
+              id="topSearchForm"
+              role="search"
+              aria-label="검색"
+            >
+              <label class="srOnly" for="topSearchInput">검색어</label>
               <input
                 id="topSearchInput"
                 class="topSearchInput"
                 type="search"
+                name="q"
                 placeholder="검색어를 입력하세요"
                 autocomplete="off"
+                aria-describedby="searchHelp"
               />
+              <span id="searchHelp" class="srOnly">검색어를 입력한 뒤 검색 실행 버튼을 누르세요.</span>
+
               <button class="iconBtn" type="submit" aria-label="검색 실행">
                 <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
               </button>
-              <button class="iconBtn" id="closeTopSearchBtn" type="button" aria-label="검색 닫기">
+
+              <button
+                class="iconBtn"
+                id="closeTopSearchBtn"
+                type="button"
+                aria-label="검색 닫기"
+              >
                 <span class="xGlyph" aria-hidden="true">×</span>
               </button>
             </form>
 
             <div class="topbar__right" id="topbarRight">
-              <button class="iconBtn" id="openTopSearchBtn" type="button" aria-label="검색">
+              <button
+                class="iconBtn"
+                id="openTopSearchBtn"
+                type="button"
+                aria-label="검색 열기"
+                aria-controls="topSearchForm"
+                aria-expanded="false"
+              >
                 <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
               </button>
+
               <button class="iconBtn" type="button" aria-label="알림">
                 <img src="./images/icon_alram.svg" class="iconImg" alt="" aria-hidden="true" />
               </button>
             </div>
           </header>
 
-          <!-- 프로필 카드(히어로 위에서 바로 보이게) -->
+          <!-- 프로필 카드 -->
           <section class="profileCard" aria-label="프로필">
             <div class="profileLeft">
               <div class="avatarWrap">
-                <!-- ✅ 프로필 이미지: 로컬스토리지 값 있으면 JS로 교체 -->
                 <img class="avatarImg" id="avatarImg" src="./images/profile1.jpg" alt="프로필 이미지" />
-                <!-- ✅ 이미지 변경용(숨김) -->
                 <input type="file" id="avatarInput" accept="image/*" hidden />
               </div>
+
               <div class="who">
                 <div class="whoName" id="myName">Yejomy 님</div>
                 <div class="whoSub" id="myBio">오늘도 천천히, 괜찮아</div>
@@ -76,15 +104,15 @@
           <!-- 통계 -->
           <section class="statRow" aria-label="나의 기록 요약">
             <div class="statBox">
-              <div class="statVal" id="streakDays">0</div>
+              <div class="statVal" id="streakDays" aria-live="polite">0</div>
               <div class="statLabel">연속 기록</div>
             </div>
             <div class="statBox">
-              <div class="statVal" id="diaryCount">0</div>
+              <div class="statVal" id="diaryCount" aria-live="polite">0</div>
               <div class="statLabel">일기</div>
             </div>
             <div class="statBox">
-              <div class="statVal" id="communityCount">0</div>
+              <div class="statVal" id="communityCount" aria-live="polite">0</div>
               <div class="statLabel">커뮤니티</div>
             </div>
           </section>
@@ -95,24 +123,25 @@
       <section class="sheet" aria-label="마이페이지 내용">
 
         <!-- 오늘의 체크 -->
-        <section class="card">
+        <section class="card" aria-labelledby="todayCheckTitle">
           <div class="cardHd">
-            <h2 class="sectionTitle">오늘의 체크</h2>
+            <h2 class="sectionTitle" id="todayCheckTitle">오늘의 체크</h2>
             <div class="caption" id="todayHint">가볍게 확인하고 마음을 정리해요.</div>
           </div>
 
-          <div class="checkGrid">
-            <button class="pillBtn" type="button" data-check="water">물 한 컵</button>
-            <button class="pillBtn" type="button" data-check="breath">호흡 1분</button>
-            <button class="pillBtn" type="button" data-check="walk">5분 걷기</button>
-            <button class="pillBtn" type="button" data-check="note">한 줄 기록</button>
+          <!-- 토글 버튼이므로 aria-pressed는 JS에서 토글 권장 -->
+          <div class="checkGrid" aria-describedby="todayHint">
+            <button class="pillBtn" type="button" data-check="water" aria-pressed="false">물 한 컵</button>
+            <button class="pillBtn" type="button" data-check="breath" aria-pressed="false">호흡 1분</button>
+            <button class="pillBtn" type="button" data-check="walk" aria-pressed="false">5분 걷기</button>
+            <button class="pillBtn" type="button" data-check="note" aria-pressed="false">한 줄 기록</button>
           </div>
         </section>
 
         <!-- 빠른 메뉴 -->
-        <section class="card">
+        <section class="card" aria-labelledby="quickTitle">
           <div class="cardHd">
-            <h2 class="sectionTitle">빠른 메뉴</h2>
+            <h2 class="sectionTitle" id="quickTitle">빠른 메뉴</h2>
             <div class="caption">자주 쓰는 기능으로 바로 이동해요.</div>
           </div>
 
@@ -122,7 +151,7 @@
                 <span class="rowDot" aria-hidden="true"></span>
                 <span class="rowTxt">내 일기 모아보기</span>
               </span>
-              <span class="rowMeta" id="myDiaryMeta">0개</span>
+              <span class="rowMeta" id="myDiaryMeta" aria-live="polite">0개</span>
             </button>
 
             <button class="rowBtn" type="button" id="goMyPosts">
@@ -130,7 +159,7 @@
                 <span class="rowDot" aria-hidden="true"></span>
                 <span class="rowTxt">내가 쓴 커뮤니티 글</span>
               </span>
-              <span class="rowMeta" id="myPostMeta">0개</span>
+              <span class="rowMeta" id="myPostMeta" aria-live="polite">0개</span>
             </button>
 
             <button class="rowBtn" type="button" id="goSaved">
@@ -144,20 +173,20 @@
         </section>
 
         <!-- 감정 리포트 -->
-        <section class="card">
+        <section class="card" aria-labelledby="reportTitle">
           <div class="cardHd">
-            <h2 class="sectionTitle">이번 주 감정 리포트</h2>
+            <h2 class="sectionTitle" id="reportTitle">이번 주 감정 리포트</h2>
             <div class="caption">최근 패턴을 짧게 요약해요.</div>
           </div>
 
           <div class="reportBox">
             <div class="reportLine">
               <span class="reportLabel">가장 많았던 감정</span>
-              <span class="reportVal" id="topMood">평온</span>
+              <span class="reportVal" id="topMood" aria-live="polite">평온</span>
             </div>
             <div class="reportLine">
               <span class="reportLabel">불안 강도 평균</span>
-              <span class="reportVal" id="avgAnx">2/5</span>
+              <span class="reportVal" id="avgAnx" aria-live="polite">2/5</span>
             </div>
             <div class="reportLine">
               <span class="reportLabel">추천 루틴</span>
@@ -169,9 +198,9 @@
         </section>
 
         <!-- 설정 -->
-        <section class="card">
+        <section class="card" aria-labelledby="settingTitle">
           <div class="cardHd">
-            <h2 class="sectionTitle">설정</h2>
+            <h2 class="sectionTitle" id="settingTitle">설정</h2>
             <div class="caption">나에게 맞게 앱을 조정해요.</div>
           </div>
 
@@ -181,8 +210,11 @@
                 <div class="settingTitle">알림 받기</div>
                 <div class="settingDesc">기록/루틴 리마인드</div>
               </div>
+
+              <!-- 스위치: label로 감싸고, input에 role="switch" -->
               <label class="switch">
-                <input type="checkbox" id="toggleNotify">
+                <span class="srOnly"></span>
+                <input type="checkbox" id="toggleNotify" role="switch" aria-checked="false">
                 <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
@@ -192,8 +224,10 @@
                 <div class="settingTitle">잠금(프라이버시)</div>
                 <div class="settingDesc">앱 실행 시 잠금 활성화</div>
               </div>
+
               <label class="switch">
-                <input type="checkbox" id="toggleLock">
+                <span class="srOnly"></span>
+                <input type="checkbox" id="toggleLock" role="switch" aria-checked="false">
                 <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
@@ -221,9 +255,9 @@
 
     </main>
 
-    <!-- TAB BAR (통일) -->
+    <!-- TAB BAR -->
     <nav class="tabWrap" aria-label="하단 탭">
-      <div class="tabbar">
+      <div class="tabbar" role="navigation" aria-label="주요 메뉴">
         <button class="tab" type="button" data-tab="home">
           <img class="tabImg" src="./images/icon_home.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">홈</span>
@@ -251,15 +285,21 @@
       </div>
     </nav>
 
-    <!-- Drawer -->
-    <div class="drawer" id="drawer" aria-hidden="true">
+    <!-- Drawer: hidden + aria-hidden (JS에서 토글) -->
+    <div class="drawer" id="drawer" aria-hidden="true" hidden>
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
-      <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
+      <aside
+        class="drawer__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="메뉴"
+        tabindex="-1"
+      >
         <header class="drawer__hd">
           <div class="drawer__profile">
             <div class="drawer__avatar" aria-hidden="true">
-              <img src="./images/profile1.jpg" alt="" aria-hidden="true">
+              <img src="./images/profile1.jpg" alt="" aria-hidden="true" />
             </div>
             <div class="drawer__who">
               <div class="drawer__name">Yejomy</div>
@@ -277,7 +317,6 @@
           </button>
 
           <nav class="drawer__nav" aria-label="메뉴 목록">
-            <!-- ✅ '내 정보' 클릭 시 my.html 이동 -->
             <button class="drawer__item" type="button" id="drawerToMy">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">내 정보</span>

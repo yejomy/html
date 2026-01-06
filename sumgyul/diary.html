@@ -14,7 +14,7 @@
       <section class="hero" aria-label="일기 상단">
         <div class="hero__inner">
 
-          <!--  TOPBAR: record랑 동일 UX (검색 form 토글) -->
+          <!-- TOPBAR: record랑 동일 UX (검색 form 토글) -->
           <header class="hero__topbar" id="topbar">
             <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
               <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg" />
@@ -25,7 +25,6 @@
 
             <!-- 기본 오른쪽 아이콘들 (검색 열리면 숨김) -->
             <div class="topbarRight" id="topbarRight">
-
               <button class="iconBtn" type="button" aria-label="알림">
                 <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg" />
               </button>
@@ -49,10 +48,10 @@
             </form>
           </header>
 
-          <!--  검색 결과 영역 (record처럼 상단 아래 인라인) -->
+          <!-- 검색 결과 영역 (record처럼 상단 아래 인라인) -->
           <section class="searchInline is-hidden" id="searchInline" aria-label="일기 검색 결과">
             <div class="hint" id="searchHint" aria-live="polite"></div>
-            <div class="resultList" id="searchResults" aria-label="검색 결과"></div>
+            <div class="resultList" id="searchResults"></div>
           </section>
 
           <div class="hero__titleRow">
@@ -61,7 +60,7 @@
           </div>
 
           <p class="hero__sub">
-            오늘의 마음을 있는 그대로 적어도 괜찮아요.  
+            오늘의 마음을 있는 그대로 적어도 괜찮아요.
             기록은 “회복의 증거”가 될 수 있어요.
           </p>
         </div>
@@ -79,27 +78,32 @@
 
           <div class="emojiRow" id="emojiRow" aria-label="감정 이모티콘 선택">
             <button class="emojiBtn" type="button" data-emoji="happy" aria-label="행복">
-              <img class="emojiImg" src="./images/felling_happy.png" alt="행복" />
+              <img class="emojiImg" src="./images/felling_happy.png" alt="" aria-hidden="true" />
               <span class="emojiTxt">행복</span>
             </button>
+
             <button class="emojiBtn" type="button" data-emoji="angry" aria-label="화남">
-              <img class="emojiImg" src="./images/felling_angry.png" alt="화남" />
+              <img class="emojiImg" src="./images/felling_angry.png" alt="" aria-hidden="true" />
               <span class="emojiTxt">화남</span>
             </button>
+
             <button class="emojiBtn" type="button" data-emoji="sad" aria-label="슬픔">
-              <img class="emojiImg" src="./images/felling_sad.png" alt="" />
+              <img class="emojiImg" src="./images/felling_sad.png" alt="" aria-hidden="true" />
               <span class="emojiTxt">슬픔</span>
             </button>
+
             <button class="emojiBtn" type="button" data-emoji="anxious" aria-label="불안">
-              <img class="emojiImg" src="./images/feeling_unrest.png" alt="" />
+              <img class="emojiImg" src="./images/feeling_unrest.png" alt="" aria-hidden="true" />
               <span class="emojiTxt">불안</span>
             </button>
+
             <button class="emojiBtn" type="button" data-emoji="panic" aria-label="무기력">
-              <img class="emojiImg" src="./images/felling_lethargy.png" alt="무기력" />
+              <img class="emojiImg" src="./images/felling_lethargy.png" alt="" aria-hidden="true" />
               <span class="emojiTxt">무기력</span>
             </button>
+
             <button class="emojiBtn" type="button" data-emoji="worry" aria-label="걱정">
-              <img class="emojiImg" src="./images/felling_worry.png" alt="걱정" />
+              <img class="emojiImg" src="./images/felling_worry.png" alt="" aria-hidden="true" />
               <span class="emojiTxt">걱정</span>
             </button>
           </div>
@@ -109,7 +113,7 @@
               <span class="field__label">강도</span>
               <input class="range" id="intensity" type="range" min="0" max="10" value="5" />
             </label>
-            <div class="rangeVal" id="intensityVal">5/10</div>
+            <div class="rangeVal" id="intensityVal" aria-live="polite">5/10</div>
           </div>
         </section>
 
@@ -140,7 +144,7 @@
             <div class="card__meta">선택</div>
           </div>
 
-          <div class="tagGrid" id="triggerTags">
+          <div class="tagGrid" id="triggerTags" aria-label="트리거 태그 선택">
             <button class="tag" type="button" data-tag="수면부족">수면부족</button>
             <button class="tag" type="button" data-tag="과호흡">과호흡</button>
             <button class="tag" type="button" data-tag="카페인">카페인</button>
@@ -201,7 +205,7 @@
           </p>
 
           <div class="canvasWrap">
-            <canvas id="cardCanvas" width="960" height="540" aria-label="그림일기 캔버스"></canvas>
+            <canvas id="cardCanvas" width="960" height="540" role="img" aria-label="그림일기 카드 캔버스"></canvas>
           </div>
 
           <div class="btnRow">
@@ -223,27 +227,27 @@
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
         <button class="tab" type="button" data-tab="home">
-          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_home.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">홈</span>
         </button>
 
         <button class="tab" type="button" data-tab="stability">
-          <img class="tabImg" src="./images/icon_stability.svg" alt="안정" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_stability.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">안정</span>
         </button>
 
         <button class="tab is-active" type="button" data-tab="record" aria-current="page">
-          <img class="tabImg" src="./images/icon_record_on.svg" alt="기록" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_record_on.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">기록</span>
         </button>
 
         <button class="tab" type="button" data-tab="community">
-          <img class="tabImg" src="./images/icon_community.svg" alt="커뮤니티" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_community.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">커뮤니티</span>
         </button>
 
         <button class="tab" type="button" data-tab="my">
-          <img class="tabImg" src="./images/icon_my.svg" alt="MY" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_my.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">MY</span>
         </button>
       </div>
