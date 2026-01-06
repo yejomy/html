@@ -6,7 +6,7 @@
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
-    post: "./community_post.html",
+    post: "./community_post.html", // (이동 안 씀, 남겨만 둠)
     write: "./community_write.html",
   };
 
@@ -40,12 +40,12 @@
     if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
   });
 
-  // ✅ 오늘 기록하기 -> diary.html
+  // 오늘 기록하기 -> diary.html
   document.getElementById("drawerWriteBtn")?.addEventListener("click", () => {
     window.location.href = "./diary.html";
   });
 
-  // ✅ 내 정보 -> my.html
+  // 내 정보 -> my.html
   document.getElementById("drawerToMy")?.addEventListener("click", () => {
     window.location.href = routes.my;
   });
@@ -76,7 +76,7 @@
   openTopSearchBtn?.addEventListener("click", openTopSearch);
   closeTopSearchBtn?.addEventListener("click", closeTopSearch);
 
-  /* ===== storage (✅ v4로 올려서 기존 중복 데이터 자동 무시) ===== */
+  /* ===== storage (v4) ===== */
   const COMMUNITY_KEY = "sbg_community_posts_v4";
   const LIKES_KEY = "sbg_community_likes_v4";
 
@@ -123,6 +123,22 @@
     return "전체";
   }
 
+  //  펼침/접힘용 미리보기
+  function previewText(text, max = 90) {
+    const s = String(text || "").replace(/\s+/g, " ").trim();
+    if (s.length <= max) return s;
+    return s.slice(0, max) + "…";
+  }
+
+  function renderComments(comments) {
+    const arr = Array.isArray(comments) ? comments : [];
+    if (!arr.length) return `<div class="commentItem">아직 댓글이 없어요.</div>`;
+    return arr.slice(0, 12).map((c) => {
+      const t = typeof c === "string" ? c : (c?.text || "");
+      return `<div class="commentItem">${esc(t)}</div>`;
+    }).join("");
+  }
+
   /* ===== data ===== */
   const authorPool = [
     { name:"작은용기", sub:"몸이 먼저 안심해야" },
@@ -133,7 +149,7 @@
     { name:"눈웃음에이", sub:"천천히 해도 괜찮다" },
   ];
 
-  // ✅ 카테고리별 서로 다른 글 (요구 개수 정확히)
+  //  카테고리별 서로 다른 글 (요구 개수 정확히)
   const templates = {
     tips: [
       { t:"불안 올라오기 전 미리 막는 호흡 루틴", b:"불안이 커지기 전에 4초 들숨 / 6초 날숨을 5번만 해도 확실히 다르더라구요. 특히 밤에 효과 있었어요." },
@@ -192,7 +208,7 @@
     return arr;
   }
 
-  // ✅ “중복 없이” 템플릿을 각 1번씩만 생성 (총 23개)
+  //  “중복 없이” 템플릿을 각 1번씩만 생성 (총 23개)
   function seedRich(force=false) {
     const existing = loadPosts();
     if (existing.length && !force) return;
@@ -204,7 +220,6 @@
     cats.forEach((cat) => {
       (templates[cat] || []).forEach((tpl, idx) => {
         const author = authorPool[rand(0, authorPool.length - 1)];
-
         const createdAt =
           now
           - (1000*60*60*rand(2, 240))
@@ -237,6 +252,7 @@
   let activeCat = "popular";
   let activeSort = "hot";
   let searchQuery = "";
+  let pendingOpenId = null; //  베스트 클릭으로 특정 글 펼치기 예약
 
   /* ===== elements ===== */
   const bestList = document.getElementById("bestList");
@@ -253,6 +269,7 @@
       document.querySelectorAll(".topTab").forEach(b => b.classList.remove("is-active"));
       btn.classList.add("is-active");
       activeCat = btn.dataset.cat || "all";
+      pendingOpenId = null;
       renderAll();
     });
   });
@@ -316,7 +333,7 @@
     return posts;
   }
 
-  // ✅ 베스트 fallback 이미지 4개 (너가 바꿔 끼우면 됨)
+  // ✅ 베스트 fallback 이미지 4개
   const bestFallbackImgs = [
     "./images/home_diary1.png",
     "./images/home_diary2.png",
@@ -359,8 +376,16 @@
         </div>
       `;
 
+      //  이동 제거: 베스트 클릭 -> 피드에서 해당 글 펼치기
       row.addEventListener("click", () => {
-        window.location.href = `${routes.post}?id=${encodeURIComponent(p.id)}`;
+        pendingOpenId = p.id;
+
+        // 베스트는 전체에서 찾는 게 자연스러워서 전체 탭으로 전환
+        activeCat = "all";
+        document.querySelectorAll(".topTab").forEach(b => b.classList.remove("is-active"));
+        document.querySelector('.topTab[data-cat="all"]')?.classList.add("is-active");
+
+        renderAll();
       });
 
       frag.appendChild(row);
@@ -396,6 +421,31 @@
     `;
   }
 
+  function setCardOpen(cardEl, isOpen){
+    const detail = cardEl.querySelector(".postDetail");
+    const bodyShort = cardEl.querySelector(".postBodyShort");
+    const bodyFull = cardEl.querySelector(".postBodyFull");
+
+    if (!detail || !bodyShort || !bodyFull) return;
+
+    if (isOpen){
+      cardEl.classList.add("is-open");
+      detail.style.display = "block";
+      bodyShort.style.display = "none";
+      bodyFull.style.display = "block";
+    } else {
+      cardEl.classList.remove("is-open");
+      detail.style.display = "none";
+      bodyShort.style.display = "block";
+      bodyFull.style.display = "none";
+    }
+  }
+
+  function toggleCard(cardEl){
+    const isOpen = cardEl.classList.contains("is-open");
+    setCardOpen(cardEl, !isOpen);
+  }
+
   function renderFeed(){
     const posts = getFilteredPosts();
     postList.innerHTML = "";
@@ -419,6 +469,9 @@
         ? `<div class="postMedia"><img src="${esc(p.imageUrl)}" alt="" onerror="this.closest('.postMedia').remove();" /></div>`
         : "";
 
+      //  본문: short(미리보기) + full(전체) 두 개 만들어서 토글
+      const shortBody = previewText(p.body, 95);
+
       card.innerHTML = `
         <div class="postTop">
           <div class="author">
@@ -432,7 +485,10 @@
         </div>
 
         <div class="postTitle">${esc(p.title)}</div>
-        <div class="postBody">${esc(p.body)}</div>
+
+        <div class="postBody postBodyShort">${esc(shortBody)}</div>
+        <div class="postBody postBodyFull" style="display:none;">${esc(p.body)}</div>
+
         ${media}
 
         <div class="postActions">
@@ -442,6 +498,7 @@
             <span>${p.likeCount || 0}</span>
           </button>
 
+          <!--  댓글 버튼도 “이동” 대신 “펼치기”에 사용 -->
           <button class="actionBtn" type="button" data-open="${esc(p.id)}">
             <span class="actionDot" aria-hidden="true"></span>
             <span>댓글</span>
@@ -453,15 +510,41 @@
             <span>공유</span>
           </button>
         </div>
+
+        <!--  상세 영역 (기본 숨김) -->
+        <div class="postDetail" style="display:none;">
+          <div class="postDetail__title" style="margin-top:10px; font-weight:700;">댓글</div>
+          <div class="postDetail__comments" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+            ${renderComments(p.comments)}
+          </div>
+          <button type="button" class="postDetail__close" data-collapse="1"
+            style="margin-top:12px; width:100%; height:38px; border-radius:12px; border:1px solid rgba(0,0,0,.08); background:#fff;">
+            접기
+          </button>
+        </div>
       `;
 
       frag.appendChild(card);
     });
 
     postList.appendChild(frag);
+
+    // 베스트에서 클릭해서 특정 글 펼치기 예약된 경우
+    if (pendingOpenId){
+      const target = postList.querySelector(`.postCard[data-open="${CSS.escape(pendingOpenId)}"]`);
+      if (target){
+        // 다른 글 닫기(원하면 제거 가능)
+        postList.querySelectorAll(".postCard.is-open").forEach(c => setCardOpen(c, false));
+        setCardOpen(target, true);
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      pendingOpenId = null;
+    }
   }
 
+  // 클릭 이벤트: 이동 제거 + 카드 토글
   postList?.addEventListener("click", (e) => {
+    // 좋아요
     const likeBtn = e.target.closest("[data-like]");
     if (likeBtn){
       e.preventDefault();
@@ -472,6 +555,7 @@
       return;
     }
 
+    // 공유
     const shareBtn = e.target.closest("[data-share]");
     if (shareBtn){
       e.preventDefault();
@@ -480,12 +564,22 @@
       return;
     }
 
-    const openTarget = e.target.closest("[data-open]") || e.target.closest(".postCard");
-    if (openTarget){
-      const id = openTarget.getAttribute("data-open") || openTarget.dataset.open;
-      if (!id) return;
-      window.location.href = `${routes.post}?id=${encodeURIComponent(id)}`;
+    // 접기 버튼
+    const collapseBtn = e.target.closest("[data-collapse='1']");
+    if (collapseBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      const card = e.target.closest(".postCard");
+      if (card) setCardOpen(card, false);
+      return;
     }
+
+    // 댓글 버튼 or 카드 아무 곳 클릭 => 토글
+    const card = e.target.closest(".postCard");
+    if (!card) return;
+
+    // (댓글 버튼도 결국 카드 토글)
+    toggleCard(card);
   });
 
   function renderAll(){
