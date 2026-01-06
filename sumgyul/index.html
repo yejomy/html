@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>숨결록</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
   <!-- 배경 -->
@@ -17,13 +17,15 @@
   </div>
 
   <!-- UI -->
-  <main class="wrap" role="status" aria-live="polite" aria-label="로딩 중">
+  <main class="wrap">
     <section class="hero">
       <h1 class="title">숨결록</h1>
       <p class="subtitle">당신의 숨결을 남겨요</p>
     </section>
 
-    <div class="loader-text" aria-label="로딩 중">loading</div>
+    <div class="loader" role="status" aria-live="polite">
+      <span class="loader-text">loading</span>
+    </div>
   </main>
 
   <script src="./js/main.js"></script>
