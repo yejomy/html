@@ -1,6 +1,6 @@
 (() => {
   /* =========================
-     Routes (탭 이동)
+     Routes
      ========================= */
   const routes = {
     home: "./home.html",
@@ -8,6 +8,7 @@
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
+    diary: "./diary.html",
   };
 
   document.querySelectorAll(".tabbar .tab").forEach((btn) => {
@@ -21,7 +22,7 @@
   });
 
   /* =========================
-     Drawer (home/stability 동일 UX)
+     Drawer
      ========================= */
   const openDrawerBtn = document.getElementById("openDrawerBtn");
   const drawer = document.getElementById("drawer");
@@ -47,22 +48,21 @@
     if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
   });
 
-  /* drawer의 "오늘 기록하기" */
+  // ✅ 드로어: 오늘 기록하기 -> diary.html
   document.getElementById("drawerWriteBtn")?.addEventListener("click", () => {
-    window.location.href = "./diary.html";
+    window.location.href = routes.diary;
+  });
+
+  // ✅ 드로어: 내 정보 -> my.html
+  document.getElementById("drawerToMy")?.addEventListener("click", () => {
+    window.location.href = routes.my;
   });
 
   /* =========================
-     Diary storage
+     Storage
      ========================= */
   const STORAGE_KEY = "sbg_diary_entries_v1";
 
-  /**
-   * entries shape:
-   * {
-   *   "2026-01-05": { text:"...", tags:["불안감"], emoji:"happy", moodClass:"mood-b" }
-   * }
-   */
   function loadEntries() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -74,12 +74,150 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
-  function pad2(n) {
-    return String(n).padStart(2, "0");
+  // ✅ 요청한 날짜로 “가상 데이터” 자동 삽입 (기존 데이터는 절대 덮어쓰지 않음)
+  function seedEntries() {
+    const current = loadEntries();
+    const now = Date.now();
+
+    const seed = {
+      "2025-10-31": { text: "어쩌다 공황장애가 찾아온 걸까...", tags: ["불안감"], emoji: "panic", moodClass: "mood-c", savedAt: now - 6000000 },
+      "2025-11-03": { text: "퇴근길엔 그냥 바람만 쐬고 싶었다...", tags: ["피로감"], emoji: "tired", moodClass: "mood-a", savedAt: now - 5500000 },
+      "2025-11-10": { text: "오랜만에 공황도 없고 불안도 없고...", tags: ["행복"], emoji: "neutral", moodClass: "mood-b", savedAt: now - 5000000 },
+      "2025-11-19": { text: "오늘 무기력했지만 끝까지 버텼다...", tags: ["우울감"], emoji: "anxious", moodClass: "mood-a", savedAt: now - 4500000 },
+      "2025-12-20": { text: "조금 천천히 가도 괜찮아. 숨 고르기!", tags: ["불면증"], emoji: "sad", moodClass: "mood-c", savedAt: now - 4000000 },
+      "2026-01-01": { text: "새해. 오늘은 조금 덜 불안한 하루였으면.", tags: ["기쁨"], emoji: "happy", moodClass: "mood-b", savedAt: now - 3500000 },
+    };
+
+    let changed = false;
+    Object.keys(seed).forEach((k) => {
+      if (!current[k]) {
+        current[k] = seed[k];
+        changed = true;
+      }
+    });
+
+    if (changed) saveEntries(current);
   }
-  function toKey(d) {
-    return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  seedEntries();
+
+  function pad2(n) { return String(n).padStart(2, "0"); }
+  function toKey(d) { return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+
+  /* =========================
+     ✅ Top Search (my처럼 배치/동작)
+     ========================= */
+  const openTopSearchBtn = document.getElementById("openTopSearchBtn");
+  const closeTopSearchBtn = document.getElementById("closeTopSearchBtn");
+  const topbarTitle = document.getElementById("topbarTitle");
+  const topbarRight = document.getElementById("topbarRight");
+  const topSearchForm = document.getElementById("topSearchForm");
+  const topSearchInput = document.getElementById("topSearchInput");
+
+  const searchInline = document.getElementById("searchInline");
+  const searchResults = document.getElementById("searchResults");
+  const searchHint = document.getElementById("searchHint");
+
+  function openTopSearch() {
+    topbarTitle?.classList.add("is-hidden");
+    topbarRight?.classList.add("is-hidden");
+    topSearchForm?.classList.remove("is-hidden");
+
+    searchInline?.classList.add("is-hidden");
+    if (searchHint) searchHint.textContent = "";
+    if (searchResults) searchResults.innerHTML = "";
+
+    setTimeout(() => topSearchInput?.focus(), 0);
   }
+
+  function closeTopSearch() {
+    topSearchForm?.classList.add("is-hidden");
+    topbarTitle?.classList.remove("is-hidden");
+    topbarRight?.classList.remove("is-hidden");
+
+    if (topSearchInput) topSearchInput.value = "";
+
+    searchInline?.classList.add("is-hidden");
+    if (searchHint) searchHint.textContent = "";
+    if (searchResults) searchResults.innerHTML = "";
+  }
+
+  openTopSearchBtn?.addEventListener("click", openTopSearch);
+  closeTopSearchBtn?.addEventListener("click", closeTopSearch);
+
+  function escapeHtml(str) {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function renderSearch(q) {
+    const query = (q || "").trim().toLowerCase();
+    const entries = loadEntries();
+
+    const list = Object.entries(entries)
+      .map(([date, data]) => ({ date, ...data }))
+      .sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0));
+
+    const filtered = query
+      ? list.filter((it) => {
+          const text = (it.text || "").toLowerCase();
+          const tags = (it.tags || []).join(" ").toLowerCase();
+          return text.includes(query) || tags.includes(query) || it.date.includes(query);
+        })
+      : list;
+
+    searchInline?.classList.remove("is-hidden");
+
+    if (searchHint) {
+      searchHint.textContent = query ? `검색 결과: ${filtered.length}개` : `저장된 일기: ${filtered.length}개`;
+    }
+    if (!searchResults) return;
+    searchResults.innerHTML = "";
+
+    if (!filtered.length) {
+      searchResults.innerHTML = `<div class="hint">검색 결과가 없어요.</div>`;
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    filtered.forEach((it) => {
+      const item = document.createElement("div");
+      item.className = "resultItem";
+      const tagsText = (it.tags && it.tags.length) ? it.tags.join(", ") : "태그 없음";
+
+      item.innerHTML = `
+        <div class="resultTop">
+          <div class="resultDate">${escapeHtml(it.date)}</div>
+          <div class="resultTags">${escapeHtml(tagsText)}</div>
+        </div>
+        <div class="resultText">${escapeHtml(it.text || "")}</div>
+        <button class="resultBtn" type="button" data-open-date="${escapeHtml(it.date)}">이 날짜 보기</button>
+      `;
+      frag.appendChild(item);
+    });
+
+    searchResults.appendChild(frag);
+  }
+
+  topSearchForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    renderSearch(topSearchInput?.value || "");
+  });
+
+  topSearchInput?.addEventListener("input", (e) => {
+    renderSearch(e.target.value);
+  });
+
+  searchResults?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-open-date]");
+    if (!btn) return;
+    const date = btn.getAttribute("data-open-date");
+    if (!date) return;
+    window.location.href = `./diary.html?date=${encodeURIComponent(date)}`;
+  });
 
   /* =========================
      Calendar
@@ -91,54 +229,47 @@
 
   const today = new Date();
   let viewYear = today.getFullYear();
-  let viewMonth = today.getMonth(); // 0-index
+  let viewMonth = today.getMonth();
   let selectedKey = toKey(today);
 
   function getMonthLabel(y, m) {
     return `${y}. ${pad2(m + 1)}`;
   }
 
-  // 달력 계산: (일요일 시작)
   function buildCalendar(y, m) {
     const entries = loadEntries();
     if (!calGrid) return;
 
-    calTitle.textContent = getMonthLabel(y, m);
+    if (calTitle) calTitle.textContent = getMonthLabel(y, m);
     calGrid.innerHTML = "";
 
     const first = new Date(y, m, 1);
     const last = new Date(y, m + 1, 0);
 
-    const startDay = first.getDay(); // 0=Sun
+    const startDay = first.getDay();
     const daysInMonth = last.getDate();
 
-    // 이전달 마지막 날짜
     const prevLast = new Date(y, m, 0);
     const prevDays = prevLast.getDate();
 
-    // 총 6주(42칸)로 고정 (UI 안정)
     const totalCells = 42;
 
     for (let i = 0; i < totalCells; i++) {
       const cell = document.createElement("div");
       cell.className = "day";
 
-      // 날짜 계산
       let cellDate;
       let isCurrentMonth = true;
 
       if (i < startDay) {
-        // prev month
         const dayNum = prevDays - (startDay - 1 - i);
         cellDate = new Date(y, m - 1, dayNum);
         isCurrentMonth = false;
       } else if (i >= startDay + daysInMonth) {
-        // next month
         const dayNum = i - (startDay + daysInMonth) + 1;
         cellDate = new Date(y, m + 1, dayNum);
         isCurrentMonth = false;
       } else {
-        // current
         const dayNum = i - startDay + 1;
         cellDate = new Date(y, m, dayNum);
       }
@@ -154,21 +285,17 @@
       if (key === toKey(today)) btn.classList.add("is-today");
       if (key === selectedKey) btn.classList.add("is-selected");
 
-      // entry mark
       if (entries[key]) {
         btn.classList.add("has-entry");
-        // moodClass로 색 구분 (간단 3종)
         if (entries[key].moodClass) btn.classList.add(entries[key].moodClass);
       }
 
       btn.addEventListener("click", () => {
         selectedKey = key;
-        // 현재 표시 월이 아닌 날짜 클릭 시, 월 이동해줘도 UX 좋음
         viewYear = cellDate.getFullYear();
         viewMonth = cellDate.getMonth();
         buildCalendar(viewYear, viewMonth);
 
-        // ✅ 일기 쓴 날이면 diary.html로 이동
         const latest = loadEntries();
         if (latest[key]) {
           window.location.href = `./diary.html?date=${encodeURIComponent(key)}`;
@@ -182,216 +309,232 @@
 
   prevMonthBtn?.addEventListener("click", () => {
     viewMonth -= 1;
-    if (viewMonth < 0) {
-      viewMonth = 11;
-      viewYear -= 1;
-    }
+    if (viewMonth < 0) { viewMonth = 11; viewYear -= 1; }
     buildCalendar(viewYear, viewMonth);
   });
 
   nextMonthBtn?.addEventListener("click", () => {
     viewMonth += 1;
-    if (viewMonth > 11) {
-      viewMonth = 0;
-      viewYear += 1;
-    }
+    if (viewMonth > 11) { viewMonth = 0; viewYear += 1; }
     buildCalendar(viewYear, viewMonth);
   });
 
   buildCalendar(viewYear, viewMonth);
 
-  /* =========================
-     FAB -> diary.html
-     ========================= */
+  /* FAB -> diary.html */
   document.getElementById("goDiaryBtn")?.addEventListener("click", () => {
-    window.location.href = "./diary.html";
+    window.location.href = routes.diary;
   });
 
-  /* =========================
-     Emoji select (단일 선택)
-     ========================= */
+  /* bars animation */
+  document.querySelectorAll(".barRow").forEach((row) => {
+    const pctEl = row.querySelector(".barPct");
+    const fill = row.querySelector(".barFill");
+    const pct = Number(pctEl?.dataset.pct || "0");
+    if (!fill) return;
+    requestAnimationFrame(() => { fill.style.width = `${pct}%`; });
+  });
+
   let selectedEmoji = null;
-  document.querySelectorAll(".emojiBtn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".emojiBtn").forEach((b) => b.classList.remove("is-selected"));
-      btn.classList.add("is-selected");
-      selectedEmoji = btn.dataset.emoji || null;
-    });
+
+document.querySelectorAll(".emojiBtn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // 다른 애들 선택 해제
+    document.querySelectorAll(".emojiBtn").forEach((b) => b.classList.remove("is-selected"));
+
+    // 지금 누른 것만 선택
+    btn.classList.add("is-selected");
+    selectedEmoji = btn.dataset.emoji || null;
   });
 
-  /* =========================
-     Save diary -> calendar sync
-     - 선택된 날짜(selectedKey)에 저장
-     ========================= */
-  const diaryInput = document.getElementById("diaryInput");
-  const saveBtn = document.getElementById("saveBtn");
-  const saveHint = document.getElementById("saveHint");
+  /********************
+ * 날짜 유틸
+ ********************/
+const today = new Date();
 
-  function pickMoodClass(emoji, tags) {
-    // 단순 매핑: 네가 나중에 원하는대로 변경 가능
-    if (tags?.includes("불안감") || tags?.includes("심장 두근거림")) return "mood-c";
-    if (emoji === "happy") return "mood-b";
-    return "mood-a";
+function toKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function fromKey(key) {
+  const [y, m, d] = key.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+/********************
+ * 저장소
+ ********************/
+const STORAGE_KEY = "calendarEntries";
+
+function loadEntries() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch {
+    return {};
   }
+}
 
-  saveBtn?.addEventListener("click", () => {
-    const text = (diaryInput?.value || "").trim();
-    const tags = Array.from(document.querySelectorAll(".chk__input:checked")).map((el) => el.value);
+function saveEntries(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
 
-    if (!text) {
-      if (saveHint) saveHint.textContent = "기록을 입력해 주세요.";
-      return;
-    }
+/********************
+ * 상태값
+ ********************/
+let viewYear = today.getFullYear();
+let viewMonth = today.getMonth();
+let selectedKey = toKey(today);
+let selectedEmoji = null;
 
-    const entries = loadEntries();
-    const moodClass = pickMoodClass(selectedEmoji, tags);
+/********************
+ * DOM
+ ********************/
+const calendarEl = document.getElementById("calendar");
+const diaryInputEl = document.getElementById("diaryInput");
+const saveBtn = document.getElementById("saveBtn");
+const saveHint = document.getElementById("saveHint");
 
-    entries[selectedKey] = {
-      text,
-      tags,
-      emoji: selectedEmoji,
-      moodClass,
-      savedAt: Date.now(),
-    };
+/********************
+ * 헬퍼
+ ********************/
+function setHint(msg) {
+  if (saveHint) saveHint.textContent = msg;
+}
 
-    saveEntries(entries);
+function clearChecks() {
+  document.querySelectorAll(".chk__input").forEach(el => el.checked = false);
+}
 
-    if (saveHint) saveHint.textContent = "저장됐어요! 캘린더에 반영했어요.";
-    diaryInput.value = "";
-
-    // 체크박스 초기화
-    document.querySelectorAll(".chk__input").forEach((el) => (el.checked = false));
-
-    // 캘린더 다시 그려서 마킹 반영
-    buildCalendar(viewYear, viewMonth);
+function setChecks(tags = []) {
+  const set = new Set(tags);
+  document.querySelectorAll(".chk__input").forEach(el => {
+    el.checked = set.has(el.value);
   });
-
-  /* =========================
-   Search diary
-   ========================= */
-const openSearchBtn = document.getElementById("openSearchBtn");
-const searchModal = document.getElementById("searchModal");
-const searchInput = document.getElementById("searchInput");
-const searchResults = document.getElementById("searchResults");
-const searchHint = document.getElementById("searchHint");
-
-function openSearch() {
-  if (!searchModal) return;
-  searchModal.classList.add("is-open");
-  searchModal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-  setTimeout(() => searchInput?.focus(), 0);
-  renderSearch(""); // 초기 전체/빈 결과
 }
 
-function closeSearch() {
-  if (!searchModal) return;
-  searchModal.classList.remove("is-open");
-  searchModal.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
+/********************
+ * 폼 <-> 캘린더 연동 핵심
+ ********************/
+function applyEntryToForm(entry) {
+  if (!diaryInputEl) return;
 
-openSearchBtn?.addEventListener("click", openSearch);
-
-searchModal?.addEventListener("click", (e) => {
-  if (e.target.closest("[data-close='search']")) closeSearch();
-});
-
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && searchModal?.classList.contains("is-open")) closeSearch();
-});
-
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function renderSearch(q) {
-  const query = (q || "").trim().toLowerCase();
-  const entries = loadEntries();
-
-  // 날짜 내림차순 정렬
-  const list = Object.entries(entries)
-    .map(([date, data]) => ({ date, ...data }))
-    .sort((a, b) => (b.savedAt || 0) - (a.savedAt || 0));
-
-  const filtered = query
-    ? list.filter((it) => {
-        const text = (it.text || "").toLowerCase();
-        const tags = (it.tags || []).join(" ").toLowerCase();
-        return text.includes(query) || tags.includes(query) || it.date.includes(query);
-      })
-    : list;
-
-  if (searchHint) {
-    searchHint.textContent = query
-      ? `검색 결과: ${filtered.length}개`
-      : `저장된 일기: ${filtered.length}개`;
-  }
-
-  if (!searchResults) return;
-  searchResults.innerHTML = "";
-
-  if (!filtered.length) {
-    searchResults.innerHTML = `<div class="hint">검색 결과가 없어요.</div>`;
+  if (!entry) {
+    diaryInputEl.value = "";
+    clearChecks();
+    selectedEmoji = null;
+    document.querySelectorAll(".emojiBtn").forEach(b => b.classList.remove("is-selected"));
+    setHint("");
     return;
   }
 
-  const frag = document.createDocumentFragment();
+  diaryInputEl.value = entry.text || "";
+  setChecks(entry.tags || []);
+  selectedEmoji = entry.emoji || null;
 
-  filtered.forEach((it) => {
-    const item = document.createElement("div");
-    item.className = "resultItem";
-
-    const tagsText = (it.tags && it.tags.length) ? it.tags.join(", ") : "태그 없음";
-    item.innerHTML = `
-      <div class="resultTop">
-        <div class="resultDate">${escapeHtml(it.date)}</div>
-        <div class="resultTags">${escapeHtml(tagsText)}</div>
-      </div>
-      <div class="resultText">${escapeHtml(it.text || "")}</div>
-      <button class="resultBtn" type="button" data-open-date="${escapeHtml(it.date)}">이 날짜 보기</button>
-    `;
-
-    frag.appendChild(item);
+  document.querySelectorAll(".emojiBtn").forEach(b => {
+    b.classList.toggle("is-selected", b.dataset.emoji === selectedEmoji);
   });
 
-  searchResults.appendChild(frag);
+  setHint("불러왔어요");
 }
 
-searchInput?.addEventListener("input", (e) => {
-  renderSearch(e.target.value);
-});
+/********************
+ * 캘린더 그리기
+ ********************/
+function buildCalendar(year, month) {
+  if (!calendarEl) return;
 
-// 결과에서 “이 날짜 보기” -> diary.html로 이동
-searchResults?.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-open-date]");
-  if (!btn) return;
-  const date = btn.getAttribute("data-open-date");
-  if (!date) return;
-  window.location.href = `./diary.html?date=${encodeURIComponent(date)}`;
-});
+  calendarEl.innerHTML = "";
 
+  const first = new Date(year, month, 1);
+  const last = new Date(year, month + 1, 0);
 
-  /* =========================
-     Weekly bars animation (5s)
-     ========================= */
-  function animateBars() {
-    document.querySelectorAll(".barRow").forEach((row) => {
-      const pctEl = row.querySelector(".barPct");
-      const fill = row.querySelector(".barFill");
-      const pct = Number(pctEl?.dataset.pct || "0");
-      if (!fill) return;
+  const entries = loadEntries();
 
-      // layout reflow 후 transition 적용되게
-      requestAnimationFrame(() => {
-        fill.style.width = `${pct}%`;
-      });
-    });
+  for (let i = 0; i < first.getDay(); i++) {
+    calendarEl.appendChild(document.createElement("div"));
   }
-  animateBars();
+
+  for (let d = 1; d <= last.getDate(); d++) {
+    const cellDate = new Date(year, month, d);
+    const key = toKey(cellDate);
+
+    const btn = document.createElement("button");
+    btn.textContent = d;
+    btn.className = "calendar-day";
+
+    if (key === selectedKey) btn.classList.add("is-selected");
+    if (entries[key]) btn.classList.add("has-entry");
+
+    btn.addEventListener("click", () => {
+      selectedKey = key;
+      viewYear = cellDate.getFullYear();
+      viewMonth = cellDate.getMonth();
+
+      buildCalendar(viewYear, viewMonth);
+
+      const latest = loadEntries();
+      applyEntryToForm(latest[key] || null);
+    });
+
+    calendarEl.appendChild(btn);
+  }
+}
+
+/********************
+ * 이모지 선택
+ ********************/
+document.querySelectorAll(".emojiBtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".emojiBtn").forEach(b => b.classList.remove("is-selected"));
+    btn.classList.add("is-selected");
+    selectedEmoji = btn.dataset.emoji;
+  });
+});
+
+/********************
+ * 저장 버튼
+ ********************/
+saveBtn?.addEventListener("click", () => {
+  const entries = loadEntries();
+
+  const text = diaryInputEl.value.trim();
+  const tags = Array.from(document.querySelectorAll(".chk__input:checked"))
+    .map(el => el.value);
+
+  if (!text && tags.length === 0 && !selectedEmoji) {
+    delete entries[selectedKey];
+    saveEntries(entries);
+    buildCalendar(viewYear, viewMonth);
+    applyEntryToForm(null);
+    setHint("삭제됨");
+    return;
+  }
+
+  entries[selectedKey] = {
+    text,
+    tags,
+    emoji: selectedEmoji,
+    updatedAt: Date.now(),
+  };
+
+  saveEntries(entries);
+  buildCalendar(viewYear, viewMonth);
+  setHint("저장 완료");
+});
+
+/********************
+ * 최초 로드
+ ********************/
+buildCalendar(viewYear, viewMonth);
+
+const initEntries = loadEntries();
+applyEntryToForm(initEntries[selectedKey] || null);
+
+});
+
+
 })();

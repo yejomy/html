@@ -14,24 +14,48 @@
       <section class="hero" aria-label="기록 상단 영역">
         <div class="hero__inner">
 
-          <!-- 상단 메뉴/알람 (home과 동일 위치/사이즈) -->
-          <header class="hero__topbar">
+          <!-- TOPBAR -->
+          <header class="hero__topbar" id="topbar">
             <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
-              <!-- TODO: 네 SVG로 교체 -->
               <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg" />
             </button>
 
-            <div class="topbar__right">
-              <button class="iconBtn" id="openSearchBtn" type="button" aria-label="검색">
-                <!-- TODO: 네 SVG로 교체 -->
+            <!-- ✅ 기본 타이틀(검색 열리면 숨김) -->
+            <div class="topbarTitle" id="topbarTitle"></div>
+
+            <!-- ✅ 기본 오른쪽(검색/알림) (검색 열리면 숨김) -->
+            <div class="topbarRight" id="topbarRight">
+              <button class="iconBtn" id="openTopSearchBtn" type="button" aria-label="검색">
                 <img src="./images/icon_search.svg" alt="" aria-hidden="true" class="iconImg" />
               </button>
               <button class="iconBtn" type="button" aria-label="알림">
-                <!-- TODO: 네 SVG로 교체 -->
                 <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg" />
               </button>
             </div>
+
+            <!-- ✅ 검색폼 (my처럼: input + 돋보기 + X / topbar 한줄) -->
+            <form class="topSearch is-hidden" id="topSearchForm" role="search" aria-label="검색">
+              <input
+                id="topSearchInput"
+                class="topSearchInput"
+                type="search"
+                placeholder="검색어를 입력하세요"
+                autocomplete="off"
+              />
+              <button class="iconBtn topSearchBtn" type="submit" aria-label="검색 실행">
+                <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
+              </button>
+              <button class="iconBtn topCloseBtn" id="closeTopSearchBtn" type="button" aria-label="검색 닫기">
+                <span class="xGlyph" aria-hidden="true">×</span>
+              </button>
+            </form>
           </header>
+
+          <!-- ✅ 검색 결과(페이지 내 표시) -->
+          <section class="searchInline is-hidden" id="searchInline" aria-label="일기 검색 결과">
+            <div class="hint" id="searchHint" aria-live="polite"></div>
+            <div class="resultList" id="searchResults"></div>
+          </section>
 
           <!-- 캘린더 카드 -->
           <section class="calCard" aria-label="캘린더">
@@ -56,7 +80,6 @@
 
           <!-- ✅ 연필 FAB: diary.html 이동 -->
           <button class="fab" id="goDiaryBtn" type="button" aria-label="일기 작성하기">
-            <!-- TODO: 네 연필 SVG로 교체 -->
             <img src="./images/icon_pencil.svg" alt="" aria-hidden="true" class="fab__icon" />
           </button>
 
@@ -69,9 +92,7 @@
         <!-- 오늘의 감정 카드 -->
         <section class="card" aria-label="오늘의 감정">
           <div class="card__row">
-            <!-- 이모티콘 자리 (네가 SVG로 교체) -->
             <div class="emojiGrid" aria-label="감정 이모티콘">
-              <!-- TODO: 네 이모티콘 SVG로 교체 (원하는 개수만큼) -->
               <button class="emojiBtn" type="button" data-emoji="happy" aria-label="감정 happy">
                 <img class="emojiImg" src="./images/feeling_unrest.png" alt="불안" />
               </button>
@@ -98,7 +119,6 @@
             </div>
           </div>
 
-          <!-- 감정 상태 체크(복수 선택) -->
           <div class="checkGrid" aria-label="감정 상태 체크">
             <label class="chk">
               <input type="checkbox" value="불안감" class="chk__input" />
@@ -128,7 +148,6 @@
 
           <div class="divider"></div>
 
-          <!-- 오늘 하루 기록 -->
           <div class="card__title2">오늘 하루를 기록해요</div>
           <textarea class="diaryInput" id="diaryInput" placeholder="오늘 있었던 일을 간단히 적어봐요"></textarea>
 
@@ -144,7 +163,6 @@
 
           <div class="weekMood__grid">
             <div class="bars" id="bars">
-              <!-- JS가 width를 5초 애니메이션으로 채움 -->
               <div class="barRow">
                 <div class="barLabel">행복</div>
                 <div class="barTrack"><div class="barFill" data-key="행복"></div></div>
@@ -177,9 +195,7 @@
               </div>
             </div>
 
-            <!-- 오른쪽 일러스트 자리 -->
             <div class="weekMood__illu" aria-label="일러스트 자리">
-              <!-- TODO: 네 일러스트 SVG로 교체 -->
               <img src="./images/record_charac.png" alt="" aria-hidden="true" />
             </div>
           </div>
@@ -225,7 +241,7 @@
       </section>
     </main>
 
-    <!-- TAB BAR (home과 동일 규칙/위치/사이즈) -->
+    <!-- TAB BAR -->
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
         <button class="tab" type="button" data-tab="home">
@@ -255,34 +271,7 @@
       </div>
     </nav>
 
-    <!-- SEARCH MODAL -->
-<div class="modal" id="searchModal" aria-hidden="true">
-  <div class="modal-dim" data-close="search"></div>
-
-  <div class="modal-sheet" role="dialog" aria-modal="true" aria-label="일기 검색">
-    <div class="modal-head">
-      <div class="modal-title">일기 검색</div>
-      <button class="modal-close" type="button" data-close="search" aria-label="닫기">닫기</button>
-    </div>
-
-    <div class="modal-body">
-      <label class="field">
-        <span class="field__label">검색어</span>
-        <input class="field__input" id="searchInput" type="text" placeholder="키워드로 검색해요" />
-      </label>
-
-      <div class="hint" id="searchHint"></div>
-
-      <div class="resultList" id="searchResults" aria-label="검색 결과"></div>
-    </div>
-
-    <div class="modal-foot">
-      <button class="modal-cta" type="button" data-close="search">확인</button>
-    </div>
-  </div>
-</div>
-
-    <!-- (옵션) Drawer: home/stability와 동일 구조로 확장 가능 -->
+    <!-- LEFT DRAWER -->
     <div class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
@@ -290,10 +279,10 @@
         <header class="drawer__hd">
           <div class="drawer__profile">
             <div class="drawer__avatar" aria-hidden="true">
-              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+              <img src="./images/profile1.jpg" alt="" aria-hidden="true">
             </div>
             <div class="drawer__who">
-              <div class="drawer__name">숨결록</div>
+              <div class="drawer__name">Yejomy</div>
               <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
             </div>
           </div>
@@ -308,7 +297,7 @@
           </button>
 
           <nav class="drawer__nav" aria-label="메뉴 목록">
-            <button class="drawer__item" type="button">
+            <button class="drawer__item" type="button" id="drawerToMy">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">내 정보</span>
               <span class="drawer__chev" aria-hidden="true"></span>
@@ -322,7 +311,7 @@
 
             <button class="drawer__item" type="button">
               <span class="drawer__dot" aria-hidden="true"></span>
-              <span class="drawer__txt">도움말</span>
+              <span class="drawer__txt">공지사항</span>
               <span class="drawer__chev" aria-hidden="true"></span>
             </button>
 

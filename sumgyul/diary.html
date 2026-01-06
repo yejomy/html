@@ -10,27 +10,50 @@
   <div class="shell">
     <main class="page">
 
-      <!-- TOP HERO (record/home와 동일한 topbar 위치/사이즈) -->
+      <!-- TOP HERO -->
       <section class="hero" aria-label="일기 상단">
         <div class="hero__inner">
 
-          <header class="hero__topbar">
+          <!--  TOPBAR: record랑 동일 UX (검색 form 토글) -->
+          <header class="hero__topbar" id="topbar">
             <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
-              <!-- TODO: 네 SVG로 교체 -->
               <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg" />
             </button>
 
-            <div class="topbar__right">
-              <button class="iconBtn" id="openSearchBtn" type="button" aria-label="검색">
-                <!-- TODO: 네 SVG로 교체 -->
-                <img src="./images/icon_search.svg" alt="" aria-hidden="true" class="iconImg" />
-              </button>
+            <!-- 기본 타이틀 (검색 열리면 숨김) -->
+            <div class="topbarTitle" id="topbarTitle"></div>
+
+            <!-- 기본 오른쪽 아이콘들 (검색 열리면 숨김) -->
+            <div class="topbarRight" id="topbarRight">
+
               <button class="iconBtn" type="button" aria-label="알림">
-                <!-- TODO: 네 SVG로 교체 -->
                 <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg" />
               </button>
             </div>
+
+            <!-- 검색폼 (record와 동일 구조/위치) -->
+            <form class="topSearch is-hidden" id="topSearchForm" role="search" aria-label="일기 검색">
+              <input
+                id="topSearchInput"
+                class="topSearchInput"
+                type="search"
+                placeholder="검색어를 입력하세요"
+                autocomplete="off"
+              />
+              <button class="iconBtn topSearchBtn" type="submit" aria-label="검색 실행">
+                <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
+              </button>
+              <button class="iconBtn topCloseBtn" id="closeTopSearchBtn" type="button" aria-label="검색 닫기">
+                <span class="xGlyph" aria-hidden="true">×</span>
+              </button>
+            </form>
           </header>
+
+          <!--  검색 결과 영역 (record처럼 상단 아래 인라인) -->
+          <section class="searchInline is-hidden" id="searchInline" aria-label="일기 검색 결과">
+            <div class="hint" id="searchHint" aria-live="polite"></div>
+            <div class="resultList" id="searchResults" aria-label="검색 결과"></div>
+          </section>
 
           <div class="hero__titleRow">
             <h1 class="hero__title">일기 쓰기</h1>
@@ -55,7 +78,6 @@
           </div>
 
           <div class="emojiRow" id="emojiRow" aria-label="감정 이모티콘 선택">
-            <!-- TODO: 네가 SVG/이미지로 교체 (원하는 만큼) -->
             <button class="emojiBtn" type="button" data-emoji="happy" aria-label="행복">
               <img class="emojiImg" src="./images/felling_happy.png" alt="행복" />
               <span class="emojiTxt">행복</span>
@@ -197,7 +219,7 @@
       </section>
     </main>
 
-    <!-- TAB BAR (home/record와 동일 규칙) -->
+    <!-- TAB BAR -->
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
         <button class="tab" type="button" data-tab="home">
@@ -227,7 +249,7 @@
       </div>
     </nav>
 
-    <!-- Drawer (home/record와 동일) -->
+    <!-- LEFT DRAWER -->
     <div class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
@@ -235,10 +257,10 @@
         <header class="drawer__hd">
           <div class="drawer__profile">
             <div class="drawer__avatar" aria-hidden="true">
-              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+              <img src="./images/profile1.jpg" alt="" aria-hidden="true">
             </div>
             <div class="drawer__who">
-              <div class="drawer__name">숨결록</div>
+              <div class="drawer__name">Yejomy</div>
               <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
             </div>
           </div>
@@ -253,7 +275,7 @@
           </button>
 
           <nav class="drawer__nav" aria-label="메뉴 목록">
-            <button class="drawer__item" type="button">
+            <button class="drawer__item" type="button" id="drawerToMy">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">내 정보</span>
               <span class="drawer__chev" aria-hidden="true"></span>
@@ -267,7 +289,7 @@
 
             <button class="drawer__item" type="button">
               <span class="drawer__dot" aria-hidden="true"></span>
-              <span class="drawer__txt">도움말</span>
+              <span class="drawer__txt">공지사항</span>
               <span class="drawer__chev" aria-hidden="true"></span>
             </button>
 
@@ -283,32 +305,6 @@
           <div class="drawer__ver">v1.0</div>
         </footer>
       </aside>
-    </div>
-
-    <!-- SEARCH MODAL (record와 동일 개념) -->
-    <div class="modal" id="searchModal" aria-hidden="true">
-      <div class="modal-dim" data-close="search"></div>
-
-      <div class="modal-sheet" role="dialog" aria-modal="true" aria-label="일기 검색">
-        <div class="modal-head">
-          <div class="modal-title">일기 검색</div>
-          <button class="modal-close" type="button" data-close="search" aria-label="닫기">닫기</button>
-        </div>
-
-        <div class="modal-body">
-          <label class="field">
-            <span class="field__label">검색어</span>
-            <input class="field__input" id="searchInput" type="text" placeholder="키워드로 검색해요" />
-          </label>
-
-          <div class="hint" id="searchHint" aria-live="polite"></div>
-          <div class="resultList" id="searchResults" aria-label="검색 결과"></div>
-        </div>
-
-        <div class="modal-foot">
-          <button class="modal-cta" type="button" data-close="search">확인</button>
-        </div>
-      </div>
     </div>
 
   </div>

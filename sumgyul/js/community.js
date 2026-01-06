@@ -1,13 +1,13 @@
 (() => {
-  /* =========================
-     Routes
-     ========================= */
+  /* ===== routes ===== */
   const routes = {
     home: "./home.html",
     stability: "./stability.html",
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
+    post: "./community_post.html",
+    write: "./community_write.html",
   };
 
   document.querySelectorAll(".tabbar .tab").forEach((btn) => {
@@ -20,12 +20,8 @@
     });
   });
 
-  /* =========================
-     Drawer
-     ========================= */
+  /* ===== drawer ===== */
   const drawer = document.getElementById("drawer");
-  const openDrawerBtn = document.getElementById("openDrawerBtn");
-
   function openDrawer() {
     drawer?.classList.add("is-open");
     drawer?.setAttribute("aria-hidden", "false");
@@ -36,27 +32,54 @@
     drawer?.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
   }
-  openDrawerBtn?.addEventListener("click", openDrawer);
+  document.getElementById("openDrawerBtn")?.addEventListener("click", openDrawer);
   drawer?.addEventListener("click", (e) => {
     if (e.target.closest("[data-close='drawer']")) closeDrawer();
   });
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
   });
+
+  // ✅ 오늘 기록하기 -> diary.html
   document.getElementById("drawerWriteBtn")?.addEventListener("click", () => {
-    window.location.href = "./record.html";
+    window.location.href = "./diary.html";
   });
 
-  /* =========================
-     Storage Keys
-     ========================= */
-  const DIARY_KEY = "sbg_diary_entries_v1";        // record/diary와 동일
-  const COMMUNITY_KEY = "sbg_community_posts_v1";  // 커뮤니티 게시글
+  // ✅ 내 정보 -> my.html
+  document.getElementById("drawerToMy")?.addEventListener("click", () => {
+    window.location.href = routes.my;
+  });
 
-  function loadDiary() {
-    try { return JSON.parse(localStorage.getItem(DIARY_KEY) || "{}"); }
-    catch { return {}; }
+  /* ===== top search ===== */
+  const openTopSearchBtn = document.getElementById("openTopSearchBtn");
+  const closeTopSearchBtn = document.getElementById("closeTopSearchBtn");
+  const topbarTitle = document.getElementById("topbarTitle");
+  const topbarRight = document.getElementById("topbarRight");
+  const topSearchForm = document.getElementById("topSearchForm");
+  const topSearchInput = document.getElementById("topSearchInput");
+
+  function openTopSearch() {
+    topbarTitle.style.display = "none";
+    topbarRight.style.display = "none";
+    topSearchForm.classList.remove("is-hidden");
+    setTimeout(() => topSearchInput.focus(), 0);
   }
+  function closeTopSearch() {
+    topSearchForm.classList.add("is-hidden");
+    topbarTitle.style.display = "";
+    topbarRight.style.display = "";
+    topSearchInput.value = "";
+    searchQuery = "";
+    renderAll();
+  }
+
+  openTopSearchBtn?.addEventListener("click", openTopSearch);
+  closeTopSearchBtn?.addEventListener("click", closeTopSearch);
+
+  /* ===== storage (✅ v4로 올려서 기존 중복 데이터 자동 무시) ===== */
+  const COMMUNITY_KEY = "sbg_community_posts_v4";
+  const LIKES_KEY = "sbg_community_likes_v4";
+
   function loadPosts() {
     try { return JSON.parse(localStorage.getItem(COMMUNITY_KEY) || "[]"); }
     catch { return []; }
@@ -64,13 +87,24 @@
   function savePosts(posts) {
     localStorage.setItem(COMMUNITY_KEY, JSON.stringify(posts));
   }
-
-  /* =========================
-     Utils
-     ========================= */
-  function uid() {
-    return `p_${Math.random().toString(16).slice(2)}_${Date.now()}`;
+  function loadLikes() {
+    try { return JSON.parse(localStorage.getItem(LIKES_KEY) || "{}"); }
+    catch { return {}; }
   }
+  function saveLikes(likes) {
+    localStorage.setItem(LIKES_KEY, JSON.stringify(likes));
+  }
+
+  /* ===== utils ===== */
+  const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const uid = (p="p") => `${p}_${Math.random().toString(16).slice(2)}_${Date.now()}`;
+  const esc = (s) => String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
   function timeAgo(ts) {
     const d = Date.now() - ts;
     const m = Math.floor(d / 60000);
@@ -78,484 +112,388 @@
     if (m < 60) return `${m}분 전`;
     const h = Math.floor(m / 60);
     if (h < 24) return `${h}시간 전`;
-    const day = Math.floor(h / 24);
-    return `${day}일 전`;
-  }
-  function esc(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+    return `${Math.floor(h / 24)}일 전`;
   }
 
-  function typeLabel(t) {
-    if (t === "diary") return "일기공유";
-    if (t === "question") return "질문";
-    return "정보/팁";
+  function catLabel(c) {
+    if (c === "tips") return "꿀팁";
+    if (c === "question") return "고민&질문";
+    if (c === "comfort") return "위로";
+    if (c === "routine") return "루틴";
+    return "전체";
   }
 
-  /* =========================
-     Seed (처음 진입시 샘플 몇개)
-     ========================= */
-  function seedIfEmpty() {
-    const posts = loadPosts();
-    if (posts.length) return;
+  /* ===== data ===== */
+  const authorPool = [
+    { name:"작은용기", sub:"몸이 먼저 안심해야" },
+    { name:"하루한줄", sub:"괜찮지 않아도 괜찮아" },
+    { name:"숨고르기", sub:"불안 올라오면 물부터" },
+    { name:"조용한밤", sub:"오늘도 기록으로 버텼다" },
+    { name:"천천히걷기", sub:"5분 산책이 힘이 됨" },
+    { name:"눈웃음에이", sub:"천천히 해도 괜찮다" },
+  ];
 
-    const seeded = [
-      {
-        id: uid(),
-        type: "tips",
-        title: "지하철에서 공황 올라올 때 저는 이렇게 해요",
-        body: "1) 손에 차가운 물병 쥐기\n2) 숨을 길게 내쉬기(4초)\n3) 눈으로 주변 사물 5개 찾기\n조금이라도 도움되면 좋겠어요.",
-        createdAt: Date.now() - 1000 * 60 * 60 * 5,
-        comments: [
-          { id: uid(), text: "오 5개 찾기(그라운딩) 저도 효과 있었어요!", createdAt: Date.now() - 1000 * 60 * 20 },
-        ],
-        diaryAttach: null,
-      },
-      {
-        id: uid(),
-        type: "question",
-        title: "심장 두근거림이 계속되면 병원 가야할까요?",
-        body: "불안할 때마다 심장이 빨라져요. 검사 한 번 해보는 게 좋을까요?",
-        createdAt: Date.now() - 1000 * 60 * 60 * 30,
-        comments: [
-          { id: uid(), text: "저는 한 번 검사 받고 ‘정상’ 확인하니 불안이 좀 줄었어요.", createdAt: Date.now() - 1000 * 60 * 60 * 3 },
-        ],
-        diaryAttach: null,
-      },
-    ];
-    savePosts(seeded);
+  // ✅ 카테고리별 서로 다른 글 (요구 개수 정확히)
+  const templates = {
+    tips: [
+      { t:"불안 올라오기 전 미리 막는 호흡 루틴", b:"불안이 커지기 전에 4초 들숨 / 6초 날숨을 5번만 해도 확실히 다르더라구요. 특히 밤에 효과 있었어요." },
+      { t:"생각 폭주할 때는 ‘논리’보다 감각이 먼저", b:"불안할 때 생각을 이기려 하면 더 커졌어요. 대신 차가운 물로 손 씻기/발바닥 감각에 집중했더니 확 내려갔어요." },
+      { t:"불안한 날엔 목표를 ‘반’으로 줄이기", b:"해야 할 일을 다 하려다 무너졌어요. 그래서 요즘은 딱 1개만 성공하면 성공으로 쳐요. 자책이 줄었어요." },
+      { t:"잠들기 30분 전 SNS/뉴스 끊기", b:"자극적인 정보가 심박을 올리더라구요. 잠들기 전 30분만 끊어도 몸이 훨씬 조용해졌어요." },
+      { t:"불안 기록은 ‘한 줄’로만", b:"길게 쓰면 감정에 더 빠져요. ‘지금 불안 7/10, 이유: 내일 일정’처럼 한 줄만 쓰니 생각이 정리됐어요." },
+    ],
+    question: [
+      { t:"잠을 못 자면 다음날 불안이 폭발해요", b:"수면이 깨지면 가슴이 벌렁거리고 생각이 멈추질 않아요. 다들 이런 날 어떻게 버티세요?" },
+      { t:"불안할 때 혼자 있는 게 더 무서운 이유가 뭘까요?", b:"사람 피하고 싶은데 막상 혼자 있으면 더 무서워요. 저만 이런가요?" },
+      { t:"공황 올 것 같은 ‘초기 신호’ 오면 뭐부터 하세요?", b:"초기 신호가 오면 미리 막는 루틴이 있나요? 다들 첫 행동이 궁금해요." },
+      { t:"약 말고 생활습관으로 효과 본 게 있을까요?", b:"약에 의존하고 싶진 않은데, 루틴/습관으로 도움이 된 방법이 있으면 공유 부탁해요." },
+      { t:"불안 때문에 약속 취소가 반복돼요", b:"미안한 마음도 크고… 회피가 습관될까 겁나요. 이 패턴 어떻게 끊으셨어요?" },
+      { t:"밤에만 유독 불안해지는 이유가 뭘까요?", b:"낮엔 괜찮은데 밤만 되면 심해져요. 비슷한 경험 있으신 분들 원인이 뭐였나요?" },
+      { t:"불안이 ‘나아지고 있다’는 기준이 있나요?", b:"완전히 없어지진 않는데, 이게 좋아지고 있는 건지 모르겠어요. 어떤 기준으로 판단하셨나요?" },
+    ],
+    comfort: [
+      { t:"오늘 아무것도 못 해도 괜찮아요", b:"불안한 하루를 버텼다면 그걸로 충분해요. 오늘은 그 자체로 잘한 거예요." },
+      { t:"불안은 약해서 생기는 게 아니래요", b:"몸이 나를 지키려다 경보를 과하게 울리는 거라고 하더라구요. 당신이 이상한 게 아니에요." },
+      { t:"지금 이 순간이 영원하진 않아요", b:"감정은 파도처럼 올라왔다 내려가요. 지금은 그 중간일 뿐이에요." },
+      { t:"불안해도 당신은 안전해요", b:"느낌이 위험한 거지, 실제로 위험한 건 아니에요. 숨을 한 번만 길게 내쉬어봐요." },
+      { t:"오늘은 쉬어도 되는 날이에요", b:"회복에도 에너지가 필요해요. 멈춤도 앞으로 가는 과정이에요." },
+      { t:"잘 버티고 있다는 사실 잊지 마세요", b:"지금 이만큼 견디는 것도 쉬운 일 아니에요. 여기까지 온 것만으로도 충분해요." },
+    ],
+    routine: [
+      { t:"아침 햇빛 5분이 하루를 바꿨어요", b:"눈 뜨자마자 창가에 서서 빛을 보는 것만으로도 불안이 덜했어요. 몸이 먼저 깨어나는 느낌!" },
+      { t:"불안한 날엔 ‘5분 산책’이 제일 확실했어요", b:"속도가 아니라 ‘밖에 나갔다’는 게 중요하더라구요. 5분만 걸어도 생각이 정리돼요." },
+      { t:"자기 전 루틴을 고정하니 밤 불안이 줄었어요", b:"같은 순서로 움직이니까 몸이 먼저 안심해요. (세안→물→스트레칭→불 끄기) 단순할수록 좋아요." },
+      { t:"불안 기록은 밤 말고 낮에 했어요", b:"밤에 쓰면 감정에 더 빠져 힘들었어요. 낮에 3분만 정리하고 밤엔 쉬는 게 더 좋았어요." },
+      { t:"루틴이 깨진 날은 ‘실패’ 대신 ‘리셋’으로", b:"실패로 기록하면 다음날도 무너져요. 그래서 그냥 ‘리셋’이라고 쓰고 다시 시작했어요." },
+    ],
+  };
+
+  const commentPool = [
+    "저도 비슷해요… 읽고 조금 안심됐어요.",
+    "공감… 특히 밤이 더 힘들죠.",
+    "저는 카페인 줄이니 덜했어요.",
+    "호흡 4-6 도움이 됐어요.",
+    "검사 정상 확인하니 마음이 조금 편해졌어요.",
+    "글 고마워요. 저도 버텨볼게요.",
+    "‘지금 안전해’ 반복 은근 효과 있더라구요.",
+    "혼자가 아니라는 게 위로가 돼요.",
+  ];
+
+  function makeComments(baseTs) {
+    const n = rand(8, 40);
+    const arr = [];
+    for (let i=0;i<n;i++){
+      arr.push({
+        id: uid("c"),
+        text: commentPool[rand(0, commentPool.length - 1)],
+        createdAt: baseTs + i * 1000 * 60 * rand(1, 4),
+      });
+    }
+    return arr;
   }
-  seedIfEmpty();
 
-  /* =========================
-     Filter chips
-     ========================= */
-  let activeFilter = "all";
-  document.querySelectorAll(".chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach((c) => c.classList.remove("is-on"));
-      chip.classList.add("is-on");
-      activeFilter = chip.dataset.filter || "all";
-      renderFeed();
+  // ✅ “중복 없이” 템플릿을 각 1번씩만 생성 (총 23개)
+  function seedRich(force=false) {
+    const existing = loadPosts();
+    if (existing.length && !force) return;
+
+    const now = Date.now();
+    const posts = [];
+    const cats = ["tips","question","comfort","routine"];
+
+    cats.forEach((cat) => {
+      (templates[cat] || []).forEach((tpl, idx) => {
+        const author = authorPool[rand(0, authorPool.length - 1)];
+
+        const createdAt =
+          now
+          - (1000*60*60*rand(2, 240))
+          - rand(0, 1000*60*40)
+          - (idx * 1000 * 60 * rand(7, 20));
+
+        const hasImage = rand(1,100) <= 35;
+        const imageUrl = hasImage ? `./images/community_sample_${rand(1,6)}.jpg` : "";
+
+        posts.push({
+          id: uid("p"),
+          category: cat,
+          authorName: author.name,
+          authorSub: author.sub,
+          title: tpl.t,
+          body: tpl.b,
+          imageUrl,
+          createdAt,
+          likeCount: rand(3, 260),
+          comments: makeComments(createdAt + 1000*60*15),
+        });
+      });
     });
-  });
 
-  /* =========================
-     Feed render
-     ========================= */
+    posts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    savePosts(posts);
+  }
+
+  /* ===== state ===== */
+  let activeCat = "popular";
+  let activeSort = "hot";
+  let searchQuery = "";
+
+  /* ===== elements ===== */
+  const bestList = document.getElementById("bestList");
   const postList = document.getElementById("postList");
   const emptyHint = document.getElementById("emptyHint");
 
-  function renderFeed() {
-    const posts = loadPosts()
-      .slice()
-      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  document.getElementById("fabWriteBtn")?.addEventListener("click", () => {
+    window.location.href = routes.write;
+  });
 
-    const filtered = activeFilter === "all"
-      ? posts
-      : posts.filter((p) => p.type === activeFilter);
+  // top tabs
+  document.querySelectorAll(".topTab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".topTab").forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      activeCat = btn.dataset.cat || "all";
+      renderAll();
+    });
+  });
 
-    postList.innerHTML = "";
+  // chips sort
+  document.querySelectorAll(".chip").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".chip").forEach(b => b.classList.remove("is-on"));
+      btn.classList.add("is-on");
+      activeSort = btn.dataset.sort || "hot";
+      renderAll();
+    });
+  });
 
-    if (!filtered.length) {
-      if (emptyHint) emptyHint.textContent = "아직 글이 없어요. 첫 글을 남겨볼까요?";
-      return;
+  topSearchForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    searchQuery = (topSearchInput.value || "").trim();
+    renderAll();
+  });
+
+  function calcHotScore(p){
+    const ageH = Math.max(1, (Date.now() - p.createdAt) / (1000*60*60));
+    const like = p.likeCount || 0;
+    const c = (p.comments || []).length;
+    return (like * 1.2 + c * 2.2) / Math.pow(ageH, 0.25);
+  }
+
+  function getFilteredPosts(){
+    let posts = loadPosts().slice();
+    const likesMap = loadLikes();
+
+    const q = (searchQuery || "").toLowerCase();
+    if (q){
+      posts = posts.filter(p => {
+        const inText = `${p.title} ${p.body}`.toLowerCase().includes(q);
+        const inComments = (p.comments||[]).some(c => (c.text||"").toLowerCase().includes(q));
+        return inText || inComments;
+      });
     }
-    if (emptyHint) emptyHint.textContent = "";
 
+    if (activeCat !== "all" && activeCat !== "popular"){
+      posts = posts.filter(p => p.category === activeCat);
+    }
+
+    posts.forEach(p => {
+      p._hot = calcHotScore(p);
+      p._liked = !!likesMap[p.id];
+    });
+
+    if (activeSort === "new"){
+      posts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    } else if (activeSort === "comment"){
+      posts.sort((a,b) => (b.comments?.length||0) - (a.comments?.length||0));
+    } else if (activeSort === "like"){
+      posts.sort((a,b) => (b.likeCount||0) - (a.likeCount||0));
+    } else {
+      posts.sort((a,b) => (b._hot||0) - (a._hot||0));
+    }
+
+    if (activeCat === "popular") posts = posts.slice(0, 30);
+    return posts;
+  }
+
+  // ✅ 베스트 fallback 이미지 4개 (너가 바꿔 끼우면 됨)
+  const bestFallbackImgs = [
+    "./images/home_diary1.png",
+    "./images/home_diary2.png",
+    "./images/stable_kit_1.png",
+    "./images/home_diary4.png",
+  ];
+
+  function renderBest(){
+    const posts = loadPosts().slice();
+    posts.forEach(p => p._hot = calcHotScore(p));
+    posts.sort((a,b) => (b._hot||0) - (a._hot||0));
+    const best = posts.slice(0,4);
+
+    bestList.innerHTML = "";
     const frag = document.createDocumentFragment();
 
-    filtered.forEach((p) => {
-      const el = document.createElement("div");
-      el.className = "post";
+    best.forEach((p, idx) => {
+      const row = document.createElement("div");
+      row.className = "bestRow";
 
-      const isDiary = p.type === "diary" && p.diaryAttach;
-      const badge = isDiary ? `<span class="badge diary">요약일기 포함</span>` : `<span class="badge">${typeLabel(p.type)}</span>`;
+      const bestImg = p.imageUrl ? p.imageUrl : (bestFallbackImgs[idx] || bestFallbackImgs[0]);
 
-      el.innerHTML = `
-        <div class="postTop">
-          <div class="postType">${esc(typeLabel(p.type))}</div>
-          <div class="postTime">${esc(timeAgo(p.createdAt || Date.now()))}</div>
-        </div>
-        <div class="postTitle">${esc(p.title || "제목 없음")}</div>
-        <div class="postBody">${esc(p.body || "")}</div>
-        <div class="postMeta">
-          <div class="metaLeft">
-            ${badge}
-            <span>댓글 ${(p.comments || []).length}개</span>
+      row.innerHTML = `
+        <div class="bestLeft">
+          <div class="bestRank">${idx+1}</div>
+          <div class="bestText">
+            <div class="bestTitle">${esc(p.title)}</div>
+            <div class="bestMeta">
+              <span>${esc(p.authorName)}</span>
+              <span>·</span>
+              <span>좋아요 ${p.likeCount || 0}</span>
+              <span>·</span>
+              <span>댓글 ${(p.comments||[]).length}</span>
+            </div>
           </div>
-          <button class="openBtn" type="button" data-open="${esc(p.id)}">열기</button>
+        </div>
+        <div class="bestThumb">
+          <img src="${esc(bestImg)}" alt=""
+            onerror="this.remove(); this.closest('.bestThumb').classList.add('is-empty'); this.closest('.bestThumb').textContent='이미지';" />
         </div>
       `;
 
-      frag.appendChild(el);
+      row.addEventListener("click", () => {
+        window.location.href = `${routes.post}?id=${encodeURIComponent(p.id)}`;
+      });
+
+      frag.appendChild(row);
+    });
+
+    bestList.appendChild(frag);
+  }
+
+  function toggleLike(postId){
+    const likes = loadLikes();
+    const posts = loadPosts();
+    const p = posts.find(x => x.id === postId);
+    if (!p) return;
+
+    const liked = !!likes[postId];
+    if (liked){
+      delete likes[postId];
+      p.likeCount = Math.max(0, (p.likeCount||0) - 1);
+    } else {
+      likes[postId] = true;
+      p.likeCount = (p.likeCount||0) + 1;
+    }
+
+    saveLikes(likes);
+    savePosts(posts);
+  }
+
+  function heartSvg(){
+    return `
+      <svg class="heartIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 21s-6.7-4.35-9.33-7.38C.8 11.45 1.5 7.5 5.4 6.5c2-.5 3.9.4 4.6 1.6.7-1.2 2.6-2.1 4.6-1.6 3.9 1 4.6 4.95 2.73 7.12C18.7 16.65 12 21 12 21z"/>
+      </svg>
+    `;
+  }
+
+  function renderFeed(){
+    const posts = getFilteredPosts();
+    postList.innerHTML = "";
+
+    if (!posts.length){
+      emptyHint.textContent = searchQuery
+        ? `“${searchQuery}” 검색 결과가 없어요.`
+        : "결과가 없어요.";
+      return;
+    }
+    emptyHint.textContent = "";
+
+    const frag = document.createDocumentFragment();
+
+    posts.forEach(p => {
+      const card = document.createElement("article");
+      card.className = "postCard";
+      card.dataset.open = p.id;
+
+      const media = p.imageUrl
+        ? `<div class="postMedia"><img src="${esc(p.imageUrl)}" alt="" onerror="this.closest('.postMedia').remove();" /></div>`
+        : "";
+
+      card.innerHTML = `
+        <div class="postTop">
+          <div class="author">
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="authorText">
+              <div class="authorName">${esc(p.authorName)}</div>
+              <div class="authorMeta">${esc(timeAgo(p.createdAt))} · ${esc(p.authorSub || "")}</div>
+            </div>
+          </div>
+          <div class="catBadge">${esc(catLabel(p.category))}</div>
+        </div>
+
+        <div class="postTitle">${esc(p.title)}</div>
+        <div class="postBody">${esc(p.body)}</div>
+        ${media}
+
+        <div class="postActions">
+          <button class="actionBtn ${p._liked ? "is-liked":""}" type="button" data-like="${esc(p.id)}" aria-label="좋아요">
+            ${heartSvg()}
+            <span>좋아요</span>
+            <span>${p.likeCount || 0}</span>
+          </button>
+
+          <button class="actionBtn" type="button" data-open="${esc(p.id)}">
+            <span class="actionDot" aria-hidden="true"></span>
+            <span>댓글</span>
+            <span>${(p.comments||[]).length}</span>
+          </button>
+
+          <button class="actionBtn" type="button" data-share="${esc(p.id)}">
+            <span class="actionDot" aria-hidden="true"></span>
+            <span>공유</span>
+          </button>
+        </div>
+      `;
+
+      frag.appendChild(card);
     });
 
     postList.appendChild(frag);
   }
 
-  document.getElementById("refreshBtn")?.addEventListener("click", renderFeed);
-  renderFeed();
-
-  /* =========================
-     Detail modal (open post + comments)
-     ========================= */
-  const detailModal = document.getElementById("detailModal");
-  const detailBox = document.getElementById("detailBox");
-  const commentList = document.getElementById("commentList");
-  const commentCount = document.getElementById("commentCount");
-  const commentInput = document.getElementById("commentInput");
-  const commentSendBtn = document.getElementById("commentSendBtn");
-  const commentHint = document.getElementById("commentHint");
-  let currentPostId = null;
-
-  function openModal(modal) {
-    modal?.classList.add("is-open");
-    modal?.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-  function closeModal(modal) {
-    modal?.classList.remove("is-open");
-    modal?.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  function getPostById(id) {
-    return loadPosts().find((p) => p.id === id);
-  }
-
-  function renderDetail(post) {
-    if (!post) return;
-
-    const diaryBlock = (post.type === "diary" && post.diaryAttach)
-      ? `
-        <div class="diaryPreview">
-          <div class="t1">공유된 요약 일기</div>
-          <div class="t2">${esc(post.diaryAttach.preview || "")}</div>
-        </div>
-      ` : "";
-
-    detailBox.innerHTML = `
-      <div class="detailTitle">${esc(post.title || "")}</div>
-      <div class="detailBody">${esc(post.body || "")}</div>
-      ${diaryBlock}
-      <div class="detailMeta">
-        <div>${esc(typeLabel(post.type))}</div>
-        <div>${esc(timeAgo(post.createdAt || Date.now()))}</div>
-      </div>
-    `;
-
-    const comments = post.comments || [];
-    commentCount.textContent = `${comments.length}개`;
-
-    commentList.innerHTML = "";
-    if (!comments.length) {
-      commentList.innerHTML = `<div class="hint">첫 댓글을 남겨주세요.</div>`;
-      return;
-    }
-
-    const frag = document.createDocumentFragment();
-    comments
-      .slice()
-      .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
-      .forEach((c) => {
-        const el = document.createElement("div");
-        el.className = "comment";
-        el.innerHTML = `
-          <div class="commentTop">
-            <div class="commentName">익명</div>
-            <div class="commentTime">${esc(timeAgo(c.createdAt || Date.now()))}</div>
-          </div>
-          <div class="commentText">${esc(c.text || "")}</div>
-        `;
-        frag.appendChild(el);
-      });
-
-    commentList.appendChild(frag);
-  }
-
   postList?.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-open]");
-    if (!btn) return;
-    const id = btn.getAttribute("data-open");
-    const post = getPostById(id);
-    currentPostId = id;
-    renderDetail(post);
-    commentHint.textContent = "";
-    commentInput.value = "";
-    openModal(detailModal);
-    setTimeout(() => commentInput?.focus(), 0);
-  });
-
-  commentSendBtn?.addEventListener("click", () => {
-    const text = (commentInput?.value || "").trim();
-    if (!text) {
-      commentHint.textContent = "댓글을 입력해 주세요.";
+    const likeBtn = e.target.closest("[data-like]");
+    if (likeBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      const id = likeBtn.getAttribute("data-like");
+      toggleLike(id);
+      renderAll();
       return;
     }
-    const posts = loadPosts();
-    const post = posts.find((p) => p.id === currentPostId);
-    if (!post) return;
 
-    post.comments = post.comments || [];
-    post.comments.push({ id: uid(), text, createdAt: Date.now() });
-    savePosts(posts);
+    const shareBtn = e.target.closest("[data-share]");
+    if (shareBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      alert("공유는 다음 단계에서 연결해줄게 🙂");
+      return;
+    }
 
-    commentInput.value = "";
-    commentHint.textContent = "등록했어요.";
-    renderDetail(post);
+    const openTarget = e.target.closest("[data-open]") || e.target.closest(".postCard");
+    if (openTarget){
+      const id = openTarget.getAttribute("data-open") || openTarget.dataset.open;
+      if (!id) return;
+      window.location.href = `${routes.post}?id=${encodeURIComponent(id)}`;
+    }
+  });
+
+  function renderAll(){
+    renderBest();
     renderFeed();
-  });
-
-  document.querySelectorAll("[data-close='detail']").forEach((x) => {
-    x.addEventListener("click", () => closeModal(detailModal));
-  });
-
-  /* =========================
-     Compose modal (create post + optional diary attach)
-     ========================= */
-  const composeModal = document.getElementById("composeModal");
-  const openComposeBtn = document.getElementById("openComposeBtn");
-  const publishBtn = document.getElementById("publishBtn");
-  const composeTitle = document.getElementById("composeTitle");
-  const composeBody = document.getElementById("composeBody");
-  const composeHint = document.getElementById("composeHint");
-
-  const attachWrap = document.getElementById("attachWrap");
-  const openDiaryPickerBtn = document.getElementById("openDiaryPickerBtn");
-  const attachedDiaryCard = document.getElementById("attachedDiaryCard");
-  const anonymizeChk = document.getElementById("anonymizeChk");
-
-  let composeType = "tips";
-  let attachedDiary = null;
-
-  function setComposeType(t) {
-    composeType = t;
-    document.querySelectorAll(".segBtn").forEach((b) => b.classList.toggle("is-on", b.dataset.type === t));
-    attachWrap.hidden = (t !== "diary");
   }
 
-  document.querySelectorAll(".segBtn").forEach((b) => {
-    b.addEventListener("click", () => setComposeType(b.dataset.type || "tips"));
-  });
-
-  function openCompose() {
-    composeTitle.value = "";
-    composeBody.value = "";
-    composeHint.textContent = "";
-    attachedDiary = null;
-    attachedDiaryCard.innerHTML = `<div class="attachEmpty">선택된 일기가 없어요</div>`;
-    anonymizeChk.checked = true;
-    setComposeType("tips");
-    openModal(composeModal);
-  }
-  openComposeBtn?.addEventListener("click", openCompose);
-  document.querySelectorAll("[data-close='compose']").forEach((x) => {
-    x.addEventListener("click", () => closeModal(composeModal));
-  });
-
-  function diaryPreviewFromEntry(entry) {
-    // 안전하게 요약: 길이 제한 + 민감정보 노출 최소화
-    const parts = [];
-    if (entry.emoji) parts.push(`감정: ${entry.emoji}`);
-    if (typeof entry.intensity === "number") parts.push(`강도: ${entry.intensity}/10`);
-    if (Array.isArray(entry.tags) && entry.tags.length) parts.push(`상태: ${entry.tags.slice(0, 3).join(", ")}`);
-    const text = (entry.eventText || entry.text || "").trim();
-    if (text) parts.push(text.split("\n").slice(0, 2).join("\n"));
-    return parts.join("\n");
-  }
-
-  publishBtn?.addEventListener("click", () => {
-    const title = (composeTitle.value || "").trim();
-    const body = (composeBody.value || "").trim();
-
-    if (!title || !body) {
-      composeHint.textContent = "제목과 내용을 입력해 주세요.";
-      return;
-    }
-
-    if (composeType === "diary" && !attachedDiary) {
-      composeHint.textContent = "일기공유 글은 ‘내 일기 선택’을 해주세요.";
-      return;
-    }
-
-    const post = {
-      id: uid(),
-      type: composeType,
-      title,
-      body,
-      createdAt: Date.now(),
-      comments: [],
-      diaryAttach: null,
-    };
-
-    if (composeType === "diary" && attachedDiary) {
-      const preview = anonymizeChk.checked
-        ? diaryPreviewFromEntry(attachedDiary.entry)
-        : (attachedDiary.entry.text || attachedDiary.entry.eventText || "");
-
-      post.diaryAttach = {
-        date: attachedDiary.date,
-        preview: (preview || "").slice(0, 400),
-        moodClass: attachedDiary.entry.moodClass || null,
-      };
-    }
-
-    const posts = loadPosts();
-    posts.push(post);
-    savePosts(posts);
-
-    closeModal(composeModal);
-    renderFeed();
-  });
-
-  /* =========================
-     Diary picker
-     ========================= */
-  const pickerModal = document.getElementById("pickerModal");
-  const pickerList = document.getElementById("pickerList");
-  const pickerHint = document.getElementById("pickerHint");
-
-  function openPicker() {
-    const diary = loadDiary();
-    const list = Object.entries(diary)
-      .map(([date, entry]) => ({ date, entry }))
-      .sort((a, b) => (b.entry.savedAt || 0) - (a.entry.savedAt || 0));
-
-    pickerList.innerHTML = "";
-    if (!list.length) {
-      pickerHint.textContent = "저장된 일기가 없어요. 먼저 기록을 남겨주세요.";
-      openModal(pickerModal);
-      return;
-    }
-    pickerHint.textContent = "";
-
-    const frag = document.createDocumentFragment();
-    list.forEach(({ date, entry }) => {
-      const el = document.createElement("div");
-      el.className = "pickItem";
-
-      const tagText = Array.isArray(entry.tags) && entry.tags.length ? entry.tags.slice(0, 2).join(", ") : "태그 없음";
-      const text = (entry.text || entry.eventText || "").trim();
-
-      el.innerHTML = `
-        <div class="pickTop">
-          <div class="pickDate">${esc(date)}</div>
-          <div class="pickTag">${esc(tagText)}</div>
-        </div>
-        <div class="pickText">${esc(text)}</div>
-        <button class="smallBtn pickBtn" type="button" data-pick="${esc(date)}">이 일기 선택</button>
-      `;
-      frag.appendChild(el);
-    });
-    pickerList.appendChild(frag);
-
-    openModal(pickerModal);
-  }
-
-  openDiaryPickerBtn?.addEventListener("click", openPicker);
-
-  pickerList?.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-pick]");
-    if (!btn) return;
-    const date = btn.getAttribute("data-pick");
-    const diary = loadDiary();
-    const entry = diary[date];
-    if (!entry) return;
-
-    attachedDiary = { date, entry };
-
-    const preview = diaryPreviewFromEntry(entry);
-    attachedDiaryCard.innerHTML = `
-      <div class="postType">선택됨 · ${esc(date)}</div>
-      <div class="postBody" style="-webkit-line-clamp:3">${esc(preview)}</div>
-    `;
-
-    closeModal(pickerModal);
-    setComposeType("diary");
-  });
-
-  document.querySelectorAll("[data-close='picker']").forEach((x) => {
-    x.addEventListener("click", () => closeModal(pickerModal));
-  });
-
-  /* =========================
-     Search modal (community posts + comments)
-     ========================= */
-  const openSearchBtn = document.getElementById("openSearchBtn");
-  const searchModal = document.getElementById("searchModal");
-  const searchInput = document.getElementById("searchInput");
-  const searchHint = document.getElementById("searchHint");
-  const searchResults = document.getElementById("searchResults");
-
-  function openSearch() {
-    openModal(searchModal);
-    searchInput.value = "";
-    renderSearch("");
-    setTimeout(() => searchInput?.focus(), 0);
-  }
-  function closeSearch() {
-    closeModal(searchModal);
-  }
-
-  openSearchBtn?.addEventListener("click", openSearch);
-  document.querySelectorAll("[data-close='search']").forEach((x) => x.addEventListener("click", closeSearch));
-
-  function renderSearch(q) {
-    const query = (q || "").trim().toLowerCase();
-    const posts = loadPosts().slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-    const results = query
-      ? posts.filter((p) => {
-          const text = `${p.title || ""} ${p.body || ""}`.toLowerCase();
-          const comments = (p.comments || []).map((c) => c.text).join(" ").toLowerCase();
-          return text.includes(query) || comments.includes(query);
-        })
-      : posts;
-
-    searchHint.textContent = query ? `검색 결과: ${results.length}개` : `전체 글: ${results.length}개`;
-    searchResults.innerHTML = "";
-
-    if (!results.length) {
-      searchResults.innerHTML = `<div class="hint">검색 결과가 없어요.</div>`;
-      return;
-    }
-
-    const frag = document.createDocumentFragment();
-    results.slice(0, 30).forEach((p) => {
-      const el = document.createElement("div");
-      el.className = "resultItem";
-      const tagText = `${typeLabel(p.type)} · 댓글 ${(p.comments || []).length}개`;
-
-      el.innerHTML = `
-        <div class="resultTop">
-          <div class="resultDate">${esc(timeAgo(p.createdAt || Date.now()))}</div>
-          <div class="resultTags">${esc(tagText)}</div>
-        </div>
-        <div class="resultText">${esc(p.title || "")} — ${esc(p.body || "")}</div>
-        <button class="smallBtn resultBtn" type="button" data-open="${esc(p.id)}">열기</button>
-      `;
-      frag.appendChild(el);
-    });
-
-    searchResults.appendChild(frag);
-  }
-
-  searchInput?.addEventListener("input", (e) => renderSearch(e.target.value));
-  searchResults?.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-open]");
-    if (!btn) return;
-    const id = btn.getAttribute("data-open");
-    const post = getPostById(id);
-    if (!post) return;
-    closeSearch();
-    currentPostId = id;
-    renderDetail(post);
-    openModal(detailModal);
-  });
-
+  /* ===== init ===== */
+  seedRich(false);
+  renderAll();
 })();

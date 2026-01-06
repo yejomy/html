@@ -8,6 +8,7 @@
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
+    diary: "./diary.html",
   };
 
   document.querySelectorAll(".tabbar .tab").forEach((btn) => {
@@ -41,6 +42,16 @@
   }
 
   openDrawerBtn?.addEventListener("click", openDrawer);
+
+  // ✅ 드로어 메뉴 이동: 내 정보 -> my.html
+  document.getElementById("drawerToMy")?.addEventListener("click", () => {
+    window.location.href = routes.my;
+  });
+
+  // ✅ 드로어 메뉴 이동: 오늘 기록하기 -> diary.html  (🔥 이게 추가된 핵심)
+  document.getElementById("drawerWriteBtn")?.addEventListener("click", () => {
+    window.location.href = routes.diary;
+  });
 
   drawer?.addEventListener("click", (e) => {
     if (e.target.closest("[data-close='drawer']")) closeDrawer();
@@ -177,170 +188,163 @@
     start();
   }
 
-/* =========================
-   3) ✅ 영상 재생 (YouTube IFrame Player API)
-   ========================= */
+  /* =========================
+     3) ✅ 영상 재생 (YouTube IFrame Player API)
+     ========================= */
 
-const YOUTUBE_URL = "https://www.youtube.com/watch?v=PhL1u3Hn4ok&list=RDPhL1u3Hn4ok&start_radio=1";
+  const YOUTUBE_URL = "https://www.youtube.com/watch?v=PhL1u3Hn4ok&list=RDPhL1u3Hn4ok&start_radio=1";
 
-const getYoutubeParams = (url) => {
-  try {
-    const u = new URL(url);
-    const videoId =
-      u.searchParams.get("v") ||
-      (u.hostname.includes("youtu.be") ? u.pathname.replace("/", "") : "") ||
-      (u.pathname.includes("/shorts/") ? u.pathname.split("/shorts/")[1].split("?")[0] : "");
+  const getYoutubeParams = (url) => {
+    try {
+      const u = new URL(url);
+      const videoId =
+        u.searchParams.get("v") ||
+        (u.hostname.includes("youtu.be") ? u.pathname.replace("/", "") : "") ||
+        (u.pathname.includes("/shorts/") ? u.pathname.split("/shorts/")[1].split("?")[0] : "");
 
-    const list = u.searchParams.get("list") || ""; // RD... 같은 플레이리스트
-    return { videoId, list };
-  } catch {
-    return { videoId: "", list: "" };
-  }
-};
-
-const { videoId, list } = getYoutubeParams(YOUTUBE_URL);
-
-const btnPlay = document.getElementById("btnPlay");
-const btnRepeat = document.getElementById("btnRepeat");
-const btnPrev = document.getElementById("btnPrev");
-const btnNext = document.getElementById("btnNext");
-const seek = document.getElementById("seek");
-const curTime = document.getElementById("curTime");
-const durTime = document.getElementById("durTime");
-
-const fmt = (s) => {
-  if (!isFinite(s) || s < 0) return "0:00";
-  const m = Math.floor(s / 60);
-  const ss = Math.floor(s % 60).toString().padStart(2, "0");
-  return `${m}:${ss}`;
-};
-
-let ytPlayer = null;
-let uiTimer = null;
-let isLoop = false;
-let isSeeking = false;
-
-function showPlayerError(msg) {
-  const mediaSub = document.getElementById("mediaSub");
-  if (mediaSub) mediaSub.textContent = msg;
-  if (btnPlay) btnPlay.disabled = true;
-}
-
-if (!videoId) {
-  showPlayerError("유튜브 링크/ID가 올바르지 않아요");
-} else {
-  // API 로드
-  if (!window.__YT_API_LOADING__) {
-    window.__YT_API_LOADING__ = true;
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-  }
-
-  window.onYouTubeIframeAPIReady = () => {
-    // ✅ 핵심: videoId는 필수, list는 있으면 같이 넣기
-    const playerVars = {
-      controls: 0,
-      rel: 0,
-      modestbranding: 1,
-      playsinline: 1,
-      origin: window.location.origin || undefined,
-    };
-
-    // 라디오/믹스(list)까지 같이 재생하고 싶으면 listType/list를 세팅
-    // (list가 RD...로 들어오면 보통 동작함. 단, 유튜브 정책/지역/저작권 따라 막힐 수 있음)
-    if (list) {
-      playerVars.listType = "playlist";
-      playerVars.list = list;
+      const list = u.searchParams.get("list") || ""; // RD... 같은 플레이리스트
+      return { videoId, list };
+    } catch {
+      return { videoId: "", list: "" };
     }
-
-    ytPlayer = new YT.Player("ytPlayer", {
-      videoId,
-      playerVars,
-      events: {
-        onReady: () => {
-          // duration은 로딩 직후 0일 수 있음
-          setTimeout(() => {
-            const d = ytPlayer.getDuration?.() ?? 0;
-            if (durTime) durTime.textContent = fmt(d);
-          }, 600);
-
-          if (uiTimer) clearInterval(uiTimer);
-          uiTimer = setInterval(() => {
-            if (!ytPlayer) return;
-            const d = ytPlayer.getDuration?.() ?? 0;
-            const t = ytPlayer.getCurrentTime?.() ?? 0;
-
-            if (!isSeeking && seek) {
-              seek.value = String(d > 0 ? (t / d) * 100 : 0);
-            }
-            if (curTime) curTime.textContent = fmt(t);
-            if (durTime && durTime.textContent === "0:00") durTime.textContent = fmt(d);
-          }, 250);
-        },
-
-        onStateChange: (e) => {
-          const playing = e.data === YT.PlayerState.PLAYING;
-          if (btnPlay) btnPlay.textContent = playing ? "⏸" : "▶";
-
-          if (e.data === YT.PlayerState.ENDED) {
-            if (isLoop) {
-              ytPlayer.seekTo(0, true);
-              ytPlayer.playVideo();
-            } else {
-              if (btnPlay) btnPlay.textContent = "▶";
-            }
-          }
-        },
-
-        onError: (e) => {
-          const code = e?.data;
-          if (code === 101 || code === 150) {
-            showPlayerError("이 영상은 외부 재생(임베드)이 막혀있어요. 다른 영상으로 바꿔줘!");
-          } else if (code === 100) {
-            showPlayerError("영상이 삭제되었거나 비공개예요.");
-          } else {
-            showPlayerError(`유튜브 재생 오류(code: ${code})`);
-          }
-        }
-      }
-    });
   };
 
-  // ✅ 유튜브는 사용자 제스처가 있어야 재생되는 경우가 많음 → 버튼 클릭으로만 재생
-  btnPlay?.addEventListener("click", () => {
-    if (!ytPlayer) return;
-    const st = ytPlayer.getPlayerState?.();
-    if (st === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
-    else ytPlayer.playVideo();
-  });
+  const { videoId, list } = getYoutubeParams(YOUTUBE_URL);
 
-  // ✅ playlist가 있으면 다음/이전은 실제로 넘길 수 있음
-  btnNext?.addEventListener("click", () => {
-    if (!ytPlayer) return;
-    if (list && ytPlayer.nextVideo) ytPlayer.nextVideo();
-    else ytPlayer.seekTo(0, true);
-  });
+  const btnPlay = document.getElementById("btnPlay");
+  const btnRepeat = document.getElementById("btnRepeat");
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const seek = document.getElementById("seek");
+  const curTime = document.getElementById("curTime");
+  const durTime = document.getElementById("durTime");
 
-  btnPrev?.addEventListener("click", () => {
-    if (!ytPlayer) return;
-    if (list && ytPlayer.previousVideo) ytPlayer.previousVideo();
-    else ytPlayer.seekTo(0, true);
-  });
+  const fmt = (s) => {
+    if (!isFinite(s) || s < 0) return "0:00";
+    const m = Math.floor(s / 60);
+    const ss = Math.floor(s % 60).toString().padStart(2, "0");
+    return `${m}:${ss}`;
+  };
 
-  seek?.addEventListener("input", () => { isSeeking = true; });
-  seek?.addEventListener("change", () => {
-    if (!ytPlayer || !seek) return;
-    const d = ytPlayer.getDuration?.() ?? 0;
-    const p = Number(seek.value) / 100;
-    ytPlayer.seekTo(p * d, true);
-    isSeeking = false;
-  });
+  let ytPlayer = null;
+  let uiTimer = null;
+  let isLoop = false;
+  let isSeeking = false;
 
-  btnRepeat?.addEventListener("click", () => {
-    isLoop = !isLoop;
-    btnRepeat.classList.toggle("is-on", isLoop);
-  });
-}
+  function showPlayerError(msg) {
+    const mediaSub = document.getElementById("mediaSub");
+    if (mediaSub) mediaSub.textContent = msg;
+    if (btnPlay) btnPlay.disabled = true;
+  }
 
+  if (!videoId) {
+    showPlayerError("유튜브 링크/ID가 올바르지 않아요");
+  } else {
+    // API 로드
+    if (!window.__YT_API_LOADING__) {
+      window.__YT_API_LOADING__ = true;
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    }
+
+    window.onYouTubeIframeAPIReady = () => {
+      const playerVars = {
+        controls: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1,
+        origin: window.location.origin || undefined,
+      };
+
+      if (list) {
+        playerVars.listType = "playlist";
+        playerVars.list = list;
+      }
+
+      ytPlayer = new YT.Player("ytPlayer", {
+        videoId,
+        playerVars,
+        events: {
+          onReady: () => {
+            setTimeout(() => {
+              const d = ytPlayer.getDuration?.() ?? 0;
+              if (durTime) durTime.textContent = fmt(d);
+            }, 600);
+
+            if (uiTimer) clearInterval(uiTimer);
+            uiTimer = setInterval(() => {
+              if (!ytPlayer) return;
+              const d = ytPlayer.getDuration?.() ?? 0;
+              const t = ytPlayer.getCurrentTime?.() ?? 0;
+
+              if (!isSeeking && seek) {
+                seek.value = String(d > 0 ? (t / d) * 100 : 0);
+              }
+              if (curTime) curTime.textContent = fmt(t);
+              if (durTime && durTime.textContent === "0:00") durTime.textContent = fmt(d);
+            }, 250);
+          },
+
+          onStateChange: (e) => {
+            const playing = e.data === YT.PlayerState.PLAYING;
+            if (btnPlay) btnPlay.textContent = playing ? "⏸" : "▶";
+
+            if (e.data === YT.PlayerState.ENDED) {
+              if (isLoop) {
+                ytPlayer.seekTo(0, true);
+                ytPlayer.playVideo();
+              } else {
+                if (btnPlay) btnPlay.textContent = "▶";
+              }
+            }
+          },
+
+          onError: (e) => {
+            const code = e?.data;
+            if (code === 101 || code === 150) {
+              showPlayerError("이 영상은 외부 재생(임베드)이 막혀있어요. 다른 영상으로 바꿔줘!");
+            } else if (code === 100) {
+              showPlayerError("영상이 삭제되었거나 비공개예요.");
+            } else {
+              showPlayerError(`유튜브 재생 오류(code: ${code})`);
+            }
+          }
+        }
+      });
+    };
+
+    btnPlay?.addEventListener("click", () => {
+      if (!ytPlayer) return;
+      const st = ytPlayer.getPlayerState?.();
+      if (st === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+      else ytPlayer.playVideo();
+    });
+
+    btnNext?.addEventListener("click", () => {
+      if (!ytPlayer) return;
+      if (list && ytPlayer.nextVideo) ytPlayer.nextVideo();
+      else ytPlayer.seekTo(0, true);
+    });
+
+    btnPrev?.addEventListener("click", () => {
+      if (!ytPlayer) return;
+      if (list && ytPlayer.previousVideo) ytPlayer.previousVideo();
+      else ytPlayer.seekTo(0, true);
+    });
+
+    seek?.addEventListener("input", () => { isSeeking = true; });
+    seek?.addEventListener("change", () => {
+      if (!ytPlayer || !seek) return;
+      const d = ytPlayer.getDuration?.() ?? 0;
+      const p = Number(seek.value) / 100;
+      ytPlayer.seekTo(p * d, true);
+      isSeeking = false;
+    });
+
+    btnRepeat?.addEventListener("click", () => {
+      isLoop = !isLoop;
+      btnRepeat.classList.toggle("is-on", isLoop);
+    });
+  }
 })();

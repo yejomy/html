@@ -217,6 +217,20 @@ achTrack?.addEventListener("click", (e) => {
     if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
   });
 
+  /* ✅ 드로어 메뉴 이동 */
+const drawerWriteBtn = document.getElementById("drawerWriteBtn");
+const drawerToMy = document.getElementById("drawerToMy");
+
+// 오늘 기록하기 -> diary.html
+drawerWriteBtn?.addEventListener("click", () => {
+  window.location.href = routes.diary;
+});
+
+// 내 정보 -> my.html
+drawerToMy?.addEventListener("click", () => {
+  window.location.href = routes.my;
+});
+
   /* =========================================================
      7) 탭 이동
      ========================================================= */
@@ -226,6 +240,7 @@ achTrack?.addEventListener("click", (e) => {
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
+    diary: "./diary.html"
   };
 
   document.querySelectorAll(".tabbar .tab").forEach((btn) => {

@@ -8,6 +8,7 @@
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
+    diary: "./diary.html",
   };
 
   document.querySelectorAll(".tabbar .tab").forEach((btn) => {
@@ -47,9 +48,14 @@
     if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
   });
 
+  // ✅ 드로어: 오늘 기록하기 -> diary.html
   document.getElementById("drawerWriteBtn")?.addEventListener("click", () => {
-    // 지금 페이지가 diary라서 record로 보내거나 noop 처리 가능
-    window.location.href = "./record.html";
+    window.location.href = routes.diary;
+  });
+
+  // ✅ 드로어: 내 정보 -> my.html
+  document.getElementById("drawerToMy")?.addEventListener("click", () => {
+    window.location.href = routes.my;
   });
 
   /* =========================
@@ -89,24 +95,51 @@
   let selectedEmoji = null;
   const selectedTriggers = new Set();
 
-  // emoji select
+  // emoji select (단일)
   document.querySelectorAll(".emojiBtn").forEach((btn) => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".emojiBtn").forEach((b) => b.classList.remove("is-selected"));
       btn.classList.add("is-selected");
       selectedEmoji = btn.dataset.emoji || null;
-      renderCard(); // 선택만 바뀌어도 카드 갱신
+      renderCard();
     });
   });
 
-  // intensity
+  /* =========================
+     ✅ intensity + 민트 반쪽 채움 (여기가 핵심)
+     ========================= */
   const intensity = document.getElementById("intensity");
   const intensityVal = document.getElementById("intensityVal");
+
+  // ✅ 파란 채워지는 부분만 민트로 덮어쓰기
+  function paintIntensityRange() {
+    if (!intensity) return;
+
+    const min = intensity.min ? Number(intensity.min) : 0;
+    const max = intensity.max ? Number(intensity.max) : 10;
+    const val = Number(intensity.value || 0);
+    const percent = ((val - min) / (max - min)) * 100;
+
+    // 왼쪽(채워진 부분) = 민트 / 오른쪽(남은 트랙) = 원래 트랙색(연회색)
+    intensity.style.background = `linear-gradient(
+      to right,
+      #2d8f83 0%,
+      #2d8f83 ${percent}%,
+      #e6e6e6 ${percent}%,
+      #e6e6e6 100%
+    )`;
+  }
+
   function syncIntensity() {
     const v = Number(intensity?.value || 0);
     if (intensityVal) intensityVal.textContent = `${v}/10`;
+
+    // ✅ 값 바뀔 때마다 민트 채움도 같이 갱신
+    paintIntensityRange();
+
     renderCard();
   }
+
   intensity?.addEventListener("input", syncIntensity);
 
   // triggers (toggle)
@@ -134,7 +167,6 @@
   function applyEntry(entry) {
     if (!entry) return;
 
-    // emoji
     if (entry.emoji) {
       selectedEmoji = entry.emoji;
       const btn = document.querySelector(`.emojiBtn[data-emoji="${CSS.escape(entry.emoji)}"]`);
@@ -144,20 +176,17 @@
       }
     }
 
-    // intensity
     if (typeof entry.intensity === "number" && intensity) {
       intensity.value = String(entry.intensity);
-      syncIntensity();
+      syncIntensity(); // ✅ 여기서 paintIntensityRange()까지 같이 됨
     }
 
-    // symptoms
     if (Array.isArray(entry.tags)) {
       document.querySelectorAll(".chk__input").forEach((el) => {
         el.checked = entry.tags.includes(el.value);
       });
     }
 
-    // triggers
     selectedTriggers.clear();
     if (Array.isArray(entry.triggers)) {
       entry.triggers.forEach((t) => selectedTriggers.add(t));
@@ -167,7 +196,6 @@
       });
     }
 
-    // texts
     const setVal = (id, v) => {
       const el = document.getElementById(id);
       if (el) el.value = v || "";
@@ -183,8 +211,12 @@
   }
 
   const existing = loadEntries()[dateKey];
-  if (existing) applyEntry(existing);
-  else syncIntensity();
+  if (existing) {
+    applyEntry(existing);
+  } else {
+    // ✅ 첫 진입일 때도 민트 채움 1회 적용
+    syncIntensity();
+  }
 
   /* =========================
      Save
@@ -193,240 +225,135 @@
   const saveHint = document.getElementById("saveHint");
 
   function pickMoodClass(emoji, tags, intensityNum) {
-    // record 캘린더 색 구분용 (3종)
-    // mood-a: 안정/중립, mood-b: 긍정, mood-c: 불안/공황
     if (emoji === "happy" || emoji === "calm") return "mood-b";
     if (emoji === "panic" || (tags || []).includes("심장 두근거림") || intensityNum >= 7) return "mood-c";
     return "mood-a";
   }
 
+  function collectTags() {
+    return Array.from(document.querySelectorAll(".chk__input"))
+      .filter((el) => el.checked)
+      .map((el) => el.value);
+  }
+
+  function collectText(id) {
+    return (document.getElementById(id)?.value || "").trim();
+  }
+
+  function buildSearchTextForRecord(entry) {
+    const parts = [
+      entry.eventText, entry.thoughtText, entry.bodyText, entry.copeText, entry.praiseText,
+      entry.triggerNote,
+      (entry.triggers || []).join(", "),
+      (entry.tags || []).join(", "),
+      entry.emoji ? `감정:${entry.emoji}` : "",
+      typeof entry.intensity === "number" ? `강도:${entry.intensity}` : ""
+    ].filter(Boolean);
+    return parts.join("\n");
+  }
+
   saveBtn?.addEventListener("click", () => {
     const entries = loadEntries();
-
+    const tags = collectTags();
     const intensityNum = Number(intensity?.value || 0);
-    const tags = Array.from(document.querySelectorAll(".chk__input:checked")).map((el) => el.value);
 
-    const triggerNote = document.getElementById("triggerNote")?.value?.trim() || "";
-    const eventText = document.getElementById("eventText")?.value?.trim() || "";
-    const thoughtText = document.getElementById("thoughtText")?.value?.trim() || "";
-    const bodyText = document.getElementById("bodyText")?.value?.trim() || "";
-    const copeText = document.getElementById("copeText")?.value?.trim() || "";
-    const praiseText = document.getElementById("praiseText")?.value?.trim() || "";
-
-    if (!eventText && !thoughtText && !bodyText) {
-      if (saveHint) saveHint.textContent = "최소한 ‘무슨 일이 있었나요?’ 또는 ‘생각/몸 반응’ 중 하나는 적어줘요.";
-      return;
-    }
-
-    const triggers = Array.from(selectedTriggers);
-
-    const moodClass = pickMoodClass(selectedEmoji, tags, intensityNum);
-
-    entries[dateKey] = {
-      // record에서 쓰는 필드들(호환)
-      text: [eventText, thoughtText].filter(Boolean).join("\n"),
-      tags,
+    const entry = {
       emoji: selectedEmoji,
-      moodClass,
-      savedAt: Date.now(),
-
-      // diary 상세 필드
       intensity: intensityNum,
-      triggers,
-      triggerNote,
-      eventText,
-      thoughtText,
-      bodyText,
-      copeText,
-      praiseText,
+      tags,
+      triggers: Array.from(selectedTriggers),
+      triggerNote: collectText("triggerNote"),
+      eventText: collectText("eventText"),
+      thoughtText: collectText("thoughtText"),
+      bodyText: collectText("bodyText"),
+      copeText: collectText("copeText"),
+      praiseText: collectText("praiseText"),
+      moodClass: pickMoodClass(selectedEmoji, tags, intensityNum),
+      savedAt: Date.now(),
     };
 
+    entry.text = buildSearchTextForRecord(entry);
+
+    entries[dateKey] = entry;
     saveEntries(entries);
 
-    if (saveHint) saveHint.textContent = "저장했어요. 기록이 캘린더에 반영돼요.";
+    if (saveHint) saveHint.textContent = "저장 완료! 기록 페이지에서 달력에 표시돼요.";
     renderCard();
-
-    // 저장 후 record로 돌아가고 싶으면 아래 주석 해제
-    // setTimeout(() => (window.location.href = "./record.html"), 300);
   });
 
   /* =========================
-     Picture diary (canvas)
+     Canvas card (기존 그대로)
      ========================= */
   const canvas = document.getElementById("cardCanvas");
-  const ctx = canvas?.getContext("2d");
-
+  const ctx = canvas?.getContext?.("2d");
   const regenBtn = document.getElementById("regenBtn");
   const downloadBtn = document.getElementById("downloadBtn");
 
-  regenBtn?.addEventListener("click", renderCard);
-  downloadBtn?.addEventListener("click", () => {
-    if (!canvas) return;
-    const a = document.createElement("a");
-    a.href = canvas.toDataURL("image/png");
-    a.download = `diary_${dateKey}.png`;
-    a.click();
-  });
-
-  function roundRect(c, x, y, w, h, r) {
-    const radius = Math.min(r, w / 2, h / 2);
-    c.beginPath();
-    c.moveTo(x + radius, y);
-    c.arcTo(x + w, y, x + w, y + h, radius);
-    c.arcTo(x + w, y + h, x, y + h, radius);
-    c.arcTo(x, y + h, x, y, radius);
-    c.arcTo(x, y, x + w, y, radius);
-    c.closePath();
-  }
-
-  function moodPalette(emoji) {
-    // 감정에 따라 카드 톤 다르게 (앱 분위기)
-    switch (emoji) {
-      case "happy": return { bg1: "#FFE6C7", bg2: "#FFF3E5", accent: "#F1762C" };
-      case "calm":  return { bg1: "#D8EFE9", bg2: "#F2FBF8", accent: "#2D5A51" };
-      case "sad":   return { bg1: "#D9E2EA", bg2: "#F4F7FA", accent: "#4B6A86" };
-      case "anxious":return { bg1: "#F2E6D8", bg2: "#FBF6F0", accent: "#8A5A3A" };
-      case "panic": return { bg1: "#F1D7D2", bg2: "#FFF1EE", accent: "#D85B3A" };
-      default:      return { bg1: "#E9E3DA", bg2: "#FBFAF7", accent: "#2D5A51" };
-    }
-  }
-
-  function pickKeywords() {
-    const eventText = document.getElementById("eventText")?.value || "";
-    const thoughtText = document.getElementById("thoughtText")?.value || "";
-    const copeText = document.getElementById("copeText")?.value || "";
-    const triggers = Array.from(selectedTriggers);
-
-    // 아주 단순 추출(서버/AI 없이 가능): 짧은 구절만
-    const pick = (s) => (s || "").trim().split(/\s+/).slice(0, 6).join(" ");
-    return {
-      line1: pick(eventText) || "오늘의 기록",
-      line2: pick(thoughtText) || (triggers[0] ? `트리거: ${triggers[0]}` : "천천히 숨을 쉬었어요"),
-      line3: pick(copeText) || "내가 나를 지켜줬어요",
-    };
-  }
-
-  function drawSimpleFace(x, y, r, accent, emoji) {
-    // 기본 “그림일기 느낌” 얼굴(대체)
-    ctx.save();
-    ctx.translate(x, y);
-
-    // face
+  function roundRect(ctx, x, y, w, h, r) {
+    const rr = Math.min(r, w / 2, h / 2);
     ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(255,255,255,0.75)";
-    ctx.fill();
-
-    // eyes
-    ctx.fillStyle = "rgba(31,42,37,0.65)";
-    ctx.beginPath(); ctx.arc(-r * 0.28, -r * 0.12, r * 0.08, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(r * 0.28, -r * 0.12, r * 0.08, 0, Math.PI * 2); ctx.fill();
-
-    // mouth
-    ctx.strokeStyle = "rgba(31,42,37,0.65)";
-    ctx.lineWidth = r * 0.08;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    if (emoji === "sad" || emoji === "panic") {
-      ctx.arc(0, r * 0.26, r * 0.22, Math.PI, Math.PI * 2);
-    } else if (emoji === "happy" || emoji === "calm") {
-      ctx.arc(0, r * 0.10, r * 0.26, 0, Math.PI);
-    } else {
-      ctx.moveTo(-r * 0.22, r * 0.22);
-      ctx.lineTo(r * 0.22, r * 0.22);
-    }
-    ctx.stroke();
-
-    // accent dot
-    ctx.fillStyle = accent;
-    ctx.beginPath();
-    ctx.arc(r * 0.42, -r * 0.42, r * 0.10, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.restore();
+    ctx.moveTo(x + rr, y);
+    ctx.arcTo(x + w, y, x + w, y + h, rr);
+    ctx.arcTo(x + w, y + h, x, y + h, rr);
+    ctx.arcTo(x, y + h, x, y, rr);
+    ctx.arcTo(x, y, x + w, y, rr);
+    ctx.closePath();
   }
 
   function renderCard() {
     if (!canvas || !ctx) return;
 
-    const w = canvas.width;
-    const h = canvas.height;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#f7f5f0";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const intensityNum = Number(document.getElementById("intensity")?.value || 0);
-    const tags = Array.from(document.querySelectorAll(".chk__input:checked")).map((el) => el.value);
-    const praiseText = document.getElementById("praiseText")?.value?.trim() || "";
+    const tags = collectTags();
+    const intensityNum = Number(intensity?.value || 0);
+    const mood = pickMoodClass(selectedEmoji, tags, intensityNum);
 
-    const pal = moodPalette(selectedEmoji);
-    const kw = pickKeywords();
+    const bg = mood === "mood-b" ? "rgba(241,118,44,0.18)"
+             : mood === "mood-c" ? "rgba(80,130,150,0.18)"
+             : "rgba(45,90,81,0.14)";
 
-    // bg
-    const grad = ctx.createLinearGradient(0, 0, w, h);
-    grad.addColorStop(0, pal.bg1);
-    grad.addColorStop(1, pal.bg2);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, h);
+    const cardX = 70, cardY = 60, cardW = 820, cardH = 420;
 
-    // card
-    const pad = 48;
-    const cardX = pad;
-    const cardY = pad;
-    const cardW = w - pad * 2;
-    const cardH = h - pad * 2;
-
-    roundRect(ctx, cardX, cardY, cardW, cardH, 36);
-    ctx.fillStyle = "rgba(255,255,255,0.70)";
+    roundRect(ctx, cardX, cardY, cardW, cardH, 42);
+    ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    // header strip
-    roundRect(ctx, cardX + 18, cardY + 18, cardW - 36, 86, 24);
-    ctx.fillStyle = "rgba(255,255,255,0.65)";
+    roundRect(ctx, cardX, cardY, cardW, cardH, 42);
+    ctx.strokeStyle = "rgba(31,42,37,0.08)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    roundRect(ctx, cardX + 26, cardY + 26, cardW - 52, 110, 30);
+    ctx.fillStyle = bg;
     ctx.fill();
 
-    // title
-    ctx.fillStyle = "rgba(31,42,37,0.85)";
-    ctx.font = "700 42px Pretendard";
-    ctx.fillText("오늘의 그림일기", cardX + 44, cardY + 74);
-
-    // date
-    ctx.font = "600 22px Pretendard";
-    ctx.fillStyle = "rgba(31,42,37,0.60)";
-    ctx.fillText(dateKey, cardX + cardW - 220, cardY + 74);
-
-    // face/emoji block
-    const faceX = cardX + 120;
-    const faceY = cardY + 210;
-    drawSimpleFace(faceX, faceY, 64, pal.accent, selectedEmoji);
-
-    // mood label
-    ctx.font = "700 24px Pretendard";
-    ctx.fillStyle = "rgba(31,42,37,0.78)";
-    ctx.fillText(`강도 ${intensityNum}/10`, cardX + 44, cardY + 320);
-
-    // keywords area
-    roundRect(ctx, cardX + 250, cardY + 140, cardW - 300, 240, 28);
-    ctx.fillStyle = "rgba(255,255,255,0.75)";
-    ctx.fill();
-
+    ctx.font = "700 32px Pretendard";
     ctx.fillStyle = "rgba(31,42,37,0.82)";
-    ctx.font = "700 30px Pretendard";
-    ctx.fillText(kw.line1.slice(0, 18), cardX + 290, cardY + 200);
-
-    ctx.font = "600 24px Pretendard";
-    ctx.fillStyle = "rgba(31,42,37,0.72)";
-    ctx.fillText(kw.line2.slice(0, 22), cardX + 290, cardY + 250);
-
-    ctx.font = "400 22px Pretendard";
-    ctx.fillStyle = "rgba(31,42,37,0.68)";
-    ctx.fillText(kw.line3.slice(0, 24), cardX + 290, cardY + 295);
-
-    // tags chips
-    const chips = (tags.slice(0, 4));
-    let chipX = cardX + 290;
-    let chipY = cardY + 322;
+    ctx.fillText("오늘의 기록", cardX + 44, cardY + 74);
 
     ctx.font = "600 20px Pretendard";
-    chips.forEach((t) => {
-      const text = `#${t}`;
+    ctx.fillStyle = "rgba(31,42,37,0.62)";
+    ctx.fillText(dateKey, cardX + 44, cardY + 106);
+
+    const eventText = collectText("eventText");
+    ctx.font = "600 24px Pretendard";
+    ctx.fillStyle = "rgba(31,42,37,0.78)";
+    ctx.fillText(`감정: ${selectedEmoji || "미선택"}  ·  강도: ${intensityNum}/10`, cardX + 44, cardY + 172);
+
+    ctx.font = "400 22px Pretendard";
+    ctx.fillStyle = "rgba(31,42,37,0.75)";
+    const preview = (eventText || "오늘의 사건을 적어보면 카드에 요약이 보여요.").slice(0, 70);
+    ctx.fillText(preview, cardX + 44, cardY + 214);
+
+    const chips = [...tags].slice(0, 6);
+    let chipX = cardX + 44;
+    let chipY = cardY + 254;
+
+    ctx.font = "600 20px Pretendard";
+    chips.forEach((text) => {
       const m = ctx.measureText(text);
       const bw = m.width + 26;
       roundRect(ctx, chipX, chipY, bw, 42, 21);
@@ -438,12 +365,12 @@
 
       chipX += bw + 10;
       if (chipX > cardX + cardW - 140) {
-        chipX = cardX + 290;
+        chipX = cardX + 44;
         chipY += 52;
       }
     });
 
-    // praise strip
+    const praiseText = collectText("praiseText");
     if (praiseText) {
       roundRect(ctx, cardX + 44, cardY + cardH - 92, cardW - 88, 60, 22);
       ctx.fillStyle = "rgba(45,90,81,0.14)";
@@ -454,46 +381,63 @@
       ctx.fillText(`오늘의 칭찬: ${praiseText.slice(0, 26)}`, cardX + 66, cardY + cardH - 54);
     }
 
-    // watermark
     ctx.font = "400 18px Pretendard";
     ctx.fillStyle = "rgba(31,42,37,0.35)";
     ctx.fillText("숨결록 • 기록은 회복의 증거", cardX + cardW - 320, cardY + cardH - 24);
   }
 
-  // 초기 카드
+  regenBtn?.addEventListener("click", renderCard);
+  downloadBtn?.addEventListener("click", () => {
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.download = `diary_${dateKey}.png`;
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+  });
+
   renderCard();
 
   /* =========================
-     Search (record와 동일)
+     ✅ Search (record와 동일: topbar form)
      ========================= */
-  const openSearchBtn = document.getElementById("openSearchBtn");
-  const searchModal = document.getElementById("searchModal");
-  const searchInput = document.getElementById("searchInput");
+  const openTopSearchBtn = document.getElementById("openTopSearchBtn");
+  const closeTopSearchBtn = document.getElementById("closeTopSearchBtn");
+  const topbarTitle = document.getElementById("topbarTitle");
+  const topbarRight = document.getElementById("topbarRight");
+  const topSearchForm = document.getElementById("topSearchForm");
+  const topSearchInput = document.getElementById("topSearchInput");
+
+  const searchInline = document.getElementById("searchInline");
   const searchResults = document.getElementById("searchResults");
   const searchHint = document.getElementById("searchHint");
 
-  function openSearch() {
-    if (!searchModal) return;
-    searchModal.classList.add("is-open");
-    searchModal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    setTimeout(() => searchInput?.focus(), 0);
+  function openTopSearch() {
+    topbarTitle?.classList.add("is-hidden");
+    topbarRight?.classList.add("is-hidden");
+    topSearchForm?.classList.remove("is-hidden");
+
+    searchInline?.classList.add("is-hidden");
+    if (searchHint) searchHint.textContent = "";
+    if (searchResults) searchResults.innerHTML = "";
+
+    setTimeout(() => topSearchInput?.focus(), 0);
     renderSearch("");
   }
-  function closeSearch() {
-    if (!searchModal) return;
-    searchModal.classList.remove("is-open");
-    searchModal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+
+  function closeTopSearch() {
+    topSearchForm?.classList.add("is-hidden");
+    topbarTitle?.classList.remove("is-hidden");
+    topbarRight?.classList.remove("is-hidden");
+
+    if (topSearchInput) topSearchInput.value = "";
+
+    searchInline?.classList.add("is-hidden");
+    if (searchHint) searchHint.textContent = "";
+    if (searchResults) searchResults.innerHTML = "";
   }
 
-  openSearchBtn?.addEventListener("click", openSearch);
-  searchModal?.addEventListener("click", (e) => {
-    if (e.target.closest("[data-close='search']")) closeSearch();
-  });
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && searchModal?.classList.contains("is-open")) closeSearch();
-  });
+  openTopSearchBtn?.addEventListener("click", openTopSearch);
+  closeTopSearchBtn?.addEventListener("click", closeTopSearch);
 
   function escapeHtml(str) {
     return String(str)
@@ -520,10 +464,11 @@
         })
       : list;
 
+    searchInline?.classList.remove("is-hidden");
+
     if (searchHint) {
       searchHint.textContent = query ? `검색 결과: ${filtered.length}개` : `저장된 일기: ${filtered.length}개`;
     }
-
     if (!searchResults) return;
     searchResults.innerHTML = "";
 
@@ -533,12 +478,11 @@
     }
 
     const frag = document.createDocumentFragment();
-
     filtered.forEach((it) => {
       const item = document.createElement("div");
       item.className = "resultItem";
-
       const tagsText = (it.tags && it.tags.length) ? it.tags.join(", ") : "태그 없음";
+
       item.innerHTML = `
         <div class="resultTop">
           <div class="resultDate">${escapeHtml(it.date)}</div>
@@ -553,7 +497,12 @@
     searchResults.appendChild(frag);
   }
 
-  searchInput?.addEventListener("input", (e) => {
+  topSearchForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    renderSearch(topSearchInput?.value || "");
+  });
+
+  topSearchInput?.addEventListener("input", (e) => {
     renderSearch(e.target.value);
   });
 
@@ -563,6 +512,5 @@
     const date = btn.getAttribute("data-open-date");
     if (!date) return;
     window.location.href = `./diary.html?date=${encodeURIComponent(date)}`;
-    closeSearch();
   });
 })();

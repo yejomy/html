@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>community</title>
+  <title>커뮤니티</title>
   <link rel="stylesheet" href="./css/community.css" />
 </head>
 <body>
@@ -11,109 +11,130 @@
     <main class="page">
 
       <section class="hero" aria-label="커뮤니티 상단">
+        <img class="heroBg" src="./images/stableback.png" alt="" aria-hidden="true" />
+        <div class="heroShade" aria-hidden="true"></div>
+
         <div class="hero__inner">
           <header class="hero__topbar">
             <button class="iconBtn" id="openDrawerBtn" type="button" aria-label="메뉴">
-              <img src="./images/icon_menu.svg" alt="" aria-hidden="true" class="iconImg" />
+              <img src="./images/icon_menu.svg" class="iconImg" alt="" aria-hidden="true" />
             </button>
 
-            <div class="topbar__right">
-              <button class="iconBtn" id="goSearchBtn" type="button" aria-label="검색">
-                <img src="./images/icon_search.svg" alt="" aria-hidden="true" class="iconImg" />
+            <div class="topbarCenter" id="topbarTitle">
+              <div class="topbar__centerTitle">커뮤니티</div>
+            </div>
+
+            <form class="topbarCenter topSearch is-hidden" id="topSearchForm" role="search" aria-label="검색">
+              <input
+                id="topSearchInput"
+                class="topSearchInput"
+                type="search"
+                placeholder="검색어를 입력하세요"
+                autocomplete="off"
+              />
+              <button class="iconBtn" type="submit" aria-label="검색 실행">
+                <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
+              </button>
+              <button class="iconBtn" id="closeTopSearchBtn" type="button" aria-label="검색 닫기">
+                <span class="xGlyph" aria-hidden="true">×</span>
+              </button>
+            </form>
+
+            <div class="topbar__right" id="topbarRight">
+              <button class="iconBtn" id="openTopSearchBtn" type="button" aria-label="검색">
+                <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
               </button>
               <button class="iconBtn" type="button" aria-label="알림">
-                <img src="./images/icon_alram.svg" alt="" aria-hidden="true" class="iconImg" />
+                <img src="./images/icon_alram.svg" class="iconImg" alt="" aria-hidden="true" />
               </button>
             </div>
           </header>
 
-          <div class="hero__titleRow">
-            <h1 class="hero__title">커뮤니티</h1>
-            <div class="hero__pill">익명 · 안전한 공유</div>
-          </div>
+          <!-- ✅ 탭 순서 변경: 전체 → 인기 → 꿀팁 → 고민&질문 → 위로 → 루틴 -->
+          <nav class="topTabs" aria-label="커뮤니티 카테고리">
+            <button class="topTab" type="button" data-cat="all">전체</button>
+            <button class="topTab is-active" type="button" data-cat="popular">인기</button>
+            <button class="topTab" type="button" data-cat="tips">꿀팁</button>
+            <button class="topTab" type="button" data-cat="question">고민&질문</button>
+            <button class="topTab" type="button" data-cat="comfort">위로</button>
+            <button class="topTab" type="button" data-cat="routine">루틴</button>
+          </nav>
 
-          <p class="hero__sub">
-            비슷한 경험을 가진 사람들과
-            작은 정보와 마음을 나눠요.
-          </p>
-
-          <!-- ✅ 검색 인풋(모달 X) -->
-          <div class="searchBar" aria-label="커뮤니티 검색">
-            <input id="searchInput" class="searchInput" type="text" placeholder="제목/내용/댓글 키워드로 검색" />
-            <button id="searchBtn" class="searchBtn" type="button">검색</button>
-          </div>
+          <section class="chips" aria-label="정렬">
+            <button class="chip is-on" type="button" data-sort="hot">인기순</button>
+            <button class="chip" type="button" data-sort="new">최신순</button>
+            <button class="chip" type="button" data-sort="comment">댓글많은순</button>
+            <button class="chip" type="button" data-sort="like">좋아요순</button>
+          </section>
         </div>
       </section>
 
-      <section class="sheet" aria-label="커뮤니티 콘텐츠">
-        <section class="filters" aria-label="필터">
-          <button class="chip is-on" type="button" data-filter="all">전체</button>
-          <button class="chip" type="button" data-filter="diary">일기공유</button>
-          <button class="chip" type="button" data-filter="tips">정보/팁</button>
-          <button class="chip" type="button" data-filter="question">질문</button>
-          <button class="chip" type="button" data-filter="comfort">위로</button>
+      <section class="sheet" aria-label="커뮤니티 내용">
+        <section class="best" aria-label="오늘의 베스트">
+          <h2 class="sectionTitle">오늘의 베스트</h2>
+          <div class="bestList" id="bestList"></div>
         </section>
 
         <section class="feed" aria-label="게시글 목록">
           <div class="feedHead">
-            <h2 class="feedTitle">새 글</h2>
-            <div class="feedActions">
-              <button class="smallBtn" id="seedBtn" type="button">샘플 채우기</button>
-              <button class="smallBtn" id="refreshBtn" type="button">새로고침</button>
-              <button class="smallBtn is-primary" id="goWriteBtn" type="button">글쓰기</button>
-            </div>
+            <h2 class="sectionTitle">전체 글</h2>
           </div>
 
           <div class="postList" id="postList"></div>
           <div class="hint" id="emptyHint"></div>
         </section>
       </section>
+
     </main>
 
-    <!-- TAB BAR -->
+    <button class="fab" id="fabWriteBtn" type="button" aria-label="글쓰기">
+      <img src="./images/icon_pencil.svg" alt="" aria-hidden="true" class="fab__icon" />
+    </button>
+
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
         <button class="tab" type="button" data-tab="home">
-          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_home.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">홈</span>
         </button>
 
         <button class="tab" type="button" data-tab="stability">
-          <img class="tabImg" src="./images/icon_stability.svg" alt="안정" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_stability.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">안정</span>
         </button>
 
         <button class="tab" type="button" data-tab="record">
-          <img class="tabImg" src="./images/icon_record.svg" alt="기록" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_record.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">기록</span>
         </button>
 
         <button class="tab is-active" type="button" data-tab="community" aria-current="page">
-          <img class="tabImg" src="./images/icon_community_on.svg" alt="커뮤니티" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_community.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">커뮤니티</span>
         </button>
 
         <button class="tab" type="button" data-tab="my">
-          <img class="tabImg" src="./images/icon_my.svg" alt="MY" aria-hidden="true"/>
+          <img class="tabImg" src="./images/icon_my.svg" alt="" aria-hidden="true"/>
           <span class="tab__label">MY</span>
         </button>
       </div>
     </nav>
 
-    <!-- Drawer -->
     <div class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
+
       <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
         <header class="drawer__hd">
           <div class="drawer__profile">
             <div class="drawer__avatar" aria-hidden="true">
-              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+              <img src="./images/profile1.jpg" alt="" aria-hidden="true">
             </div>
             <div class="drawer__who">
-              <div class="drawer__name">숨결록</div>
+              <div class="drawer__name">Yejomy</div>
               <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
             </div>
           </div>
+
           <button class="drawer__x" type="button" data-close="drawer" aria-label="닫기">×</button>
         </header>
 
@@ -124,21 +145,24 @@
           </button>
 
           <nav class="drawer__nav" aria-label="메뉴 목록">
-            <button class="drawer__item" type="button">
+            <button class="drawer__item" type="button" id="drawerToMy">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">내 정보</span>
               <span class="drawer__chev" aria-hidden="true"></span>
             </button>
+
             <button class="drawer__item" type="button">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">알림 설정</span>
               <span class="drawer__chev" aria-hidden="true"></span>
             </button>
+
             <button class="drawer__item" type="button">
               <span class="drawer__dot" aria-hidden="true"></span>
-              <span class="drawer__txt">도움말</span>
+              <span class="drawer__txt">공지사항</span>
               <span class="drawer__chev" aria-hidden="true"></span>
             </button>
+
             <button class="drawer__item drawer__item--danger" type="button">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">로그아웃</span>
@@ -152,7 +176,6 @@
         </footer>
       </aside>
     </div>
-
   </div>
 
   <script src="./js/community.js"></script>

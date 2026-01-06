@@ -201,7 +201,7 @@
       </section>
     </main>
 
-    <!-- TAB BAR (✅ home이랑 동일 구조/크기) -->
+    <!-- TAB BAR ( home이랑 동일 구조/크기) -->
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar">
 
@@ -232,8 +232,7 @@
 
       </div>
     </nav>
-
-    <!-- ✅ LEFT DRAWER (home과 동일 마크업 복붙) -->
+    <!--  LEFT DRAWER -->
     <div class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
@@ -241,10 +240,10 @@
         <header class="drawer__hd">
           <div class="drawer__profile">
             <div class="drawer__avatar" aria-hidden="true">
-              <img src="./images/home_rogi.png" alt="" aria-hidden="true">
+              <img src="./images/profile1.jpg" alt="" aria-hidden="true">
             </div>
             <div class="drawer__who">
-              <div class="drawer__name">숨결록</div>
+              <div class="drawer__name">Yejomy</div>
               <div class="drawer__sub">오늘도 천천히, 괜찮아</div>
             </div>
           </div>
@@ -253,13 +252,13 @@
         </header>
 
         <div class="drawer__body">
-          <button class="drawer__cta" type="button">
+          <button class="drawer__cta" type="button" id="drawerWriteBtn">
             <span class="drawer__ctaT1">오늘 기록하기</span>
             <span class="drawer__ctaT2">감정/일기를 바로 남겨요</span>
           </button>
 
           <nav class="drawer__nav" aria-label="메뉴 목록">
-            <button class="drawer__item" type="button">
+            <button class="drawer__item" type="button" id="drawerToMy">
               <span class="drawer__dot" aria-hidden="true"></span>
               <span class="drawer__txt">내 정보</span>
               <span class="drawer__chev" aria-hidden="true"></span>
@@ -273,7 +272,7 @@
 
             <button class="drawer__item" type="button">
               <span class="drawer__dot" aria-hidden="true"></span>
-              <span class="drawer__txt">도움말</span>
+              <span class="drawer__txt">공지사항</span>
               <span class="drawer__chev" aria-hidden="true"></span>
             </button>
 
@@ -290,7 +289,6 @@
         </footer>
       </aside>
     </div>
-
   </div>
 
   <script src="./js/stability.js"></script>
