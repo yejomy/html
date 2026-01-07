@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>부산 맛집 정보 서비스</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <!--
+    ✅ 설정 필요
+    1) app.js에서 DATA_GO_KR_SERVICE_KEY 입력
+    2) 아래 카카오맵 appkey 입력
+  -->
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand__mark">B</div>
+      <div class="brand__text">
+        <div class="brand__title">부산 맛집</div>
+        <div class="brand__sub">공공데이터포털 + 카카오맵</div>
+      </div>
+    </div>
+
+    <div class="search">
+      <label class="search__label" for="q">검색</label>
+      <input id="q" class="search__input" type="search" placeholder="상호/메뉴/구군으로 검색…" autocomplete="off" />
+      <button id="btnClear" class="btn btn--ghost" type="button">지우기</button>
+      <button id="btnReload" class="btn btn--primary" type="button">새로고침</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- List Panel -->
+    <section class="panel panel--list" aria-label="맛집 목록">
+      <div class="panel__head">
+        <div class="panel__title">맛집 목록</div>
+        <div class="panel__meta">
+          <span id="countText">-</span>
+        </div>
+      </div>
+
+      <div id="list" class="list" role="list"></div>
+
+      <div class="list__footer">
+        <button id="btnMore" class="btn btn--outline" type="button">더 불러오기</button>
+        <div id="status" class="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Detail Panel -->
+    <section class="panel panel--detail" aria-label="맛집 상세">
+      <div id="detail" class="detail detail--empty">
+        <div class="empty">
+          <div class="empty__icon">🍜</div>
+          <div class="empty__title">맛집을 선택해 주세요</div>
+          <div class="empty__desc">왼쪽 목록에서 항목을 클릭하면 상세 정보와 지도가 표시됩니다.</div>
+        </div>
+      </div>
+
+      <div class="mapWrap">
+        <div class="mapWrap__head">
+          <div class="mapWrap__title">지도</div>
+          <div class="mapWrap__hint" id="mapHint">선택한 맛집 위치를 표시합니다.</div>
+        </div>
+        <div id="map" class="map" aria-label="카카오맵"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Data: 공공데이터포털 부산 맛집</span>
+    <span class="dot">•</span>
+    <span>Map: Kakao Maps</span>
+  </footer>
+
+  <!-- Kakao Maps JS SDK: 아래 appkey를 본인 키로 교체 -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41&autoload=false"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
