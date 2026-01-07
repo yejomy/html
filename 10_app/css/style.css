@@ -441,3 +441,9 @@ body{
   gap: 10px;
   align-items:center;
 }
+@media (max-width: 480px){
+  .headActions .btn{
+    font-size: 12px;
+    letter-spacing: -0.02em; /* 한글에서 꽤 효과 있음 */
+  }
+}
