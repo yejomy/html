@@ -2,8 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>부산 맛집 정보 서비스</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>부기랑 먹자</title>
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
@@ -50,7 +52,7 @@
         <div id="nearbyList" class="nearby__list"></div>
       </div>
 
-      <!-- 탭: 전체 / 후기 / 즐겨찾기 -->
+      <!-- 탭 -->
       <div class="tabs" role="tablist" aria-label="목록 탭">
         <button class="tab tab--active" id="tabAll" role="tab" aria-selected="true" type="button">전체</button>
         <button class="tab" id="tabGood" role="tab" aria-selected="false" type="button">후기평 좋은곳</button>
@@ -90,7 +92,8 @@
     <span class="dot">•</span>
     <span>Map: Kakao Maps</span>
   </footer>
-  
+
+  <!-- autoload=false + kakao.maps.load() -->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41&autoload=false"></script>
   <script src="./js/main.js"></script>
 </body>
