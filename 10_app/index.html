@@ -7,24 +7,20 @@
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
-  <!--
-    ✅ 설정 필요
-    1) app.js에서 DATA_GO_KR_SERVICE_KEY 입력
-    2) 아래 카카오맵 appkey 입력
-  -->
-
   <header class="topbar">
     <div class="brand">
-      <div class="brand__mark">B</div>
+      <div class="brand__mark">
+        <img class="brand__logo" src="./images/logo.png" alt="부산맛집 로고" />
+      </div>
       <div class="brand__text">
-        <div class="brand__title">부산 맛집</div>
+        <div class="brand__title">부기랑 먹자</div>
         <div class="brand__sub">공공데이터포털 + 카카오맵</div>
       </div>
     </div>
 
     <div class="search">
       <label class="search__label" for="q">검색</label>
-      <input id="q" class="search__input" type="search" placeholder="상호/메뉴/구군으로 검색…" autocomplete="off" />
+      <input id="q" class="search__input" type="search" placeholder="상호/메뉴/구군/주소로 검색…" autocomplete="off" />
       <button id="btnClear" class="btn btn--ghost" type="button">지우기</button>
       <button id="btnReload" class="btn btn--primary" type="button">새로고침</button>
     </div>
@@ -34,10 +30,31 @@
     <!-- List Panel -->
     <section class="panel panel--list" aria-label="맛집 목록">
       <div class="panel__head">
-        <div class="panel__title">맛집 목록</div>
-        <div class="panel__meta">
-          <span id="countText">-</span>
+        <div>
+          <div class="panel__title">맛집 목록</div>
+          <div class="panel__meta" id="countText">-</div>
         </div>
+
+        <div class="headActions">
+          <button id="btnMyLoc" class="btn btn--outline btn--sm" type="button">내 위치 추천</button>
+          <button id="btnFavShowOnMap" class="btn btn--outline btn--sm" type="button">즐겨찾기 지도표시</button>
+        </div>
+      </div>
+
+      <!-- 내 주변 추천 -->
+      <div class="nearby">
+        <div class="nearby__head">
+          <div class="nearby__title">내 주변 추천</div>
+          <div class="nearby__meta" id="nearbyMeta">위치 권한을 허용하면 가까운 맛집을 보여줘요.</div>
+        </div>
+        <div id="nearbyList" class="nearby__list"></div>
+      </div>
+
+      <!-- 탭: 전체 / 후기 / 즐겨찾기 -->
+      <div class="tabs" role="tablist" aria-label="목록 탭">
+        <button class="tab tab--active" id="tabAll" role="tab" aria-selected="true" type="button">전체</button>
+        <button class="tab" id="tabGood" role="tab" aria-selected="false" type="button">후기평 좋은곳</button>
+        <button class="tab" id="tabFav" role="tab" aria-selected="false" type="button">즐겨찾기</button>
       </div>
 
       <div id="list" class="list" role="list"></div>
@@ -52,7 +69,7 @@
     <section class="panel panel--detail" aria-label="맛집 상세">
       <div id="detail" class="detail detail--empty">
         <div class="empty">
-          <div class="empty__icon">🍜</div>
+          <img class="empty__mascot" src="./images/boogi.png" alt="" />
           <div class="empty__title">맛집을 선택해 주세요</div>
           <div class="empty__desc">왼쪽 목록에서 항목을 클릭하면 상세 정보와 지도가 표시됩니다.</div>
         </div>
@@ -74,8 +91,7 @@
     <span>Map: Kakao Maps</span>
   </footer>
 
-  <!-- Kakao Maps JS SDK: 아래 appkey를 본인 키로 교체 -->
-  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41&autoload=false"></script>
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41=false"></script>
   <script src="./js/main.js"></script>
 </body>
 </html>
