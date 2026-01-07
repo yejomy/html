@@ -441,9 +441,15 @@ body{
   gap: 10px;
   align-items:center;
 }
+
+.headActions .btn{
+  white-space: nowrap;
+}
+
 @media (max-width: 480px){
   .headActions .btn{
-    font-size: 12px;
-    letter-spacing: -0.02em; /* 한글에서 꽤 효과 있음 */
+    font-size: 11.5px;
+    padding: 0 8px;
+    height: 32px;
   }
 }
