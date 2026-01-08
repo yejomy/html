@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b2b3a" />
+  <title>문화유산 어디까지 가봤어?</title>
+
+  <!-- Kakao Map -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7ee9b095c90cdea6dd4e498a51c88a41&autoload=false"></script>
+
+  <!-- proj4 (MIT) -->
+  <script src="https://cdn.jsdelivr.net/npm/proj4@2.11.0/dist/proj4.min.js"></script>
+
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="controls">
+      <div class="sbHeader">
+        <div class="title">
+          <b>문화유산 여행 지도</b>
+          <span>오늘의 추천 · 필터 · 코스 · 상세</span>
+        </div>
+      </div>
+
+      <div class="sbBody">
+        <!-- 오늘의 추천 -->
+        <section class="card">
+          <div class="cardHead">
+            <h2>오늘의 추천 장소</h2>
+            <button class="btn secondary" id="refreshPicksBtn">새로고침</button>
+          </div>
+          <div class="muted">지역 상관없이 10개 먼저 띄워요 (위치서비스 불필요)</div>
+          <div class="list" id="picksList"></div>
+        </section>
+
+        <!-- Filters -->
+        <section class="card">
+          <h2>권역 · 검색</h2>
+
+          <div class="row">
+            <label>
+              권역
+              <select id="regionSelect">
+                <option value="ALL">전국</option>
+                <option value="SEOUL">서울권</option>
+                <option value="GG_NORTH">경기 북부</option>
+                <option value="GG_WEST">경기 서부</option>
+                <option value="GG_SOUTH">경기 남부</option>
+                <option value="CHUNGCHEONG">충청도</option>
+                <option value="JEOLLA">전라도</option>
+                <option value="GYEONGSANG">경상도</option>
+                <option value="JEJU">제주도</option>
+              </select>
+            </label>
+
+            <label>
+              반경(m)
+              <input id="radius" type="number" min="500" step="500" value="5000" />
+            </label>
+          </div>
+
+          <label>
+            검색(제목)
+            <input id="qInput" type="text" placeholder="예: 성곽, 박물관, 고궁..." />
+          </label>
+
+          <div class="chips">
+            <div class="chip" data-key="ctype" data-value="12" data-on="1">관광지 <small>(12)</small></div>
+            <div class="chip" data-key="ctype" data-value="14" data-on="1">문화시설 <small>(14)</small></div>
+            <div class="chip" data-key="ctype" data-value="28" data-on="0">레포츠 <small>(28)</small></div>
+            <div class="chip" data-key="ctype" data-value="39" data-on="0">음식점 <small>(39)</small></div>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn primary" id="loadBtn">주변 데이터 불러오기</button>
+            <button class="btn secondary" id="clearBtn">초기화</button>
+          </div>
+
+          <div class="muted">
+            ※ 내 위치 허용 안 해도 OK. “현재 지도 중심” 기준으로 주변을 불러옵니다.
+          </div>
+        </section>
+
+        <!-- Itinerary -->
+        <section class="card">
+          <h2>코스 추천</h2>
+
+          <div class="row">
+            <label>
+              동행자
+              <select id="companionSelect">
+                <option value="KID">아이랑</option>
+                <option value="COUPLE">연인이랑</option>
+                <option value="FRIEND">친구랑</option>
+                <option value="SOLO">나혼자</option>
+              </select>
+            </label>
+
+            <label>
+              총 시간(분)
+              <input id="totalMinutes" type="number" min="60" step="30" value="240" />
+            </label>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn primary" id="buildCourseBtn">코스 만들기</button>
+            <button class="btn danger" id="clearCourseBtn">코스 비우기</button>
+          </div>
+
+          <div class="muted" id="courseSummary">아직 코스가 없어요.</div>
+          <div class="list" id="courseList"></div>
+        </section>
+
+        <!-- Details -->
+        <section class="card">
+          <h2>상세 정보</h2>
+          <div class="detail" id="detailBox">
+            <div class="muted">아직 선택된 장소가 없어요.</div>
+          </div>
+        </section>
+
+        <!-- List -->
+        <section class="card">
+          <h2>목록</h2>
+          <div class="muted">항목 클릭 → 지도 이동 + 상세 로드</div>
+          <div class="list" id="list"></div>
+        </section>
+
+        <!-- Debug -->
+        <section class="card">
+          <h2>상태</h2>
+          <div class="muted" id="debug">준비됨.</div>
+        </section>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main" aria-label="map">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo"></div>
+          <div>
+            <h1>문화유산 여행 지도</h1>
+            <p>지도 + WMS + TourAPI + 코스추천</p>
+          </div>
+        </div>
+
+        <div class="topActions">
+          <button class="btn secondary" id="toggleWmsBtn">WMS</button>
+          <button class="btn" id="locBtn">내 위치</button>
+        </div>
+      </header>
+
+      <section class="mapWrap" role="application">
+        <div id="map"></div>
+        <img id="wmsOverlay" alt="heritage wms overlay" />
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
