@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 :root{
   --bg0:#071a22;
   --panel: rgba(8, 31, 42, .92);
@@ -152,7 +153,6 @@ body{
   justify-content:space-between;
   gap:10px;
 }
-
 .muted{ color: var(--muted); font-size:12px; line-height:1.45; }
 
 label{
@@ -245,43 +245,39 @@ input:focus, select:focus{
   background: rgba(255,255,255,.02);
 }
 
-/* ✅ 좁아지면: 좌우 -> 위아래 (메뉴 위 / 지도 아래) */
-/* ✅ 모바일: 메뉴 스크롤 내리면 지도까지 내려가게(전체 페이지 스크롤) */
+/* ✅ 모바일: “메뉴 스크롤 → 계속 내려가면 지도 등장” (전체 페이지 스크롤) */
 @media (max-width: 980px){
   body{
-    overflow: auto;                /* ✅ 전체 스크롤 ON */
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   .app{
-    height: auto;                  /* ✅ 100svh 고정 해제 */
+    height: auto;
     min-height: 100svh;
-    flex-direction: column;        /* 메뉴 위 / 지도 아래 */
+    flex-direction: column;
     gap: 10px;
   }
 
-  /* ✅ 메뉴는 높이 제한/내부 스크롤 제거 → 페이지 스크롤로 내려가게 */
   .sidebar{
     width: 100%;
     max-width: none;
     min-width: 0;
     height: auto;
-    max-height: none;              /* ✅ 44svh 제거 */
+    max-height: none;
   }
 
   .sbBody{
-    overflow: visible;             /* ✅ 내부 스크롤 OFF */
+    overflow: visible; /* 내부 스크롤 OFF */
   }
 
-  /* ✅ 지도 영역을 충분히 크게 확보 */
   .main{
-    flex: none;                    /* flex로 꽉 채우는 대신 */
-    min-height: 70svh;             /* 지도 영역이 “한 화면” 정도는 되게 */
+    flex: none;
+    min-height: 70svh;
   }
 
   .mapWrap{
-    height: 70svh;                 /* ✅ 지도 컨테이너 명시 */
+    height: 70svh;
     min-height: 70svh;
   }
 }
-

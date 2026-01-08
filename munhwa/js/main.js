@@ -1,6 +1,15 @@
 /****************************************************
- * ✅ 여기만 내키
+ * main.js (FULL, FIXED)
+ * - Kakao Map init (autoload=false)
+ * - Heritage WMS overlay (throttled on idle)
+ * - Today Picks (stable): searchKeyword1 -> random 10
+ * - Nearby load (map center based): locationBasedList1
+ * - Detail (common/intro/info)
+ * - Course builder + polyline
+ * - Mobile scroll map relayout (IntersectionObserver)
  ****************************************************/
+
+/** ✅ 너 키 넣기 */
 const TOUR_SERVICE_KEY = "4959a756bf930cb1697928ba6d8411905df289e01eab2bd2b8b9f207caa528f5";
 
 
@@ -22,31 +31,42 @@ const HERITAGE_WMS = {
 const TOUR = {
   base: "https://apis.data.go.kr/B551011/KorService2",
   ops: {
+    // 추천
+    searchKeyword: "/searchKeyword1",
+    // 주변
     location: "/locationBasedList1",
-    areaBased: "/areaBasedList1",
-    searchKeyword: "/searchKeyword1", // ✅ 추천 백업용
+    // 상세
     detailCommon: "/detailCommon1",
     detailIntro: "/detailIntro1",
     detailInfo: "/detailInfo1",
   }
 };
 
-// ---- DOM helpers ----
+// ---- Helpers ----
 const $ = (id) => document.getElementById(id);
-const debug = (msg) => { $("debug").textContent = msg; };
 
-const escapeHtml = (s) => String(s ?? "")
-  .replaceAll("&","&amp;")
-  .replaceAll("<","&lt;")
-  .replaceAll(">","&gt;")
-  .replaceAll('"',"&quot;")
-  .replaceAll("'","&#039;");
-
-function stripTags(html){
-  return String(html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g," ").trim();
+function setStatus(msg) {
+  const el = $("debug");
+  if (el) el.textContent = msg;
 }
 
-// ---- Proj defs ----
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function stripTags(html){
+  return String(html || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+// ---- Proj4 defs (WMS bbox 변환용) ----
 const PROJ_UTMK = "+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs";
 proj4.defs("EPSG:9020203", PROJ_UTMK);
 proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs");
@@ -68,6 +88,51 @@ const state = {
 
   wmsTimer: null,
 };
+
+// ---- TourAPI request utils ----
+function baseParams(){
+  return {
+    serviceKey: TOUR_SERVICE_KEY,
+    MobileOS: "ETC",
+    MobileApp: "HeritageTripMVP",
+    _type: "json",
+  };
+}
+
+function buildUrl(opPath, params){
+  const u = new URL(TOUR.base + opPath);
+  Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, String(v)));
+  return u.toString();
+}
+
+/** ✅ TourAPI는 HTTP 200이어도 resultCode로 실패를 줌 -> 반드시 체크 */
+async function fetchJson(url){
+  const res = await fetch(url);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const json = await res.json();
+  const code = json?.response?.header?.resultCode;
+  const msg  = json?.response?.header?.resultMsg;
+
+  if(code && code !== "0000"){
+    throw new Error(`TourAPI ${code}: ${msg || "Unknown error"}`);
+  }
+  return json;
+}
+
+function normalizeItems(json){
+  const items = json?.response?.body?.items?.item ?? [];
+  return Array.isArray(items) ? items : (items ? [items] : []);
+}
+
+function pickRandom(arr, n){
+  const copy = [...arr];
+  for(let i = copy.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, n);
+}
 
 // ---- Chips ----
 function bindChips(){
@@ -103,37 +168,14 @@ function inRegion(lat, lng, region){
   return true;
 }
 
-// ---- Fetch helpers ----
-function baseParams(){
-  return {
-    serviceKey: TOUR_SERVICE_KEY,
-    MobileOS: "ETC",
-    MobileApp: "HeritageTripMVP",
-    _type: "json",
-  };
-}
-function buildUrl(opPath, params){
-  const u = new URL(TOUR.base + opPath);
-  Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, String(v)));
-  return u.toString();
-}
-async function fetchJson(url){
-  const res = await fetch(url);
-  if(!res.ok) throw new Error(`HTTP ${res.status}`);
-  return await res.json();
-}
-function normalizeItems(json){
-  const items = json?.response?.body?.items?.item ?? [];
-  return Array.isArray(items) ? items : (items ? [items] : []);
-}
-
-// ---- Map init ----
+// ---- Kakao map init ----
 function initMap(){
   const center = new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng);
   state.map = new kakao.maps.Map($("map"), { center, level: 7 });
   state.info = new kakao.maps.InfoWindow({ removable: true });
   state.wmsImg = $("wmsOverlay");
 
+  // WMS idle throttle
   kakao.maps.event.addListener(state.map, "idle", () => {
     if(!state.wmsOn) return;
     if(state.wmsTimer) clearTimeout(state.wmsTimer);
@@ -141,7 +183,7 @@ function initMap(){
   });
 
   updateWmsOverlay();
-  debug("지도 준비됨.");
+  setStatus("지도 준비됨");
 }
 
 // ---- WMS overlay ----
@@ -177,134 +219,71 @@ function updateWmsOverlay(){
   state.wmsImg.src = u.toString();
 }
 
-// ---- Geolocation (선택) ----
+// ---- Geolocation (optional) ----
 function moveToMyLocation(){
   if(!navigator.geolocation){
-    debug("이 브라우저는 위치 권한을 지원하지 않음.");
+    setStatus("이 브라우저는 위치 권한을 지원하지 않음");
     return;
   }
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       state.currentPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
       state.map.setCenter(new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng));
-      debug(`내 위치로 이동: ${state.currentPos.lat.toFixed(5)}, ${state.currentPos.lng.toFixed(5)}`);
+      setStatus(`내 위치로 이동: ${state.currentPos.lat.toFixed(5)}, ${state.currentPos.lng.toFixed(5)}`);
       if(state.wmsOn) updateWmsOverlay();
     },
-    (err) => debug(`위치 실패: ${err.message}`),
+    (err) => setStatus(`위치 실패: ${err.message}`),
     { enableHighAccuracy: true, timeout: 8000 }
   );
 }
 
-/* -----------------------------
- * ✅ 오늘의 추천 10개 (안 뜨던 문제 해결)
- * - areaBasedList1: numOfRows=40 받아서 랜덤 1개
- * - 실패/빈값이면 searchKeyword1로 백업
- * ----------------------------- */
-const AREA_CODES = [
-  { code: 1, name: "서울" },
-  { code: 6, name: "부산" },
-  { code: 4, name: "대구" },
-  { code: 2, name: "인천" },
-  { code: 5, name: "광주" },
-  { code: 3, name: "대전" },
-  { code: 7, name: "울산" },
-  { code: 31, name: "경기" },
-  { code: 34, name: "충남" },
-  { code: 39, name: "제주" },
-  { code: 38, name: "전남" },
-  { code: 36, name: "경남" },
-];
+// ---- Today Picks (stable) ----
+async function loadTodayPicks(){
+  const picksEl = $("picksList");
+  if (picksEl) picksEl.innerHTML = `<div class="muted">추천 불러오는 중...</div>`;
+  setStatus("오늘의 추천 불러오는 중...");
 
-function pickRandom(arr, n){
-  const copy = [...arr];
-  for(let i = copy.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy.slice(0, n);
-}
-
-async function pickByKeyword(area, ctype){
-  const keywords = ["문화유산","박물관","고궁","성곽","유적","전통"];
+  // 추천 키워드
+  const keywords = ["문화유산", "박물관", "고궁", "성곽", "유적", "전통", "한옥", "사찰", "정원", "왕릉"];
   const keyword = keywords[Math.floor(Math.random() * keywords.length)];
 
-  const params = {
-    ...baseParams(),
-    keyword,
-    numOfRows: 40,
-    pageNo: 1,
-    contentTypeId: ctype,
-    arrange: "A",
-    areaCode: area.code
-  };
-
   try{
-    const json = await fetchJson(buildUrl(TOUR.ops.searchKeyword, params));
-    const items = normalizeItems(json);
-    if(items.length === 0) return null;
-    return items[Math.floor(Math.random() * items.length)];
-  }catch{
-    return null;
-  }
-}
-
-async function loadTodayPicks(){
-  debug("오늘의 추천 불러오는 중...");
-
-  const pickAreas = pickRandom(AREA_CODES, 10);
-  const types = ["12","14"]; // 관광지/문화시설 반반
-
-  const results = [];
-
-  for(let i=0; i<pickAreas.length; i++){
-    const area = pickAreas[i];
-    const ctype = types[i % types.length];
-
     const params = {
       ...baseParams(),
-      areaCode: area.code,
-      contentTypeId: ctype,
-      numOfRows: 40,  // ✅ 넉넉히 받아서
+      keyword,
+      numOfRows: 200,
       pageNo: 1,
-      arrange: "A"
+      arrange: "A",
     };
 
-    try{
-      const json = await fetchJson(buildUrl(TOUR.ops.areaBased, params));
-      const items = normalizeItems(json);
+    const json = await fetchJson(buildUrl(TOUR.ops.searchKeyword, params));
+    const items = normalizeItems(json);
 
-      if(items.length > 0){
-        const picked = items[Math.floor(Math.random() * items.length)];
-        picked._pickAreaName = area.name;
-        results.push(picked);
-      } else {
-        const fallback = await pickByKeyword(area, ctype);
-        if(fallback){
-          fallback._pickAreaName = area.name;
-          results.push(fallback);
-        }
-      }
-    }catch(e){
-      const fallback = await pickByKeyword(area, ctype);
-      if(fallback){
-        fallback._pickAreaName = area.name;
-        results.push(fallback);
-      } else {
-        console.warn("Pick failed:", area.name, e.message);
-      }
-    }
+    // “문화유산 느낌” 1차 필터 (없으면 전체에서 랜덤)
+    const filtered = items.filter(it =>
+      /(궁|성곽|성|유적|문화|박물관|기념관|전통|한옥|세계|사찰|정원|왕릉|문화재)/.test(String(it.title || ""))
+    );
+
+    const pool = filtered.length >= 10 ? filtered : items;
+    const picks = pickRandom(pool, Math.min(10, pool.length));
+    picks.forEach(p => p._pickAreaName = p.addr1 ? String(p.addr1).split(" ")[0] : "추천");
+
+    renderPicks(picks);
+    setStatus(`오늘의 추천 ${picks.length}개 (키워드: ${keyword})`);
+  }catch(e){
+    console.error(e);
+    if (picksEl) picksEl.innerHTML = `<div class="muted">추천 실패: ${escapeHtml(e.message)}</div>`;
+    setStatus(`추천 실패: ${e.message}`);
   }
-
-  renderPicks(results);
-  debug(`오늘의 추천 ${results.length}개 불러옴`);
 }
 
 function renderPicks(items){
   const el = $("picksList");
+  if(!el) return;
   el.innerHTML = "";
 
   if(items.length === 0){
-    el.innerHTML = `<div class="muted">추천을 불러오지 못했어요. (키/호출제한/오퍼레이션 이슈일 수 있음)</div>`;
+    el.innerHTML = `<div class="muted">추천 결과가 없어요.</div>`;
     return;
   }
 
@@ -325,65 +304,67 @@ function renderPicks(items){
   });
 }
 
-/* -----------------------------
- * 주변 불러오기: 내 위치가 아니라 "지도 중심" 기준
- * ----------------------------- */
+// ---- Nearby (map center based) ----
 async function loadNearby(){
-  const radius = Math.max(500, Number($("radius").value || 5000));
-  const region = $("regionSelect").value;
-  const q = ($("qInput").value || "").trim().toLowerCase();
+  const radius = Math.max(500, Number($("radius")?.value || 5000));
+  const region = $("regionSelect")?.value || "ALL";
+  const q = ($("qInput")?.value || "").trim().toLowerCase();
   const types = getSelectedContentTypes();
 
   const center = state.map.getCenter();
   const lat = center.getLat();
   const lng = center.getLng();
 
-  debug("주변 데이터 불러오는 중...");
+  setStatus("주변 데이터 불러오는 중...");
 
-  let all = [];
-  for(const ctype of types){
-    const params = {
-      ...baseParams(),
-      mapX: lng,
-      mapY: lat,
-      radius,
-      contentTypeId: ctype,
-      numOfRows: 80,
-      pageNo: 1,
-    };
-    const json = await fetchJson(buildUrl(TOUR.ops.location, params));
-    all.push(...normalizeItems(json));
+  try{
+    let all = [];
+    for(const ctype of types){
+      const params = {
+        ...baseParams(),
+        mapX: lng,
+        mapY: lat,
+        radius,
+        contentTypeId: ctype,
+        numOfRows: 80,
+        pageNo: 1,
+      };
+      const json = await fetchJson(buildUrl(TOUR.ops.location, params));
+      all.push(...normalizeItems(json));
+    }
+
+    all = all.filter(it => {
+      const ilat = Number(it.mapy);
+      const ilng = Number(it.mapx);
+      if(!Number.isFinite(ilat) || !Number.isFinite(ilng)) return false;
+      return inRegion(ilat, ilng, region);
+    });
+
+    if(q) all = all.filter(it => String(it.title || "").toLowerCase().includes(q));
+
+    // dedupe
+    const seen = new Set();
+    const uniq = [];
+    for(const it of all){
+      const id = String(it.contentid || "");
+      if(!id || seen.has(id)) continue;
+      seen.add(id);
+      uniq.push(it);
+    }
+
+    state.items = uniq;
+    clearMarkers();
+    renderMarkers();
+    renderList();
+
+    setStatus(`주변 ${state.items.length}건 불러옴`);
+  }catch(e){
+    console.error(e);
+    setStatus(`주변 로드 실패: ${e.message}`);
   }
-
-  all = all.filter(it => {
-    const ilat = Number(it.mapy);
-    const ilng = Number(it.mapx);
-    if(!Number.isFinite(ilat) || !Number.isFinite(ilng)) return false;
-    return inRegion(ilat, ilng, region);
-  });
-
-  if(q) all = all.filter(it => String(it.title || "").toLowerCase().includes(q));
-
-  const seen = new Set();
-  const uniq = [];
-  for(const it of all){
-    const id = String(it.contentid || "");
-    if(!id || seen.has(id)) continue;
-    seen.add(id);
-    uniq.push(it);
-  }
-
-  state.items = uniq;
-  clearMarkers();
-  renderMarkers();
-  renderList();
-
-  debug(`주변 ${state.items.length}건 불러옴`);
 }
 
-/* -----------------------------
- * 상세
- * ----------------------------- */
+// ---- Details ----
 async function fetchDetails(contentId, contentTypeId){
   const commonParams = {
     ...baseParams(),
@@ -420,10 +401,10 @@ function extractItem(settled){
   return Array.isArray(item) ? item[0] : item;
 }
 
-function pickText(v){ return stripTags(String(v || "")); }
-
 function renderDetails(baseItem, details){
   const box = $("detailBox");
+  if(!box) return;
+
   const title = baseItem?.title || "";
   const addr = baseItem?.addr1 || "";
   const img = baseItem?.firstimage || baseItem?.firstimage2 || "";
@@ -431,20 +412,13 @@ function renderDetails(baseItem, details){
   const common = details?.common || {};
   const intro = details?.intro || {};
 
-  const openTime =
-    intro.usetime || intro.usetimeculture || intro.usetimeleports || intro.opentime || "";
+  const openTime = intro.usetime || intro.usetimeculture || intro.usetimeleports || intro.opentime || "";
+  const restDay  = intro.restdate || intro.restdateculture || intro.restdateleports || "";
+  const parking  = intro.parking || intro.parkingculture || intro.parkingleports || "";
+  const fee      = intro.usefee || intro.usefeeculture || intro.usefeeleports || "";
 
-  const restDay =
-    intro.restdate || intro.restdateculture || intro.restdateleports || "";
-
-  const parking =
-    intro.parking || intro.parkingculture || intro.parkingleports || "";
-
-  const fee =
-    intro.usefee || intro.usefeeculture || intro.usefeeleports || "";
-
-  const homepage = pickText(common.homepage);
-  const overview = pickText(common.overview);
+  const homepage = stripTags(common.homepage || "");
+  const overview = stripTags(common.overview || "");
 
   box.innerHTML = `
     <div class="detailHeader">
@@ -455,10 +429,10 @@ function renderDetails(baseItem, details){
     ${img ? `<img class="detailImg" src="${escapeHtml(img)}" alt="image" />` : ""}
 
     <div class="detailGrid">
-      <div class="detailRow"><span class="k">운영시간</span><span class="v">${escapeHtml(pickText(openTime) || "정보없음")}</span></div>
-      <div class="detailRow"><span class="k">휴무</span><span class="v">${escapeHtml(pickText(restDay) || "정보없음")}</span></div>
-      <div class="detailRow"><span class="k">주차</span><span class="v">${escapeHtml(pickText(parking) || "정보없음")}</span></div>
-      <div class="detailRow"><span class="k">요금</span><span class="v">${escapeHtml(pickText(fee) || "정보없음")}</span></div>
+      <div class="detailRow"><span class="k">운영시간</span><span class="v">${escapeHtml(stripTags(openTime) || "정보없음")}</span></div>
+      <div class="detailRow"><span class="k">휴무</span><span class="v">${escapeHtml(stripTags(restDay) || "정보없음")}</span></div>
+      <div class="detailRow"><span class="k">주차</span><span class="v">${escapeHtml(stripTags(parking) || "정보없음")}</span></div>
+      <div class="detailRow"><span class="k">요금</span><span class="v">${escapeHtml(stripTags(fee) || "정보없음")}</span></div>
     </div>
 
     ${homepage ? `<div class="muted" style="margin-top:8px">홈페이지: ${escapeHtml(homepage)}</div>` : ""}
@@ -486,9 +460,7 @@ function injectDetailCssOnce(){
   document.head.appendChild(style);
 }
 
-/* -----------------------------
- * 마커/목록
- * ----------------------------- */
+// ---- Markers / List ----
 function clearMarkers(){
   state.markers.forEach(m => m.setMap(null));
   state.markers = [];
@@ -515,6 +487,7 @@ function renderMarkers(){
 
 function renderList(){
   const el = $("list");
+  if(!el) return;
   el.innerHTML = "";
 
   if(state.items.length === 0){
@@ -546,28 +519,27 @@ async function selectItem(it){
     state.map.panTo(new kakao.maps.LatLng(lat, lng));
   }
 
-  debug("상세 정보 불러오는 중...");
+  setStatus("상세 정보 불러오는 중...");
   try{
     const details = await fetchDetails(String(it.contentid), String(it.contenttypeid || ""));
     renderDetails(it, details);
-    debug("상세 정보 표시 완료.");
+    setStatus("상세 정보 표시 완료");
   }catch(e){
     console.error(e);
     $("detailBox").innerHTML = `<div class="muted">상세 정보 로드 실패: ${escapeHtml(e.message)}</div>`;
-    debug(`상세 로드 실패: ${e.message}`);
+    setStatus(`상세 실패: ${e.message}`);
   }
 }
 
-/* -----------------------------
- * 코스 추천 (기존 로직 유지)
- * ----------------------------- */
+// ---- Course ----
 function companionKey(){
-  const v = $("companionSelect").value;
+  const v = $("companionSelect")?.value || "SOLO";
   if(v === "KID") return "kid";
   if(v === "COUPLE") return "couple";
   if(v === "FRIEND") return "friend";
   return "solo";
 }
+
 function scoreItem(it, companion){
   const title = String(it.title || "").toLowerCase();
   const ctype = String(it.contenttypeid || "");
@@ -578,21 +550,15 @@ function scoreItem(it, companion){
   if(ctype === "14") score += 12;
   if(ctype === "12") score += 8;
 
-  if(companion === "kid"){
-    if(/체험|키즈|어린이|과학관|아쿠아|동물/.test(title)) score += 25;
-  }
-  if(companion === "couple"){
-    if(/야경|산책|공원|전망|드라이브|해변|카페/.test(title)) score += 18;
-  }
-  if(companion === "friend"){
-    if(/전시|시장|거리|페스티벌|축제/.test(title)) score += 12;
-  }
-  if(companion === "solo"){
-    if(/역사|박물관|기념관|전시/.test(title)) score += 14;
-  }
+  if(companion === "kid" && /체험|키즈|어린이|과학관|아쿠아|동물/.test(title)) score += 25;
+  if(companion === "couple" && /야경|산책|공원|전망|드라이브|해변|카페/.test(title)) score += 18;
+  if(companion === "friend" && /전시|시장|거리|페스티벌|축제/.test(title)) score += 12;
+  if(companion === "solo" && /역사|박물관|기념관|전시/.test(title)) score += 14;
+
   if(it.addr1) score += 3;
   return score;
 }
+
 function estStay(it){
   const ctype = String(it.contenttypeid || "");
   const t = String(it.title || "");
@@ -600,6 +566,7 @@ function estStay(it){
   if(ctype === "12") return 60;
   return 45;
 }
+
 function haversineKm(aLat, aLng, bLat, bLng){
   const R = 6371;
   const toRad = d => d * Math.PI / 180;
@@ -609,8 +576,9 @@ function haversineKm(aLat, aLng, bLat, bLng){
   const aa = s1*s1 + Math.cos(toRad(aLat))*Math.cos(toRad(bLat))*s2*s2;
   return 2 * R * Math.asin(Math.sqrt(aa));
 }
+
 function estimateTravelMinutesKm(km){
-  const speed = 30;
+  const speed = 30; // km/h
   return Math.round((km / speed) * 60);
 }
 
@@ -620,6 +588,7 @@ function clearPolyline(){
     state.polyline = null;
   }
 }
+
 function drawCoursePolyline(){
   clearPolyline();
   if(!state.map || state.course.length < 2) return;
@@ -628,89 +597,22 @@ function drawCoursePolyline(){
     new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng),
     ...state.course.map(it => new kakao.maps.LatLng(Number(it.mapy), Number(it.mapx)))
   ];
+
   state.polyline = new kakao.maps.Polyline({
     path,
     strokeWeight: 4,
     strokeOpacity: 0.9,
     strokeStyle: "solid"
   });
+
   state.polyline.setMap(state.map);
-}
-
-function buildCourse(){
-  if(state.items.length === 0){
-    debug("먼저 주변 데이터를 불러와야 코스를 만들 수 있어.");
-    return;
-  }
-  const companion = companionKey();
-  const total = Math.max(60, Number($("totalMinutes").value || 240));
-
-  const scored = state.items
-    .map(it => ({ it, score: scoreItem(it, companion) }))
-    .sort((a,b) => b.score - a.score)
-    .slice(0, 40);
-
-  let remain = total;
-  const picks = [];
-  for(const {it} of scored){
-    const stay = estStay(it);
-    if(picks.length === 0){
-      picks.push({it, stay});
-      remain -= stay;
-      continue;
-    }
-    if(picks.length >= 6) break;
-    if(remain - stay < 30) continue;
-    picks.push({it, stay});
-    remain -= stay;
-    if(picks.length >= 3 && remain <= 30) break;
-  }
-
-  const ordered = [];
-  let cur = { lat: state.currentPos.lat, lng: state.currentPos.lng };
-  const left = [...picks];
-  while(left.length){
-    let bestIdx = 0;
-    let bestDist = Infinity;
-    for(let i=0;i<left.length;i++){
-      const it = left[i].it;
-      const lat = Number(it.mapy), lng = Number(it.mapx);
-      const d = haversineKm(cur.lat, cur.lng, lat, lng);
-      if(d < bestDist){ bestDist = d; bestIdx = i; }
-    }
-    const next = left.splice(bestIdx,1)[0];
-    ordered.push(next);
-    cur = { lat: Number(next.it.mapy), lng: Number(next.it.mapx) };
-  }
-
-  let travelKm = 0;
-  cur = { lat: state.currentPos.lat, lng: state.currentPos.lng };
-  for(const p of ordered){
-    const lat = Number(p.it.mapy), lng = Number(p.it.mapx);
-    travelKm += haversineKm(cur.lat, cur.lng, lat, lng);
-    cur = { lat, lng };
-  }
-  const travelMin = estimateTravelMinutesKm(travelKm);
-  const stayMin = ordered.reduce((a,p)=>a+p.stay,0);
-  const totalEst = travelMin + stayMin;
-
-  state.course = ordered.map(p => ({ ...p.it, _stay: p.stay }));
-  renderCourse({ travelKm, travelMin, stayMin, totalEst, budget: total });
-  drawCoursePolyline();
-
-  if(state.course.length > 0){
-    const bounds = new kakao.maps.LatLngBounds();
-    bounds.extend(new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng));
-    state.course.forEach(it => bounds.extend(new kakao.maps.LatLng(Number(it.mapy), Number(it.mapx))));
-    state.map.setBounds(bounds);
-  }
-
-  debug("코스 생성 완료.");
 }
 
 function renderCourse(meta){
   const summary = $("courseSummary");
   const list = $("courseList");
+  if(!summary || !list) return;
+
   list.innerHTML = "";
 
   if(state.course.length === 0){
@@ -736,84 +638,110 @@ function renderCourse(meta){
   });
 }
 
-function clearCourse(){
-  state.course = [];
-  $("courseSummary").textContent = "아직 코스가 없어요.";
-  $("courseList").innerHTML = "";
-  clearPolyline();
-  debug("코스 비움.");
+function buildCourse(){
+  if(state.items.length === 0){
+    setStatus("먼저 주변 데이터를 불러와야 코스를 만들 수 있어요");
+    return;
+  }
+
+  const companion = companionKey();
+  const total = Math.max(60, Number($("totalMinutes")?.value || 240));
+
+  const scored = state.items
+    .map(it => ({ it, score: scoreItem(it, companion) }))
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 40);
+
+  let remain = total;
+  const picks = [];
+  for(const {it} of scored){
+    const stay = estStay(it);
+    if(picks.length === 0){
+      picks.push({it, stay});
+      remain -= stay;
+      continue;
+    }
+    if(picks.length >= 6) break;
+    if(remain - stay < 30) continue;
+    picks.push({it, stay});
+    remain -= stay;
+    if(picks.length >= 3 && remain <= 30) break;
+  }
+
+  // nearest ordering from currentPos
+  const ordered = [];
+  let cur = { lat: state.currentPos.lat, lng: state.currentPos.lng };
+  const left = [...picks];
+
+  while(left.length){
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    for(let i=0;i<left.length;i++){
+      const it = left[i].it;
+      const lat = Number(it.mapy), lng = Number(it.mapx);
+      const d = haversineKm(cur.lat, cur.lng, lat, lng);
+      if(d < bestDist){ bestDist = d; bestIdx = i; }
+    }
+    const next = left.splice(bestIdx,1)[0];
+    ordered.push(next);
+    cur = { lat: Number(next.it.mapy), lng: Number(next.it.mapx) };
+  }
+
+  // travel time estimate
+  let travelKm = 0;
+  cur = { lat: state.currentPos.lat, lng: state.currentPos.lng };
+  for(const p of ordered){
+    const lat = Number(p.it.mapy), lng = Number(p.it.mapx);
+    travelKm += haversineKm(cur.lat, cur.lng, lat, lng);
+    cur = { lat, lng };
+  }
+  const travelMin = estimateTravelMinutesKm(travelKm);
+  const stayMin = ordered.reduce((a,p)=>a+p.stay,0);
+  const totalEst = travelMin + stayMin;
+
+  state.course = ordered.map(p => ({ ...p.it, _stay: p.stay }));
+  renderCourse({ travelKm, travelMin, stayMin, totalEst, budget: total });
+  drawCoursePolyline();
+
+  if(state.course.length > 0){
+    const bounds = new kakao.maps.LatLngBounds();
+    bounds.extend(new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng));
+    state.course.forEach(it => bounds.extend(new kakao.maps.LatLng(Number(it.mapy), Number(it.mapx))));
+    state.map.setBounds(bounds);
+  }
+
+  setStatus("코스 생성 완료");
 }
 
+function clearCourse(){
+  state.course = [];
+  clearPolyline();
+  if ($("courseSummary")) $("courseSummary").textContent = "아직 코스가 없어요.";
+  if ($("courseList")) $("courseList").innerHTML = "";
+  setStatus("코스 비움");
+}
+
+// ---- Reset ----
 function clearAll(){
   clearMarkers();
   state.items = [];
   state.selected = null;
-  $("list").innerHTML = `<div class="muted">아직 불러온 데이터가 없어요.</div>`;
-  $("detailBox").innerHTML = `<div class="muted">아직 선택된 장소가 없어요.</div>`;
+
+  if ($("list")) $("list").innerHTML = `<div class="muted">아직 불러온 데이터가 없어요.</div>`;
+  if ($("detailBox")) $("detailBox").innerHTML = `<div class="muted">아직 선택된 장소가 없어요.</div>`;
+
   clearCourse();
-  debug("초기화 완료.");
+  setStatus("초기화 완료");
 }
 
-// ---- Events ----
-function bindEvents(){
-  $("loadBtn").addEventListener("click", async () => {
-    try{ await loadNearby(); }catch(e){ console.error(e); debug(`주변 로드 실패: ${e.message}`); }
-  });
-  $("clearBtn").addEventListener("click", clearAll);
-
-  $("buildCourseBtn").addEventListener("click", buildCourse);
-  $("clearCourseBtn").addEventListener("click", clearCourse);
-
-  $("toggleWmsBtn").addEventListener("click", () => {
-    state.wmsOn = !state.wmsOn;
-    $("wmsOverlay").style.display = state.wmsOn ? "block" : "none";
-    if(state.wmsOn) updateWmsOverlay();
-    debug(`WMS ${state.wmsOn ? "ON" : "OFF"}`);
-  });
-
-  $("locBtn").addEventListener("click", moveToMyLocation);
-  $("refreshPicksBtn").addEventListener("click", () => loadTodayPicks().catch(e => debug(`추천 실패: ${e.message}`)));
-
-  $("qInput").addEventListener("keydown", (e) => {
-    if(e.key === "Enter") $("loadBtn").click();
-  });
-
-  bindChips();
-}
-
-// ---- Boot ----
-kakao.maps.load(() => {
-  initMap();
-  bindEvents();
-  clearAll();
-
-  setupMapRelayoutOnScroll();   // ✅ 추가
-
-  loadTodayPicks().catch(e => {
-    console.error(e);
-    debug(`추천 로드 실패: ${e.message}`);
-  });
-
-  debug("준비됨. (추천 먼저 로드됨)");
-});
-
-
-  // ✅ 앱 시작 시 추천 10개 먼저 로드
-  loadTodayPicks().catch(e => {
-    console.error(e);
-    debug(`추천 로드 실패: ${e.message}`);
-  });
-
-  debug("준비됨. (추천 먼저 로드됨)");
-
-  function setupMapRelayoutOnScroll(){
+// ---- Mobile scroll map relayout ----
+function setupMapRelayoutOnScroll(){
   const el = document.querySelector(".mapWrap");
   if(!el || !window.IntersectionObserver) return;
 
   const io = new IntersectionObserver((entries) => {
     for (const e of entries){
       if(e.isIntersecting && state.map){
-        // 지도 컨테이너가 화면에 들어오면 레이아웃 갱신
         state.map.relayout();
         if(state.wmsOn) updateWmsOverlay();
       }
@@ -823,4 +751,39 @@ kakao.maps.load(() => {
   io.observe(el);
 }
 
+// ---- Events ----
+function bindEvents(){
+  $("refreshPicksBtn")?.addEventListener("click", loadTodayPicks);
+  $("loadBtn")?.addEventListener("click", loadNearby);
+  $("clearBtn")?.addEventListener("click", clearAll);
+
+  $("buildCourseBtn")?.addEventListener("click", buildCourse);
+  $("clearCourseBtn")?.addEventListener("click", clearCourse);
+
+  $("toggleWmsBtn")?.addEventListener("click", () => {
+    state.wmsOn = !state.wmsOn;
+    if ($("wmsOverlay")) $("wmsOverlay").style.display = state.wmsOn ? "block" : "none";
+    if(state.wmsOn) updateWmsOverlay();
+    setStatus(`WMS ${state.wmsOn ? "ON" : "OFF"}`);
+  });
+
+  $("locBtn")?.addEventListener("click", moveToMyLocation);
+
+  $("qInput")?.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") loadNearby();
+  });
+
+  bindChips();
+}
+
+// ---- Boot (IMPORTANT: only ONCE) ----
+kakao.maps.load(() => {
+  initMap();
+  bindEvents();
+  clearAll();
+
+  setupMapRelayoutOnScroll();
+
+  // 추천 먼저
+  loadTodayPicks();
 });
