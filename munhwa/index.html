@@ -17,7 +17,6 @@
 
 <body>
   <div class="app">
-    <!-- Sidebar (mobile에선 위에) -->
     <aside class="sidebar" aria-label="controls">
       <div class="sbHeader">
         <div class="title">
@@ -27,7 +26,6 @@
       </div>
 
       <div class="sbBody">
-        <!-- 오늘의 추천 -->
         <section class="card">
           <div class="cardHead">
             <h2>오늘의 추천 장소</h2>
@@ -37,7 +35,6 @@
           <div class="list" id="picksList"></div>
         </section>
 
-        <!-- Filters -->
         <section class="card">
           <h2>권역 · 검색</h2>
 
@@ -80,12 +77,9 @@
             <button class="btn secondary" id="clearBtn">초기화</button>
           </div>
 
-          <div class="muted">
-            ※ 내 위치 허용 안 해도 OK. “현재 지도 중심” 기준으로 주변을 불러옵니다.
-          </div>
+          <div class="muted">※ 내 위치 허용 안 해도 OK. “현재 지도 중심” 기준으로 불러옵니다.</div>
         </section>
 
-        <!-- Itinerary -->
         <section class="card">
           <h2>코스 추천</h2>
 
@@ -115,7 +109,6 @@
           <div class="list" id="courseList"></div>
         </section>
 
-        <!-- Details -->
         <section class="card">
           <h2>상세 정보</h2>
           <div class="detail" id="detailBox">
@@ -123,14 +116,12 @@
           </div>
         </section>
 
-        <!-- List -->
         <section class="card">
           <h2>목록</h2>
           <div class="muted">항목 클릭 → 지도 이동 + 상세 로드</div>
           <div class="list" id="list"></div>
         </section>
 
-        <!-- Debug -->
         <section class="card">
           <h2>상태</h2>
           <div class="muted" id="debug">준비됨.</div>
@@ -138,7 +129,6 @@
       </div>
     </aside>
 
-    <!-- Main -->
     <main class="main" aria-label="map">
       <header class="topbar">
         <div class="brand">

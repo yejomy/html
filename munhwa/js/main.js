@@ -1,19 +1,10 @@
 /****************************************************
- * main.js (FULL, FIXED)
- * - Kakao Map init (autoload=false)
- * - Heritage WMS overlay (throttled on idle)
- * - Today Picks (stable): searchKeyword1 -> random 10
- * - Nearby load (map center based): locationBasedList1
- * - Detail (common/intro/info)
- * - Course builder + polyline
- * - Mobile scroll map relayout (IntersectionObserver)
+ * js/main.js (FULL WORKING)
  ****************************************************/
 
-/** ✅ 너 키 넣기 */
-const TOUR_SERVICE_KEY = "4959a756bf930cb1697928ba6d8411905df289e01eab2bd2b8b9f207caa528f5";
+/** ✅ 너 serviceKey를 여기에 넣어 */
+const TOUR_SERVICE_KEY = "YOUR_TOURAPI_KEY_HERE";
 
-
-// ---- Config ----
 const HERITAGE_WMS = {
   base: "https://gis-heritage.go.kr/checkKey.do",
   domainParamName: "domain",
@@ -31,24 +22,16 @@ const HERITAGE_WMS = {
 const TOUR = {
   base: "https://apis.data.go.kr/B551011/KorService2",
   ops: {
-    // 추천
     searchKeyword: "/searchKeyword1",
-    // 주변
     location: "/locationBasedList1",
-    // 상세
     detailCommon: "/detailCommon1",
     detailIntro: "/detailIntro1",
     detailInfo: "/detailInfo1",
   }
 };
 
-// ---- Helpers ----
 const $ = (id) => document.getElementById(id);
-
-function setStatus(msg) {
-  const el = $("debug");
-  if (el) el.textContent = msg;
-}
+const status = (msg) => { const el = $("debug"); if(el) el.textContent = msg; };
 
 function escapeHtml(s){
   return String(s ?? "")
@@ -58,20 +41,15 @@ function escapeHtml(s){
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
 }
-
 function stripTags(html){
-  return String(html || "")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g," ")
-    .trim();
+  return String(html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g," ").trim();
 }
 
-// ---- Proj4 defs (WMS bbox 변환용) ----
+// proj4 defs
 const PROJ_UTMK = "+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs";
 proj4.defs("EPSG:9020203", PROJ_UTMK);
 proj4.defs("EPSG:4326", "+proj=longlat +datum=WGS84 +no_defs");
 
-// ---- State ----
 const state = {
   map: null,
   info: null,
@@ -89,7 +67,7 @@ const state = {
   wmsTimer: null,
 };
 
-// ---- TourAPI request utils ----
+// -------- TourAPI helpers --------
 function baseParams(){
   return {
     serviceKey: TOUR_SERVICE_KEY,
@@ -98,33 +76,27 @@ function baseParams(){
     _type: "json",
   };
 }
-
 function buildUrl(opPath, params){
   const u = new URL(TOUR.base + opPath);
   Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, String(v)));
   return u.toString();
 }
-
-/** ✅ TourAPI는 HTTP 200이어도 resultCode로 실패를 줌 -> 반드시 체크 */
 async function fetchJson(url){
   const res = await fetch(url);
   if(!res.ok) throw new Error(`HTTP ${res.status}`);
-
   const json = await res.json();
+
   const code = json?.response?.header?.resultCode;
   const msg  = json?.response?.header?.resultMsg;
-
   if(code && code !== "0000"){
     throw new Error(`TourAPI ${code}: ${msg || "Unknown error"}`);
   }
   return json;
 }
-
 function normalizeItems(json){
   const items = json?.response?.body?.items?.item ?? [];
   return Array.isArray(items) ? items : (items ? [items] : []);
 }
-
 function pickRandom(arr, n){
   const copy = [...arr];
   for(let i = copy.length - 1; i > 0; i--){
@@ -134,23 +106,7 @@ function pickRandom(arr, n){
   return copy.slice(0, n);
 }
 
-// ---- Chips ----
-function bindChips(){
-  document.querySelectorAll('.chip[data-key="ctype"]').forEach(chip => {
-    chip.addEventListener("click", () => {
-      chip.dataset.on = (chip.dataset.on === "1") ? "0" : "1";
-    });
-  });
-}
-function getSelectedContentTypes(){
-  const selected = [];
-  document.querySelectorAll('.chip[data-key="ctype"]').forEach(chip => {
-    if(chip.dataset.on === "1") selected.push(chip.dataset.value);
-  });
-  return selected.length ? selected : ["12","14"];
-}
-
-// ---- Region (MVP 박스) ----
+// -------- Region (MVP 박스) --------
 function inRegion(lat, lng, region){
   if(region === "ALL") return true;
 
@@ -168,25 +124,39 @@ function inRegion(lat, lng, region){
   return true;
 }
 
-// ---- Kakao map init ----
+// -------- Chips --------
+function bindChips(){
+  document.querySelectorAll('.chip[data-key="ctype"]').forEach(chip => {
+    chip.addEventListener("click", () => {
+      chip.dataset.on = (chip.dataset.on === "1") ? "0" : "1";
+    });
+  });
+}
+function getSelectedContentTypes(){
+  const selected = [];
+  document.querySelectorAll('.chip[data-key="ctype"]').forEach(chip => {
+    if(chip.dataset.on === "1") selected.push(chip.dataset.value);
+  });
+  return selected.length ? selected : ["12","14"];
+}
+
+// -------- Map init + WMS overlay --------
 function initMap(){
   const center = new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng);
   state.map = new kakao.maps.Map($("map"), { center, level: 7 });
   state.info = new kakao.maps.InfoWindow({ removable: true });
   state.wmsImg = $("wmsOverlay");
 
-  // WMS idle throttle
   kakao.maps.event.addListener(state.map, "idle", () => {
     if(!state.wmsOn) return;
     if(state.wmsTimer) clearTimeout(state.wmsTimer);
-    state.wmsTimer = setTimeout(() => updateWmsOverlay(), 120);
+    state.wmsTimer = setTimeout(updateWmsOverlay, 120);
   });
 
   updateWmsOverlay();
-  setStatus("지도 준비됨");
+  status("지도 준비됨");
 }
 
-// ---- WMS overlay ----
 function updateWmsOverlay(){
   if(!state.map || !state.wmsOn) return;
 
@@ -219,61 +189,71 @@ function updateWmsOverlay(){
   state.wmsImg.src = u.toString();
 }
 
-// ---- Geolocation (optional) ----
+function setupMapRelayoutOnScroll(){
+  const el = document.querySelector(".mapWrap");
+  if(!el || !window.IntersectionObserver) return;
+
+  const io = new IntersectionObserver((entries) => {
+    for(const e of entries){
+      if(e.isIntersecting && state.map){
+        state.map.relayout();
+        if(state.wmsOn) updateWmsOverlay();
+      }
+    }
+  }, { threshold: 0.15 });
+
+  io.observe(el);
+}
+
+// -------- Geo --------
 function moveToMyLocation(){
   if(!navigator.geolocation){
-    setStatus("이 브라우저는 위치 권한을 지원하지 않음");
+    status("이 브라우저는 위치 권한을 지원하지 않음");
     return;
   }
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       state.currentPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
       state.map.setCenter(new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng));
-      setStatus(`내 위치로 이동: ${state.currentPos.lat.toFixed(5)}, ${state.currentPos.lng.toFixed(5)}`);
-      if(state.wmsOn) updateWmsOverlay();
+      status(`내 위치: ${state.currentPos.lat.toFixed(5)}, ${state.currentPos.lng.toFixed(5)}`);
     },
-    (err) => setStatus(`위치 실패: ${err.message}`),
+    (err) => status(`위치 실패: ${err.message}`),
     { enableHighAccuracy: true, timeout: 8000 }
   );
 }
 
-// ---- Today Picks (stable) ----
+// -------- Today Picks (무조건 뜨는 방식) --------
 async function loadTodayPicks(){
   const picksEl = $("picksList");
-  if (picksEl) picksEl.innerHTML = `<div class="muted">추천 불러오는 중...</div>`;
-  setStatus("오늘의 추천 불러오는 중...");
+  if(picksEl) picksEl.innerHTML = `<div class="muted">추천 불러오는 중...</div>`;
+  status("오늘의 추천 불러오는 중...");
 
-  // 추천 키워드
-  const keywords = ["문화유산", "박물관", "고궁", "성곽", "유적", "전통", "한옥", "사찰", "정원", "왕릉"];
+  const keywords = ["문화유산","박물관","고궁","성곽","유적","전통","한옥","사찰","정원","왕릉"];
   const keyword = keywords[Math.floor(Math.random() * keywords.length)];
 
   try{
-    const params = {
+    const json = await fetchJson(buildUrl(TOUR.ops.searchKeyword, {
       ...baseParams(),
       keyword,
       numOfRows: 200,
       pageNo: 1,
       arrange: "A",
-    };
-
-    const json = await fetchJson(buildUrl(TOUR.ops.searchKeyword, params));
+    }));
     const items = normalizeItems(json);
 
-    // “문화유산 느낌” 1차 필터 (없으면 전체에서 랜덤)
     const filtered = items.filter(it =>
       /(궁|성곽|성|유적|문화|박물관|기념관|전통|한옥|세계|사찰|정원|왕릉|문화재)/.test(String(it.title || ""))
     );
-
     const pool = filtered.length >= 10 ? filtered : items;
     const picks = pickRandom(pool, Math.min(10, pool.length));
     picks.forEach(p => p._pickAreaName = p.addr1 ? String(p.addr1).split(" ")[0] : "추천");
 
     renderPicks(picks);
-    setStatus(`오늘의 추천 ${picks.length}개 (키워드: ${keyword})`);
+    status(`추천 ${picks.length}개 완료 (키워드: ${keyword})`);
   }catch(e){
     console.error(e);
-    if (picksEl) picksEl.innerHTML = `<div class="muted">추천 실패: ${escapeHtml(e.message)}</div>`;
-    setStatus(`추천 실패: ${e.message}`);
+    if(picksEl) picksEl.innerHTML = `<div class="muted">추천 실패: ${escapeHtml(e.message)}</div>`;
+    status(`추천 실패: ${e.message}`);
   }
 }
 
@@ -297,14 +277,12 @@ function renderPicks(items){
       </div>
       <div class="muted">${escapeHtml(it.addr1 || "")}</div>
     `;
-    div.addEventListener("click", async () => {
-      await selectItem(it);
-    });
+    div.addEventListener("click", async () => selectItem(it));
     el.appendChild(div);
   });
 }
 
-// ---- Nearby (map center based) ----
+// -------- Nearby (map center based) --------
 async function loadNearby(){
   const radius = Math.max(500, Number($("radius")?.value || 5000));
   const region = $("regionSelect")?.value || "ALL";
@@ -315,12 +293,12 @@ async function loadNearby(){
   const lat = center.getLat();
   const lng = center.getLng();
 
-  setStatus("주변 데이터 불러오는 중...");
+  status("주변 데이터 불러오는 중...");
 
   try{
     let all = [];
     for(const ctype of types){
-      const params = {
+      const json = await fetchJson(buildUrl(TOUR.ops.location, {
         ...baseParams(),
         mapX: lng,
         mapY: lat,
@@ -328,8 +306,7 @@ async function loadNearby(){
         contentTypeId: ctype,
         numOfRows: 80,
         pageNo: 1,
-      };
-      const json = await fetchJson(buildUrl(TOUR.ops.location, params));
+      }));
       all.push(...normalizeItems(json));
     }
 
@@ -340,9 +317,8 @@ async function loadNearby(){
       return inRegion(ilat, ilng, region);
     });
 
-    if(q) all = all.filter(it => String(it.title || "").toLowerCase().includes(q));
+    if(q) all = all.filter(it => String(it.title||"").toLowerCase().includes(q));
 
-    // dedupe
     const seen = new Set();
     const uniq = [];
     for(const it of all){
@@ -357,48 +333,47 @@ async function loadNearby(){
     renderMarkers();
     renderList();
 
-    setStatus(`주변 ${state.items.length}건 불러옴`);
+    status(`주변 ${state.items.length}건 완료`);
   }catch(e){
     console.error(e);
-    setStatus(`주변 로드 실패: ${e.message}`);
+    status(`주변 실패: ${e.message}`);
   }
 }
 
-// ---- Details ----
+// -------- Details --------
 async function fetchDetails(contentId, contentTypeId){
-  const commonParams = {
-    ...baseParams(),
-    contentId,
-    defaultYN:"Y",
-    firstImageYN:"Y",
-    areacodeYN:"Y",
-    catcodeYN:"Y",
-    addrinfoYN:"Y",
-    mapinfoYN:"Y",
-    overviewYN:"Y",
-  };
-  const introParams = { ...baseParams(), contentId, contentTypeId: contentTypeId || "" };
-  const infoParams  = { ...baseParams(), contentId, contentTypeId: contentTypeId || "" };
-
   const [commonR, introR, infoR] = await Promise.allSettled([
-    fetchJson(buildUrl(TOUR.ops.detailCommon, commonParams)),
-    fetchJson(buildUrl(TOUR.ops.detailIntro, introParams)),
-    fetchJson(buildUrl(TOUR.ops.detailInfo, infoParams)),
+    fetchJson(buildUrl(TOUR.ops.detailCommon, {
+      ...baseParams(),
+      contentId,
+      defaultYN:"Y",
+      firstImageYN:"Y",
+      areacodeYN:"Y",
+      catcodeYN:"Y",
+      addrinfoYN:"Y",
+      mapinfoYN:"Y",
+      overviewYN:"Y",
+    })),
+    fetchJson(buildUrl(TOUR.ops.detailIntro, {
+      ...baseParams(),
+      contentId,
+      contentTypeId: contentTypeId || "",
+    })),
+    fetchJson(buildUrl(TOUR.ops.detailInfo, {
+      ...baseParams(),
+      contentId,
+      contentTypeId: contentTypeId || "",
+    })),
   ]);
 
-  return {
-    common: extractItem(commonR),
-    intro: extractItem(introR),
-    info: extractItem(infoR),
+  const extract = (settled) => {
+    if(settled.status !== "fulfilled") return null;
+    const item = settled.value?.response?.body?.items?.item ?? null;
+    if(!item) return null;
+    return Array.isArray(item) ? item[0] : item;
   };
-}
 
-function extractItem(settled){
-  if(settled.status !== "fulfilled") return null;
-  const json = settled.value;
-  const item = json?.response?.body?.items?.item ?? null;
-  if(!item) return null;
-  return Array.isArray(item) ? item[0] : item;
+  return { common: extract(commonR), intro: extract(introR), info: extract(infoR) };
 }
 
 function renderDetails(baseItem, details){
@@ -416,7 +391,6 @@ function renderDetails(baseItem, details){
   const restDay  = intro.restdate || intro.restdateculture || intro.restdateleports || "";
   const parking  = intro.parking || intro.parkingculture || intro.parkingleports || "";
   const fee      = intro.usefee || intro.usefeeculture || intro.usefeeleports || "";
-
   const homepage = stripTags(common.homepage || "");
   const overview = stripTags(common.overview || "");
 
@@ -460,7 +434,7 @@ function injectDetailCssOnce(){
   document.head.appendChild(style);
 }
 
-// ---- Markers / List ----
+// -------- Markers & List --------
 function clearMarkers(){
   state.markers.forEach(m => m.setMap(null));
   state.markers = [];
@@ -476,11 +450,7 @@ function renderMarkers(){
 
     const marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(lat, lng) });
     marker.setMap(state.map);
-
-    kakao.maps.event.addListener(marker, "click", async () => {
-      await selectItem(it);
-    });
-
+    kakao.maps.event.addListener(marker, "click", async () => selectItem(it));
     state.markers.push(marker);
   });
 }
@@ -505,7 +475,7 @@ function renderList(){
       </div>
       <div class="muted">${escapeHtml(it.addr1 || "")}</div>
     `;
-    div.addEventListener("click", async () => await selectItem(it));
+    div.addEventListener("click", async () => selectItem(it));
     el.appendChild(div);
   });
 }
@@ -519,19 +489,19 @@ async function selectItem(it){
     state.map.panTo(new kakao.maps.LatLng(lat, lng));
   }
 
-  setStatus("상세 정보 불러오는 중...");
+  status("상세 불러오는 중...");
   try{
     const details = await fetchDetails(String(it.contentid), String(it.contenttypeid || ""));
     renderDetails(it, details);
-    setStatus("상세 정보 표시 완료");
+    status("상세 표시 완료");
   }catch(e){
     console.error(e);
-    $("detailBox").innerHTML = `<div class="muted">상세 정보 로드 실패: ${escapeHtml(e.message)}</div>`;
-    setStatus(`상세 실패: ${e.message}`);
+    $("detailBox").innerHTML = `<div class="muted">상세 실패: ${escapeHtml(e.message)}</div>`;
+    status(`상세 실패: ${e.message}`);
   }
 }
 
-// ---- Course ----
+// -------- Course --------
 function companionKey(){
   const v = $("companionSelect")?.value || "SOLO";
   if(v === "KID") return "kid";
@@ -539,14 +509,12 @@ function companionKey(){
   if(v === "FRIEND") return "friend";
   return "solo";
 }
-
 function scoreItem(it, companion){
   const title = String(it.title || "").toLowerCase();
   const ctype = String(it.contenttypeid || "");
   let score = 0;
 
-  const heritageHint = /(궁|성곽|성|사적|유적|문화재|박물관|기념관|전시|세계유산|전통|한옥)/.test(title);
-  if(heritageHint) score += 25;
+  if(/(궁|성곽|성|사적|유적|문화재|박물관|기념관|전시|세계유산|전통|한옥)/.test(title)) score += 25;
   if(ctype === "14") score += 12;
   if(ctype === "12") score += 8;
 
@@ -558,7 +526,6 @@ function scoreItem(it, companion){
   if(it.addr1) score += 3;
   return score;
 }
-
 function estStay(it){
   const ctype = String(it.contenttypeid || "");
   const t = String(it.title || "");
@@ -566,7 +533,6 @@ function estStay(it){
   if(ctype === "12") return 60;
   return 45;
 }
-
 function haversineKm(aLat, aLng, bLat, bLng){
   const R = 6371;
   const toRad = d => d * Math.PI / 180;
@@ -576,9 +542,8 @@ function haversineKm(aLat, aLng, bLat, bLng){
   const aa = s1*s1 + Math.cos(toRad(aLat))*Math.cos(toRad(bLat))*s2*s2;
   return 2 * R * Math.asin(Math.sqrt(aa));
 }
-
 function estimateTravelMinutesKm(km){
-  const speed = 30; // km/h
+  const speed = 30;
   return Math.round((km / speed) * 60);
 }
 
@@ -588,7 +553,6 @@ function clearPolyline(){
     state.polyline = null;
   }
 }
-
 function drawCoursePolyline(){
   clearPolyline();
   if(!state.map || state.course.length < 2) return;
@@ -597,14 +561,12 @@ function drawCoursePolyline(){
     new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng),
     ...state.course.map(it => new kakao.maps.LatLng(Number(it.mapy), Number(it.mapx)))
   ];
-
   state.polyline = new kakao.maps.Polyline({
     path,
     strokeWeight: 4,
     strokeOpacity: 0.9,
     strokeStyle: "solid"
   });
-
   state.polyline.setMap(state.map);
 }
 
@@ -614,7 +576,6 @@ function renderCourse(meta){
   if(!summary || !list) return;
 
   list.innerHTML = "";
-
   if(state.course.length === 0){
     summary.textContent = "아직 코스가 없어요.";
     return;
@@ -633,14 +594,14 @@ function renderCourse(meta){
       </div>
       <div class="muted">${escapeHtml(it.addr1 || "")}</div>
     `;
-    div.addEventListener("click", async () => await selectItem(it));
+    div.addEventListener("click", async () => selectItem(it));
     list.appendChild(div);
   });
 }
 
 function buildCourse(){
   if(state.items.length === 0){
-    setStatus("먼저 주변 데이터를 불러와야 코스를 만들 수 있어요");
+    status("먼저 주변 데이터를 불러와야 코스를 만들 수 있어요");
     return;
   }
 
@@ -687,7 +648,6 @@ function buildCourse(){
     cur = { lat: Number(next.it.mapy), lng: Number(next.it.mapx) };
   }
 
-  // travel time estimate
   let travelKm = 0;
   cur = { lat: state.currentPos.lat, lng: state.currentPos.lng };
   for(const p of ordered){
@@ -695,6 +655,7 @@ function buildCourse(){
     travelKm += haversineKm(cur.lat, cur.lng, lat, lng);
     cur = { lat, lng };
   }
+
   const travelMin = estimateTravelMinutesKm(travelKm);
   const stayMin = ordered.reduce((a,p)=>a+p.stay,0);
   const totalEst = travelMin + stayMin;
@@ -703,14 +664,7 @@ function buildCourse(){
   renderCourse({ travelKm, travelMin, stayMin, totalEst, budget: total });
   drawCoursePolyline();
 
-  if(state.course.length > 0){
-    const bounds = new kakao.maps.LatLngBounds();
-    bounds.extend(new kakao.maps.LatLng(state.currentPos.lat, state.currentPos.lng));
-    state.course.forEach(it => bounds.extend(new kakao.maps.LatLng(Number(it.mapy), Number(it.mapx))));
-    state.map.setBounds(bounds);
-  }
-
-  setStatus("코스 생성 완료");
+  status("코스 생성 완료");
 }
 
 function clearCourse(){
@@ -718,10 +672,9 @@ function clearCourse(){
   clearPolyline();
   if ($("courseSummary")) $("courseSummary").textContent = "아직 코스가 없어요.";
   if ($("courseList")) $("courseList").innerHTML = "";
-  setStatus("코스 비움");
+  status("코스 비움");
 }
 
-// ---- Reset ----
 function clearAll(){
   clearMarkers();
   state.items = [];
@@ -731,27 +684,10 @@ function clearAll(){
   if ($("detailBox")) $("detailBox").innerHTML = `<div class="muted">아직 선택된 장소가 없어요.</div>`;
 
   clearCourse();
-  setStatus("초기화 완료");
+  status("초기화 완료");
 }
 
-// ---- Mobile scroll map relayout ----
-function setupMapRelayoutOnScroll(){
-  const el = document.querySelector(".mapWrap");
-  if(!el || !window.IntersectionObserver) return;
-
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries){
-      if(e.isIntersecting && state.map){
-        state.map.relayout();
-        if(state.wmsOn) updateWmsOverlay();
-      }
-    }
-  }, { threshold: 0.15 });
-
-  io.observe(el);
-}
-
-// ---- Events ----
+// -------- Events --------
 function bindEvents(){
   $("refreshPicksBtn")?.addEventListener("click", loadTodayPicks);
   $("loadBtn")?.addEventListener("click", loadNearby);
@@ -762,9 +698,9 @@ function bindEvents(){
 
   $("toggleWmsBtn")?.addEventListener("click", () => {
     state.wmsOn = !state.wmsOn;
-    if ($("wmsOverlay")) $("wmsOverlay").style.display = state.wmsOn ? "block" : "none";
+    $("wmsOverlay").style.display = state.wmsOn ? "block" : "none";
     if(state.wmsOn) updateWmsOverlay();
-    setStatus(`WMS ${state.wmsOn ? "ON" : "OFF"}`);
+    status(`WMS ${state.wmsOn ? "ON" : "OFF"}`);
   });
 
   $("locBtn")?.addEventListener("click", moveToMyLocation);
@@ -776,14 +712,11 @@ function bindEvents(){
   bindChips();
 }
 
-// ---- Boot (IMPORTANT: only ONCE) ----
+// ✅ Boot: kakao.maps.load는 딱 1번만
 kakao.maps.load(() => {
   initMap();
   bindEvents();
   clearAll();
-
   setupMapRelayoutOnScroll();
-
-  // 추천 먼저
   loadTodayPicks();
 });
