@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>김예진 | UI/UX Designer · Frontend</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a class="brand" href="#main" aria-label="홈">
+        <img class="brand-logo logo-light" src="images/logo_s.png" alt="KYJ 로고 컬러" />
+        <img class="brand-logo logo-dark"  src="images/logo_t.png" alt="KYJ 로고 화이트" />
+      </a>
+
+      <nav class="gnb" aria-label="주요 메뉴">
+        <a href="#about" data-link="about">About</a>
+        <a href="#coding" data-link="coding">Work</a>
+        <a href="#design" data-link="design">Gallery</a>
+        <a href="#contact" data-link="contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Dot Navigation -->
+  <nav class="dotnav" aria-label="섹션 빠른 이동">
+    <button class="dot is-active" data-target="#main" aria-label="Main"></button>
+    <button class="dot" data-target="#about" aria-label="About"></button>
+    <button class="dot" data-target="#coding" aria-label="Work"></button>
+    <button class="dot" data-target="#design" aria-label="Gallery"></button>
+    <button class="dot" data-target="#contact" aria-label="Contact"></button>
+  </nav>
+
+  <!-- COVER -->
+  <main id="main" class="section cover-image light" data-theme="light" aria-label="Cover">
+    <h1 class="sr-only">김예진 포트폴리오 커버</h1>
+  </main>
+
+  <!-- ABOUT (Reference style + senior polish) -->
+  <section id="about" class="section aboutcv light" data-theme="light" aria-label="About">
+    <div class="container aboutcv-wrap">
+      <div class="aboutcv-grid">
+
+        <!-- LEFT PANEL -->
+        <aside class="aboutcv-left" aria-label="Profile column">
+          <div class="aboutcv-nameRow">
+            <h2 class="aboutcv-name">KIM<br>YEJIN</h2>
+            <p class="aboutcv-born">Born in 1992</p>
+          </div>
+
+          <div class="aboutcv-line" aria-hidden="true"></div>
+          <p class="aboutcv-role">UI/UX DESIGNER · FRONTEND</p>
+
+          <div class="aboutcv-photoRing" aria-label="Profile photo">
+            <!-- 너 사진으로 교체 -->
+            <img class="aboutcv-photo" src="./images/profile2.jpg" alt="김예진 프로필 사진" />
+          </div>
+        </aside>
+
+        <!-- RIGHT CONTENT -->
+        <div class="aboutcv-right">
+
+          <!-- TOP: PROFILE -->
+          <article class="aboutcv-card aboutcv-profile">
+            <p class="kicker">PROFILE</p>
+
+            <p class="body">
+              타전공 배경에서 출발해 앱·웹 프로젝트를 통해
+              사용자 흐름을 설계하고 구현까지 연결합니다.
+            </p>
+
+            <div class="aboutcv-miniCols" aria-label="핵심 역량">
+              <div class="miniCol">
+                <h3 class="miniTitle">What I do</h3>
+                <ul class="miniList">
+                  <li>사용 흐름/IA 정리</li>
+                  <li>UI 기준 설계</li>
+                  <li>반응형·인터랙션 구현</li>
+                </ul>
+              </div>
+
+              <div class="miniCol">
+                <h3 class="miniTitle">Strength</h3>
+                <ul class="miniList">
+                  <li>의도 전달/소통</li>
+                  <li>컴포넌트 단위 정리</li>
+                  <li>구현 관점 UX 점검</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- TOP: SKILLS -->
+          <article class="aboutcv-card aboutcv-skills">
+            <p class="kicker">SKILLS</p>
+
+            <div class="cv-skill">
+              <div class="cv-skill-row"><span>UI/UX Design</span><span class="pct">85%</span></div>
+              <div class="cv-skill-track"><span class="cv-skill-fill" style="width:85%"></span></div>
+            </div>
+
+            <div class="cv-skill">
+              <div class="cv-skill-row"><span>Figma</span><span class="pct">85%</span></div>
+              <div class="cv-skill-track"><span class="cv-skill-fill" style="width:85%"></span></div>
+            </div>
+
+            <div class="cv-skill">
+              <div class="cv-skill-row"><span>HTML/CSS</span><span class="pct">80%</span></div>
+              <div class="cv-skill-track"><span class="cv-skill-fill" style="width:80%"></span></div>
+            </div>
+
+            <div class="cv-skill">
+              <div class="cv-skill-row"><span>JavaScript</span><span class="pct">70%</span></div>
+              <div class="cv-skill-track"><span class="cv-skill-fill" style="width:70%"></span></div>
+            </div>
+
+            <div class="cv-skill">
+              <div class="cv-skill-row"><span>Photoshop / Illustrator</span><span class="pct">80%</span></div>
+              <div class="cv-skill-track"><span class="cv-skill-fill" style="width:80%"></span></div>
+            </div>
+          </article>
+
+          <!-- MIDDLE: EXPERIENCE -->
+          <article class="aboutcv-card aboutcv-exp">
+            <p class="kicker">EXPERIENCE</p>
+            <h3 class="title">Portfolio Website · Personal Project</h3>
+            <p class="subtitle">UI/UX · Frontend Implementation</p>
+
+            <ul class="bullet">
+              <li>정보 구조(IA)와 사용자 흐름을 먼저 정리한 뒤 화면을 설계했습니다.</li>
+              <li>Figma 기반으로 UI 기준(여백·타이포·컴포넌트)을 정리하고 구현까지 연결했습니다.</li>
+              <li>스크롤 기반 네비게이션 active 처리, Copy/메일 보내기 등 인터랙션을 구현했습니다.</li>
+            </ul>
+          </article>
+
+          <!-- BOTTOM: EDUCATION + CERT -->
+          <article class="aboutcv-card aboutcv-edu">
+            <p class="kicker">EDUCATION</p>
+            <div class="eduItem">
+              <b>○○대학교</b>
+              <span>사회복지 + 국제정치 (복수전공)</span>
+            </div>
+
+            <div class="eduSplit" aria-hidden="true"></div>
+
+            <p class="kicker kicker-tight">CERTIFICATION</p>
+            <div class="eduItem">
+              <b>GTQ Photoshop</b>
+              <span>Level 1</span>
+            </div>
+            <div class="eduItem">
+              <b>Driver’s License</b>
+              <span>Class 2</span>
+            </div>
+          </article>
+
+          <!-- BOTTOM: HOBBY -->
+          <article class="aboutcv-card aboutcv-hobby">
+            <p class="kicker">HOBBY &amp; INTERESTS</p>
+            <div class="chipWrap" aria-label="관심사">
+              <span class="chip">Design Trend</span>
+              <span class="chip">Typography</span>
+              <span class="chip">Photography</span>
+              <span class="chip">Cosmetic</span>
+              <span class="chip">Watching movie</span>
+              <span class="chip">Travel</span>
+            </div>
+          </article>
+
+          <!-- CONTACT STRIP -->
+          <article class="aboutcv-contact" aria-label="Contact shortcuts">
+            <div class="aboutcv-contactLeft">
+              <button class="aboutcv-contactBtn" id="aboutGoContact" type="button">
+                CONTACT <span aria-hidden="true">↘</span>
+                <small>클릭하면 맨 아래 컨택트 카드로 이동</small>
+              </button>
+              <p class="aboutcv-phone">Phone. 010-1234-5678</p>
+            </div>
+
+            <div class="aboutcv-social" aria-label="SNS links">
+              <!-- 인스타(너가 svg 교체 가능) -->
+              <a href="#" class="soc" aria-label="Instagram" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="5" width="14" height="14" rx="4"></rect>
+                  <circle cx="12" cy="12" r="3.2"></circle>
+                  <circle cx="16.7" cy="7.4" r="0.9"></circle>
+                </svg>
+              </a>
+
+              <!-- 페북(너가 svg 교체 가능) -->
+              <a href="#" class="soc" aria-label="Facebook" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 8h2V5h-2c-2.2 0-3.6 1.4-3.6 3.7V11H8v3h2.4v6H14v-6h2.4l.6-3H14V9c0-.7.2-1 1-1z"></path>
+                </svg>
+              </a>
+
+              <!-- ✅ 블로그: 아이콘 대신 대문자 B -->
+              <a href="#" class="soc soc-blog" aria-label="Naver Blog" target="_blank" rel="noopener">B</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK (DARK) -->
+  <section id="coding" class="section coding dark" data-theme="dark" aria-label="Work">
+    <div class="container">
+      <div class="section-head dark-head">
+        <h2>Work</h2>
+        <p class="section-desc">홈페이지 작업 위주로 정리했습니다. 목업 + CTA 링크로 확인할 수 있습니다.</p>
+      </div>
+
+      <div class="work-grid" id="workGrid">
+        <article class="work-card">
+          <div class="work-mock"><div class="mock-ph">MAIN MOCKUP</div></div>
+          <div class="work-body">
+            <h3>Project 01</h3>
+            <p class="work-one">반응형 구조 + CTA 정리, 기본 인터랙션 구현</p>
+            <div class="work-cta">
+              <a class="cta-link primary" href="#" target="_blank" rel="noopener">Live ↗</a>
+              <a class="cta-link" href="#" target="_blank" rel="noopener">Case ↗</a>
+              <a class="cta-link" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-mock"><div class="mock-ph">MAIN MOCKUP</div></div>
+          <div class="work-body">
+            <h3>Project 02</h3>
+            <p class="work-one">타이포 기반 페이지 구성 + 섹션 레이아웃 구현</p>
+            <div class="work-cta">
+              <a class="cta-link primary" href="#" target="_blank" rel="noopener">Live ↗</a>
+              <a class="cta-link" href="#" target="_blank" rel="noopener">Case ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-mock"><div class="mock-ph">MAIN MOCKUP</div></div>
+          <div class="work-body">
+            <h3>Project 03</h3>
+            <p class="work-one">모달/탭/필터 등 UI 인터랙션 모음 구현</p>
+            <div class="work-cta">
+              <a class="cta-link primary" href="#" target="_blank" rel="noopener">Live ↗</a>
+              <a class="cta-link" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY (DARK) -->
+  <section id="design" class="section design dark" data-theme="dark" aria-label="Gallery">
+    <div class="container">
+      <div class="section-head dark-head">
+        <h2>Gallery</h2>
+        <p class="section-desc">이미지 클릭 시 팝업으로 확대해서 볼 수 있습니다.</p>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+        <button class="gitem" data-title="로고 디자인" data-category="Branding" data-src="assets/gallery-01.jpg" type="button">
+          <div class="gthumb"><span>01</span></div>
+          <div class="gcap"><b>로고 디자인</b><span>Branding</span></div>
+        </button>
+        <button class="gitem" data-title="명함 디자인" data-category="Branding" data-src="assets/gallery-02.jpg" type="button">
+          <div class="gthumb"><span>02</span></div>
+          <div class="gcap"><b>명함 디자인</b><span>Branding</span></div>
+        </button>
+        <button class="gitem" data-title="그래픽" data-category="Graphic" data-src="assets/gallery-03.jpg" type="button">
+          <div class="gthumb"><span>03</span></div>
+          <div class="gcap"><b>그래픽</b><span>Graphic</span></div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section contact light" data-theme="light" aria-label="Contact">
+    <div class="container contact-wrap">
+      <div class="contact-card" id="contactCard">
+        <h3 class="contact-title">Contact me</h3>
+        <div class="contact-divider" aria-hidden="true"></div>
+
+        <div class="contact-list" role="list">
+          <div class="contact-row" role="listitem">
+            <span class="contact-key">Name</span>
+            <span class="contact-val" id="nameVal">김예진</span>
+            <button class="contact-copy" data-copy="#nameVal" type="button">Copy</button>
+          </div>
+
+          <div class="contact-row" role="listitem">
+            <span class="contact-key">E-mail</span>
+            <span class="contact-val" id="emailVal">yejomy@gmail.com</span>
+            <button class="contact-copy" data-copy="#emailVal" type="button">Copy</button>
+          </div>
+
+          <div class="contact-row" role="listitem">
+            <span class="contact-key">Phone</span>
+            <span class="contact-val" id="phoneVal">010-1234-5678</span>
+            <button class="contact-copy" data-copy="#phoneVal" type="button">Copy</button>
+          </div>
+
+          <div class="contact-row" role="listitem">
+            <span class="contact-key">Kakao</span>
+            <span class="contact-val" id="kakaoVal">kakao_id</span>
+            <button class="contact-copy" data-copy="#kakaoVal" type="button">Copy</button>
+          </div>
+        </div>
+
+        <div class="contact-bottom">
+          <a class="contact-mail" id="mailtoBtn" href="#">메일 보내기 ↗</a>
+        </div>
+
+        <p class="toast" id="copyToast" hidden>복사되었습니다.</p>
+
+        <footer class="footer">
+          © <span id="year"></span> Kim Ye Jin. All rights reserved.
+        </footer>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="갤러리 보기">
+      <div class="modal-top">
+        <div class="modal-title">
+          <b id="modalTitle">Title</b>
+          <span id="modalCategory">Category</span>
+        </div>
+        <div class="modal-actions">
+          <button class="m-btn" id="prevBtn" type="button" aria-label="이전">←</button>
+          <button class="m-btn" id="nextBtn" type="button" aria-label="다음">→</button>
+          <button class="m-btn close" id="closeBtn" type="button" aria-label="닫기">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-image"><img id="modalImg" alt="" /></div>
+        <div class="modal-thumbs" id="modalThumbs" aria-label="썸네일 목록"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
