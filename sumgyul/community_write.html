@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>커뮤니티 글쓰기</title>
+
+  <!-- 글쓰기 전용 -->
+  <link rel="stylesheet" href="./css/community_write.css" />
+</head>
+
+<body class="cw">
+  <div class="shell cwShell">
+    <main class="page" id="mainContent">
+
+      <!-- HERO (커뮤니티랑 높이 통일) -->
+      <section class="hero" aria-label="글쓰기 상단">
+        <img class="heroBg" src="./images/home_banner.png" alt="" aria-hidden="true" />
+        <div class="heroShade" aria-hidden="true"></div>
+
+        <div class="hero__inner">
+          <header class="hero__topbar">
+            <!-- ✅ 메뉴 아이콘 제거 -> 뒤로가기 -->
+            <button class="iconBtn backBtn" id="backBtn" type="button" aria-label="커뮤니티로 돌아가기">
+              <span class="backGlyph" aria-hidden="true">‹</span>
+            </button>
+
+            <div class="topbarCenter" id="topbarTitle">
+              <div class="topbar__centerTitle" aria-live="polite">글쓰기</div>
+            </div>
+
+            <div class="topbar__right" id="topbarRight">
+              <button class="writeSubmitBtn" id="submitBtn" type="button">등록</button>
+            </div>
+          </header>
+        </div>
+      </section>
+
+      <!-- FORM -->
+      <section class="sheet cwSheet" aria-label="글쓰기 내용">
+        <section class="writeCard" aria-label="글쓰기 폼">
+          <div class="writeRow">
+            <label class="writeLabel" for="cat">카테고리</label>
+            <select id="cat" class="writeInput">
+              <option value="tips">꿀팁</option>
+              <option value="question">고민&amp;질문</option>
+              <option value="comfort">위로</option>
+              <option value="routine">루틴</option>
+            </select>
+          </div>
+
+          <div class="writeRow">
+            <label class="writeLabel" for="title">제목</label>
+            <input id="title" class="writeInput" type="text" maxlength="60" placeholder="제목을 입력하세요" />
+          </div>
+<div class="writeRow writeRow--body">
+  <label class="writeLabel" for="body">내용</label>
+  <textarea id="body" class="writeTextarea" rows="10" placeholder="내용을 입력하세요"></textarea>
+</div>
+
+          <div class="writeRow">
+            <label class="writeLabel" for="imgFile">이미지(선택)</label>
+<div class="file-upload">
+  <input id="imgFile" type="file" accept="image/*" />
+  <label for="imgFile" class="file-btn">파일 선택</label>
+  <span class="file-name" id="fileName">선택된 파일 없음</span>
+</div>
+
+            
+
+            <!-- ✅ 원본 비율 그대로 미리보기 -->
+            <div class="writePreview" id="preview" hidden>
+              <div class="ratioBox" id="ratioBox">
+                <img id="previewImg" alt="" />
+              </div>
+
+              <button class="writeMiniBtn" id="removeImgBtn" type="button">이미지 제거</button>
+            </div>
+          </div>
+
+          <div class="writeHint">※ 등록하면 커뮤니티 목록에 바로 표시돼요.</div>
+        </section>
+      </section>
+
+    </main>
+
+    <!-- 하단 탭 -->
+    <nav class="tabWrap" aria-label="하단 탭">
+      <div class="tabbar" role="navigation" aria-label="주요 메뉴">
+        <button class="tab" type="button" data-tab="home">
+          <img class="tabImg" src="./images/icon_home.svg" alt="홈" aria-hidden="true" />
+          <span class="tab__label">홈</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="stability">
+          <img class="tabImg" src="./images/icon_stability.svg" alt="안정" aria-hidden="true" />
+          <span class="tab__label">안정</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="record">
+          <img class="tabImg" src="./images/icon_record.svg" alt="기록" aria-hidden="true" />
+          <span class="tab__label">기록</span>
+        </button>
+
+        <button class="tab is-active" type="button" data-tab="community" aria-current="page">
+          <img class="tabImg" src="./images/icon_community_on.svg" alt="커뮤니티" aria-hidden="true" />
+          <span class="tab__label">커뮤니티</span>
+        </button>
+
+        <button class="tab" type="button" data-tab="my">
+          <img class="tabImg" src="./images/icon_my.svg" alt="my" aria-hidden="true" />
+          <span class="tab__label">MY</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <script src="./js/community_write.js"></script>
+</body>
+</html>

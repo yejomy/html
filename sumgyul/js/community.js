@@ -1,4 +1,6 @@
 (() => {
+  "use strict";
+
   /* ===== routes ===== */
   const routes = {
     home: "./home.html",
@@ -6,7 +8,6 @@
     record: "./record.html",
     community: "./community.html",
     my: "./my.html",
-    post: "./community_post.html", // (이동 안 씀, 남겨만 둠)
     write: "./community_write.html",
   };
 
@@ -22,30 +23,50 @@
 
   /* ===== drawer ===== */
   const drawer = document.getElementById("drawer");
+  const openDrawerBtn = document.getElementById("openDrawerBtn");
+
   function openDrawer() {
-    drawer?.classList.add("is-open");
-    drawer?.setAttribute("aria-hidden", "false");
+    if (!drawer) return;
+    drawer.classList.add("is-open");
+    drawer.removeAttribute("hidden");
+    drawer.setAttribute("aria-hidden", "false");
+    openDrawerBtn?.setAttribute("aria-expanded", "true");
     document.body.style.overflow = "hidden";
+
+    // 패널로 포커스 이동(선택)
+    drawer.querySelector(".drawer__panel")?.focus?.();
   }
+
   function closeDrawer() {
-    drawer?.classList.remove("is-open");
-    drawer?.setAttribute("aria-hidden", "true");
+    if (!drawer) return;
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("hidden", "");
+    drawer.setAttribute("aria-hidden", "true");
+    openDrawerBtn?.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "";
+    openDrawerBtn?.focus?.();
   }
-  document.getElementById("openDrawerBtn")?.addEventListener("click", openDrawer);
+
+  openDrawerBtn?.addEventListener("click", () => {
+    const isOpen = drawer?.classList.contains("is-open");
+    if (isOpen) closeDrawer();
+    else openDrawer();
+  });
+
   drawer?.addEventListener("click", (e) => {
     if (e.target.closest("[data-close='drawer']")) closeDrawer();
   });
+
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && drawer?.classList.contains("is-open")) closeDrawer();
+    if (e.key === "Escape") {
+      if (drawer?.classList.contains("is-open")) closeDrawer();
+      if (!topSearchForm?.classList.contains("is-hidden")) closeTopSearch();
+    }
   });
 
-  // 오늘 기록하기 -> diary.html
   document.getElementById("drawerWriteBtn")?.addEventListener("click", () => {
     window.location.href = "./diary.html";
   });
-
-  // 내 정보 -> my.html
   document.getElementById("drawerToMy")?.addEventListener("click", () => {
     window.location.href = routes.my;
   });
@@ -58,52 +79,73 @@
   const topSearchForm = document.getElementById("topSearchForm");
   const topSearchInput = document.getElementById("topSearchInput");
 
+  let searchQuery = "";
+
   function openTopSearch() {
+    if (!topbarTitle || !topbarRight || !topSearchForm) return;
+    openTopSearchBtn?.setAttribute("aria-expanded", "true");
     topbarTitle.style.display = "none";
     topbarRight.style.display = "none";
     topSearchForm.classList.remove("is-hidden");
-    setTimeout(() => topSearchInput.focus(), 0);
+    setTimeout(() => topSearchInput?.focus?.(), 0);
   }
+
   function closeTopSearch() {
+    if (!topbarTitle || !topbarRight || !topSearchForm) return;
+    openTopSearchBtn?.setAttribute("aria-expanded", "false");
     topSearchForm.classList.add("is-hidden");
     topbarTitle.style.display = "";
     topbarRight.style.display = "";
-    topSearchInput.value = "";
+    if (topSearchInput) topSearchInput.value = "";
     searchQuery = "";
     renderAll();
+    openTopSearchBtn?.focus?.();
   }
 
   openTopSearchBtn?.addEventListener("click", openTopSearch);
   closeTopSearchBtn?.addEventListener("click", closeTopSearch);
 
-  /* ===== storage (v4) ===== */
+  topSearchForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    searchQuery = (topSearchInput?.value || "").trim();
+    renderAll();
+  });
+
+  /* ===== storage ===== */
   const COMMUNITY_KEY = "sbg_community_posts_v4";
   const LIKES_KEY = "sbg_community_likes_v4";
+  const BOOKMARKS_KEY = "sbg_community_bookmarks_v1";
 
-  function loadPosts() {
-    try { return JSON.parse(localStorage.getItem(COMMUNITY_KEY) || "[]"); }
-    catch { return []; }
+  function loadJSON(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+    } catch {
+      return fallback;
+    }
   }
-  function savePosts(posts) {
-    localStorage.setItem(COMMUNITY_KEY, JSON.stringify(posts));
+  function saveJSON(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
-  function loadLikes() {
-    try { return JSON.parse(localStorage.getItem(LIKES_KEY) || "{}"); }
-    catch { return {}; }
-  }
-  function saveLikes(likes) {
-    localStorage.setItem(LIKES_KEY, JSON.stringify(likes));
-  }
+
+  const loadPosts = () => loadJSON(COMMUNITY_KEY, []);
+  const savePosts = (v) => saveJSON(COMMUNITY_KEY, v);
+
+  const loadLikes = () => loadJSON(LIKES_KEY, {});
+  const saveLikes = (v) => saveJSON(LIKES_KEY, v);
+
+  const loadBookmarks = () => loadJSON(BOOKMARKS_KEY, {});
+  const saveBookmarks = (v) => saveJSON(BOOKMARKS_KEY, v);
 
   /* ===== utils ===== */
   const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-  const uid = (p="p") => `${p}_${Math.random().toString(16).slice(2)}_${Date.now()}`;
-  const esc = (s) => String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  const uid = (p = "p") => `${p}_${Math.random().toString(16).slice(2)}_${Date.now()}`;
+  const esc = (s) =>
+    String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
 
   function timeAgo(ts) {
     const d = Date.now() - ts;
@@ -123,64 +165,133 @@
     return "전체";
   }
 
-  //  펼침/접힘용 미리보기
   function previewText(text, max = 90) {
     const s = String(text || "").replace(/\s+/g, " ").trim();
     if (s.length <= max) return s;
     return s.slice(0, max) + "…";
   }
 
+  function makeRandomId() {
+    const num = Math.floor(1000 + Math.random() * 9000);
+    return `user${num}`;
+  }
+
+  /* ===== normalize (기존 데이터 호환) ===== */
+  function normalizeIds() {
+    const posts = loadPosts();
+    let changed = false;
+
+    posts.forEach((p) => {
+      if (!p.authorId) {
+        p.authorId = makeRandomId();
+        changed = true;
+      }
+      if (!Array.isArray(p.comments)) p.comments = [];
+
+      p.comments = p.comments.map((c) => {
+        if (typeof c === "string") {
+          changed = true;
+          return { id: uid("c"), text: c, createdAt: Date.now(), authorId: makeRandomId() };
+        }
+        if (!c) return c;
+
+        if (!c.authorId) {
+          c.authorId = makeRandomId();
+          changed = true;
+        }
+        if (!c.id) {
+          c.id = uid("c");
+          changed = true;
+        }
+        if (!c.createdAt) {
+          c.createdAt = Date.now();
+          changed = true;
+        }
+        if (typeof c.text !== "string") {
+          c.text = String(c.text ?? "");
+          changed = true;
+        }
+        return c;
+      });
+    });
+
+    if (changed) savePosts(posts);
+  }
+
   function renderComments(comments) {
     const arr = Array.isArray(comments) ? comments : [];
     if (!arr.length) return `<div class="commentItem">아직 댓글이 없어요.</div>`;
-    return arr.slice(0, 12).map((c) => {
-      const t = typeof c === "string" ? c : (c?.text || "");
-      return `<div class="commentItem">${esc(t)}</div>`;
+
+    return arr.slice(0, 30).map((c) => {
+      const obj = typeof c === "string" ? { authorId: "익명", text: c } : c;
+      const cid = obj?.authorId || "익명";
+      const text = obj?.text || "";
+      return `<div class="commentItem"><span class="cId">${esc(cid)}</span>${esc(text)}</div>`;
     }).join("");
   }
 
-  /* ===== data ===== */
+  /* ===== icons ===== */
+  function iconHeart() {
+    return `
+      <svg class="actionIcon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s-7-4.35-9.5-8.35C.6 9.2 2.4 5.8 6 5.2c2.1-.35 4 .6 5 2.05C12 5.8 13.9 4.85 16 5.2c3.6.6 5.4 4 3.5 7.45C19 16.65 12 21 12 21z"/>
+      </svg>
+    `;
+  }
+  function iconComment() {
+    return `
+      <svg class="actionIcon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 14a4 4 0 0 1-4 4H9l-4 3v-3H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+      </svg>
+    `;
+  }
+  function iconBookmark() {
+    return `
+      <svg class="actionIcon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/>
+      </svg>
+    `;
+  }
+  function iconShare() {
+    return `
+      <svg class="actionIcon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 8l4-4 4 4"/>
+        <path d="M19 4v10a4 4 0 0 1-4 4H6"/>
+        <path d="M9 18h-3"/>
+      </svg>
+    `;
+  }
+
+  /* ===== seed ===== */
   const authorPool = [
-    { name:"작은용기", sub:"몸이 먼저 안심해야" },
-    { name:"하루한줄", sub:"괜찮지 않아도 괜찮아" },
-    { name:"숨고르기", sub:"불안 올라오면 물부터" },
-    { name:"조용한밤", sub:"오늘도 기록으로 버텼다" },
-    { name:"천천히걷기", sub:"5분 산책이 힘이 됨" },
-    { name:"눈웃음에이", sub:"천천히 해도 괜찮다" },
+    { name: "작은용기", sub: "몸이 먼저 안심해야" },
+    { name: "하루한줄", sub: "괜찮지 않아도 괜찮아" },
+    { name: "숨고르기", sub: "불안 올라오면 물부터" },
+    { name: "조용한밤", sub: "오늘도 기록으로 버텼다" },
+    { name: "천천히걷기", sub: "5분 산책이 힘이 됨" },
+    { name: "눈웃음에이", sub: "천천히 해도 괜찮다" },
   ];
 
-  //  카테고리별 서로 다른 글 (요구 개수 정확히)
   const templates = {
     tips: [
-      { t:"불안 올라오기 전 미리 막는 호흡 루틴", b:"불안이 커지기 전에 4초 들숨 / 6초 날숨을 5번만 해도 확실히 다르더라구요. 특히 밤에 효과 있었어요." },
-      { t:"생각 폭주할 때는 ‘논리’보다 감각이 먼저", b:"불안할 때 생각을 이기려 하면 더 커졌어요. 대신 차가운 물로 손 씻기/발바닥 감각에 집중했더니 확 내려갔어요." },
-      { t:"불안한 날엔 목표를 ‘반’으로 줄이기", b:"해야 할 일을 다 하려다 무너졌어요. 그래서 요즘은 딱 1개만 성공하면 성공으로 쳐요. 자책이 줄었어요." },
-      { t:"잠들기 30분 전 SNS/뉴스 끊기", b:"자극적인 정보가 심박을 올리더라구요. 잠들기 전 30분만 끊어도 몸이 훨씬 조용해졌어요." },
-      { t:"불안 기록은 ‘한 줄’로만", b:"길게 쓰면 감정에 더 빠져요. ‘지금 불안 7/10, 이유: 내일 일정’처럼 한 줄만 쓰니 생각이 정리됐어요." },
+      { t: "불안 올라오기 전 미리 막는 호흡 루틴", b: "불안이 커지기 전에 4초 들숨 / 6초 날숨을 5번만 해도 확실히 다르더라구요. 특히 밤에 효과 있었어요." },
+      { t: "생각 폭주할 때는 ‘논리’보다 감각이 먼저", b: "불안할 때 생각을 이기려 하면 더 커졌어요. 대신 차가운 물로 손 씻기/발바닥 감각에 집중했더니 확 내려갔어요." },
+      { t: "불안한 날엔 목표를 ‘반’으로 줄이기", b: "해야 할 일을 다 하려다 무너졌어요. 그래서 요즘은 딱 1개만 성공하면 성공으로 쳐요. 자책이 줄었어요." },
+      { t: "잠들기 30분 전 SNS/뉴스 끊기", b: "자극적인 정보가 심박을 올리더라구요. 잠들기 전 30분만 끊어도 몸이 훨씬 조용해졌어요." },
+      { t: "불안 기록은 ‘한 줄’로만", b: "길게 쓰면 감정에 더 빠져요. ‘지금 불안 7/10, 이유: 내일 일정’처럼 한 줄만 쓰니 생각이 정리됐어요." },
     ],
     question: [
-      { t:"잠을 못 자면 다음날 불안이 폭발해요", b:"수면이 깨지면 가슴이 벌렁거리고 생각이 멈추질 않아요. 다들 이런 날 어떻게 버티세요?" },
-      { t:"불안할 때 혼자 있는 게 더 무서운 이유가 뭘까요?", b:"사람 피하고 싶은데 막상 혼자 있으면 더 무서워요. 저만 이런가요?" },
-      { t:"공황 올 것 같은 ‘초기 신호’ 오면 뭐부터 하세요?", b:"초기 신호가 오면 미리 막는 루틴이 있나요? 다들 첫 행동이 궁금해요." },
-      { t:"약 말고 생활습관으로 효과 본 게 있을까요?", b:"약에 의존하고 싶진 않은데, 루틴/습관으로 도움이 된 방법이 있으면 공유 부탁해요." },
-      { t:"불안 때문에 약속 취소가 반복돼요", b:"미안한 마음도 크고… 회피가 습관될까 겁나요. 이 패턴 어떻게 끊으셨어요?" },
-      { t:"밤에만 유독 불안해지는 이유가 뭘까요?", b:"낮엔 괜찮은데 밤만 되면 심해져요. 비슷한 경험 있으신 분들 원인이 뭐였나요?" },
-      { t:"불안이 ‘나아지고 있다’는 기준이 있나요?", b:"완전히 없어지진 않는데, 이게 좋아지고 있는 건지 모르겠어요. 어떤 기준으로 판단하셨나요?" },
+      { t: "잠을 못 자면 다음날 불안이 폭발해요", b: "수면이 깨지면 가슴이 벌렁거리고 생각이 멈추질 않아요. 다들 이런 날 어떻게 버티세요?" },
+      { t: "불안할 때 혼자 있는 게 더 무서운 이유가 뭘까요?", b: "사람 피하고 싶은데 막상 혼자 있으면 더 무서워요. 저만 이런가요?" },
+      { t: "공황 올 것 같은 ‘초기 신호’ 오면 뭐부터 하세요?", b: "초기 신호가 오면 미리 막는 루틴이 있나요? 다들 첫 행동이 궁금해요." },
     ],
     comfort: [
-      { t:"오늘 아무것도 못 해도 괜찮아요", b:"불안한 하루를 버텼다면 그걸로 충분해요. 오늘은 그 자체로 잘한 거예요." },
-      { t:"불안은 약해서 생기는 게 아니래요", b:"몸이 나를 지키려다 경보를 과하게 울리는 거라고 하더라구요. 당신이 이상한 게 아니에요." },
-      { t:"지금 이 순간이 영원하진 않아요", b:"감정은 파도처럼 올라왔다 내려가요. 지금은 그 중간일 뿐이에요." },
-      { t:"불안해도 당신은 안전해요", b:"느낌이 위험한 거지, 실제로 위험한 건 아니에요. 숨을 한 번만 길게 내쉬어봐요." },
-      { t:"오늘은 쉬어도 되는 날이에요", b:"회복에도 에너지가 필요해요. 멈춤도 앞으로 가는 과정이에요." },
-      { t:"잘 버티고 있다는 사실 잊지 마세요", b:"지금 이만큼 견디는 것도 쉬운 일 아니에요. 여기까지 온 것만으로도 충분해요." },
+      { t: "오늘 아무것도 못 해도 괜찮아요", b: "불안한 하루를 버텼다면 그걸로 충분해요. 오늘은 그 자체로 잘한 거예요." },
+      { t: "불안은 약해서 생기는 게 아니래요", b: "몸이 나를 지키려다 경보를 과하게 울리는 거라고 하더라구요. 당신이 이상한 게 아니에요." },
     ],
     routine: [
-      { t:"아침 햇빛 5분이 하루를 바꿨어요", b:"눈 뜨자마자 창가에 서서 빛을 보는 것만으로도 불안이 덜했어요. 몸이 먼저 깨어나는 느낌!" },
-      { t:"불안한 날엔 ‘5분 산책’이 제일 확실했어요", b:"속도가 아니라 ‘밖에 나갔다’는 게 중요하더라구요. 5분만 걸어도 생각이 정리돼요." },
-      { t:"자기 전 루틴을 고정하니 밤 불안이 줄었어요", b:"같은 순서로 움직이니까 몸이 먼저 안심해요. (세안→물→스트레칭→불 끄기) 단순할수록 좋아요." },
-      { t:"불안 기록은 밤 말고 낮에 했어요", b:"밤에 쓰면 감정에 더 빠져 힘들었어요. 낮에 3분만 정리하고 밤엔 쉬는 게 더 좋았어요." },
-      { t:"루틴이 깨진 날은 ‘실패’ 대신 ‘리셋’으로", b:"실패로 기록하면 다음날도 무너져요. 그래서 그냥 ‘리셋’이라고 쓰고 다시 시작했어요." },
+      { t: "아침 햇빛 5분이 하루를 바꿨어요", b: "눈 뜨자마자 창가에 서서 빛을 보는 것만으로도 불안이 덜했어요. 몸이 먼저 깨어나는 느낌!" },
+      { t: "불안한 날엔 ‘5분 산책’이 제일 확실했어요", b: "속도가 아니라 ‘밖에 나갔다’는 게 중요하더라구요. 5분만 걸어도 생각이 정리돼요." },
     ],
   };
 
@@ -189,70 +300,64 @@
     "공감… 특히 밤이 더 힘들죠.",
     "저는 카페인 줄이니 덜했어요.",
     "호흡 4-6 도움이 됐어요.",
-    "검사 정상 확인하니 마음이 조금 편해졌어요.",
     "글 고마워요. 저도 버텨볼게요.",
-    "‘지금 안전해’ 반복 은근 효과 있더라구요.",
-    "혼자가 아니라는 게 위로가 돼요.",
   ];
 
   function makeComments(baseTs) {
     const n = rand(8, 40);
     const arr = [];
-    for (let i=0;i<n;i++){
+    for (let i = 0; i < n; i++) {
       arr.push({
         id: uid("c"),
         text: commentPool[rand(0, commentPool.length - 1)],
         createdAt: baseTs + i * 1000 * 60 * rand(1, 4),
+        authorId: makeRandomId(),
       });
     }
     return arr;
   }
 
-  //  “중복 없이” 템플릿을 각 1번씩만 생성 (총 23개)
-  function seedRich(force=false) {
+  function seedRich(force = false) {
     const existing = loadPosts();
     if (existing.length && !force) return;
 
     const now = Date.now();
     const posts = [];
-    const cats = ["tips","question","comfort","routine"];
+    const cats = ["tips", "question", "comfort", "routine"];
 
     cats.forEach((cat) => {
       (templates[cat] || []).forEach((tpl, idx) => {
         const author = authorPool[rand(0, authorPool.length - 1)];
         const createdAt =
-          now
-          - (1000*60*60*rand(2, 240))
-          - rand(0, 1000*60*40)
-          - (idx * 1000 * 60 * rand(7, 20));
+          now - (1000 * 60 * 60 * rand(2, 240)) - rand(0, 1000 * 60 * 40) - (idx * 1000 * 60 * rand(7, 20));
 
-        const hasImage = rand(1,100) <= 35;
-        const imageUrl = hasImage ? `./images/community_sample_${rand(1,6)}.jpg` : "";
+        const hasImage = rand(1, 100) <= 35;
+        const imageUrl = hasImage ? `./images/community_sample_${rand(1, 6)}.jpg` : "";
 
         posts.push({
           id: uid("p"),
           category: cat,
-          authorName: author.name,
+          authorId: makeRandomId(),
           authorSub: author.sub,
+          authorName: author.name,
           title: tpl.t,
           body: tpl.b,
           imageUrl,
           createdAt,
           likeCount: rand(3, 260),
-          comments: makeComments(createdAt + 1000*60*15),
+          comments: makeComments(createdAt + 1000 * 60 * 15),
         });
       });
     });
 
-    posts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    posts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     savePosts(posts);
   }
 
   /* ===== state ===== */
   let activeCat = "popular";
   let activeSort = "hot";
-  let searchQuery = "";
-  let pendingOpenId = null; //  베스트 클릭으로 특정 글 펼치기 예약
+  let pendingOpenId = null;
 
   /* ===== elements ===== */
   const bestList = document.getElementById("bestList");
@@ -263,77 +368,84 @@
     window.location.href = routes.write;
   });
 
-  // top tabs
+  /* ===== top tabs ===== */
   document.querySelectorAll(".topTab").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".topTab").forEach(b => b.classList.remove("is-active"));
+      document.querySelectorAll(".topTab").forEach((b) => {
+        b.classList.remove("is-active");
+        b.setAttribute("aria-selected", "false");
+      });
       btn.classList.add("is-active");
+      btn.setAttribute("aria-selected", "true");
+
       activeCat = btn.dataset.cat || "all";
       pendingOpenId = null;
       renderAll();
     });
   });
 
-  // chips sort
+  /* ===== chips sort ===== */
   document.querySelectorAll(".chip").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach(b => b.classList.remove("is-on"));
+      document.querySelectorAll(".chip").forEach((b) => {
+        b.classList.remove("is-on");
+        b.setAttribute("aria-pressed", "false");
+      });
       btn.classList.add("is-on");
+      btn.setAttribute("aria-pressed", "true");
       activeSort = btn.dataset.sort || "hot";
       renderAll();
     });
   });
 
-  topSearchForm?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    searchQuery = (topSearchInput.value || "").trim();
-    renderAll();
-  });
-
-  function calcHotScore(p){
-    const ageH = Math.max(1, (Date.now() - p.createdAt) / (1000*60*60));
+  function calcHotScore(p) {
+    const ageH = Math.max(1, (Date.now() - p.createdAt) / (1000 * 60 * 60));
     const like = p.likeCount || 0;
     const c = (p.comments || []).length;
     return (like * 1.2 + c * 2.2) / Math.pow(ageH, 0.25);
   }
 
-  function getFilteredPosts(){
+  function getFilteredPosts() {
     let posts = loadPosts().slice();
     const likesMap = loadLikes();
+    const bmMap = loadBookmarks();
 
     const q = (searchQuery || "").toLowerCase();
-    if (q){
-      posts = posts.filter(p => {
+    if (q) {
+      posts = posts.filter((p) => {
         const inText = `${p.title} ${p.body}`.toLowerCase().includes(q);
-        const inComments = (p.comments||[]).some(c => (c.text||"").toLowerCase().includes(q));
+        const inComments = (p.comments || []).some((c) => (c?.text || "").toLowerCase().includes(q));
         return inText || inComments;
       });
     }
 
-    if (activeCat !== "all" && activeCat !== "popular"){
-      posts = posts.filter(p => p.category === activeCat);
+    if (activeCat !== "all" && activeCat !== "popular") {
+      posts = posts.filter((p) => p.category === activeCat);
     }
 
-    posts.forEach(p => {
+    posts.forEach((p) => {
       p._hot = calcHotScore(p);
       p._liked = !!likesMap[p.id];
+      p._bookmarked = !!bmMap[p.id];
     });
 
-    if (activeSort === "new"){
-      posts.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
-    } else if (activeSort === "comment"){
-      posts.sort((a,b) => (b.comments?.length||0) - (a.comments?.length||0));
-    } else if (activeSort === "like"){
-      posts.sort((a,b) => (b.likeCount||0) - (a.likeCount||0));
+    if (activeSort === "bookmark") {
+      posts = posts.filter((p) => p._bookmarked);
+      posts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    } else if (activeSort === "new") {
+      posts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    } else if (activeSort === "comment") {
+      posts.sort((a, b) => (b.comments?.length || 0) - (a.comments?.length || 0));
+    } else if (activeSort === "like") {
+      posts.sort((a, b) => (b.likeCount || 0) - (a.likeCount || 0));
     } else {
-      posts.sort((a,b) => (b._hot||0) - (a._hot||0));
+      posts.sort((a, b) => (b._hot || 0) - (a._hot || 0));
     }
 
     if (activeCat === "popular") posts = posts.slice(0, 30);
     return posts;
   }
 
-  // ✅ 베스트 fallback 이미지 4개
   const bestFallbackImgs = [
     "./images/home_diary1.png",
     "./images/home_diary2.png",
@@ -341,11 +453,12 @@
     "./images/home_diary4.png",
   ];
 
-  function renderBest(){
+  function renderBest() {
+    if (!bestList) return;
     const posts = loadPosts().slice();
-    posts.forEach(p => p._hot = calcHotScore(p));
-    posts.sort((a,b) => (b._hot||0) - (a._hot||0));
-    const best = posts.slice(0,4);
+    posts.forEach((p) => (p._hot = calcHotScore(p)));
+    posts.sort((a, b) => (b._hot || 0) - (a._hot || 0));
+    const best = posts.slice(0, 4);
 
     bestList.innerHTML = "";
     const frag = document.createDocumentFragment();
@@ -355,18 +468,19 @@
       row.className = "bestRow";
 
       const bestImg = p.imageUrl ? p.imageUrl : (bestFallbackImgs[idx] || bestFallbackImgs[0]);
+      const authorId = p.authorId || p.authorName || "user";
 
       row.innerHTML = `
         <div class="bestLeft">
-          <div class="bestRank">${idx+1}</div>
+          <div class="bestRank">${idx + 1}</div>
           <div class="bestText">
             <div class="bestTitle">${esc(p.title)}</div>
             <div class="bestMeta">
-              <span>${esc(p.authorName)}</span>
+              <span>${esc(authorId)}</span>
               <span>·</span>
               <span>좋아요 ${p.likeCount || 0}</span>
               <span>·</span>
-              <span>댓글 ${(p.comments||[]).length}</span>
+              <span>댓글 ${(p.comments || []).length}</span>
             </div>
           </div>
         </div>
@@ -376,14 +490,17 @@
         </div>
       `;
 
-      //  이동 제거: 베스트 클릭 -> 피드에서 해당 글 펼치기
       row.addEventListener("click", () => {
         pendingOpenId = p.id;
-
-        // 베스트는 전체에서 찾는 게 자연스러워서 전체 탭으로 전환
         activeCat = "all";
-        document.querySelectorAll(".topTab").forEach(b => b.classList.remove("is-active"));
-        document.querySelector('.topTab[data-cat="all"]')?.classList.add("is-active");
+
+        document.querySelectorAll(".topTab").forEach((b) => {
+          b.classList.remove("is-active");
+          b.setAttribute("aria-selected", "false");
+        });
+        const allTab = document.querySelector('.topTab[data-cat="all"]');
+        allTab?.classList.add("is-active");
+        allTab?.setAttribute("aria-selected", "true");
 
         renderAll();
       });
@@ -394,41 +511,60 @@
     bestList.appendChild(frag);
   }
 
-  function toggleLike(postId){
+  function toggleLike(postId) {
     const likes = loadLikes();
     const posts = loadPosts();
-    const p = posts.find(x => x.id === postId);
+    const p = posts.find((x) => x.id === postId);
     if (!p) return;
 
     const liked = !!likes[postId];
-    if (liked){
+    if (liked) {
       delete likes[postId];
-      p.likeCount = Math.max(0, (p.likeCount||0) - 1);
+      p.likeCount = Math.max(0, (p.likeCount || 0) - 1);
     } else {
       likes[postId] = true;
-      p.likeCount = (p.likeCount||0) + 1;
+      p.likeCount = (p.likeCount || 0) + 1;
     }
 
     saveLikes(likes);
     savePosts(posts);
   }
 
-  function heartSvg(){
-    return `
-      <svg class="heartIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M12 21s-6.7-4.35-9.33-7.38C.8 11.45 1.5 7.5 5.4 6.5c2-.5 3.9.4 4.6 1.6.7-1.2 2.6-2.1 4.6-1.6 3.9 1 4.6 4.95 2.73 7.12C18.7 16.65 12 21 12 21z"/>
-      </svg>
-    `;
+  function toggleBookmark(postId) {
+    const bm = loadBookmarks();
+    if (bm[postId]) delete bm[postId];
+    else bm[postId] = true;
+    saveBookmarks(bm);
   }
 
-  function setCardOpen(cardEl, isOpen){
+  function addComment(postId, text) {
+    const posts = loadPosts();
+    const p = posts.find((x) => x.id === postId);
+    if (!p) return;
+
+    const t = String(text || "").trim();
+    if (!t) return;
+
+    const c = {
+      id: uid("c"),
+      text: t,
+      createdAt: Date.now(),
+      authorId: makeRandomId(),
+    };
+
+    if (!Array.isArray(p.comments)) p.comments = [];
+    p.comments.unshift(c);
+    savePosts(posts);
+  }
+
+  function setCardOpen(cardEl, isOpen) {
     const detail = cardEl.querySelector(".postDetail");
     const bodyShort = cardEl.querySelector(".postBodyShort");
     const bodyFull = cardEl.querySelector(".postBodyFull");
 
     if (!detail || !bodyShort || !bodyFull) return;
 
-    if (isOpen){
+    if (isOpen) {
       cardEl.classList.add("is-open");
       detail.style.display = "block";
       bodyShort.style.display = "none";
@@ -441,26 +577,22 @@
     }
   }
 
-  function toggleCard(cardEl){
-    const isOpen = cardEl.classList.contains("is-open");
-    setCardOpen(cardEl, !isOpen);
-  }
+  function renderFeed() {
+    if (!postList || !emptyHint) return;
 
-  function renderFeed(){
     const posts = getFilteredPosts();
     postList.innerHTML = "";
 
-    if (!posts.length){
-      emptyHint.textContent = searchQuery
-        ? `“${searchQuery}” 검색 결과가 없어요.`
-        : "결과가 없어요.";
+    if (!posts.length) {
+      if (activeSort === "bookmark") emptyHint.textContent = "북마크한 글이 아직 없어요.";
+      else emptyHint.textContent = searchQuery ? `“${searchQuery}” 검색 결과가 없어요.` : "결과가 없어요.";
       return;
     }
     emptyHint.textContent = "";
 
     const frag = document.createDocumentFragment();
 
-    posts.forEach(p => {
+    posts.forEach((p) => {
       const card = document.createElement("article");
       card.className = "postCard";
       card.dataset.open = p.id;
@@ -469,16 +601,17 @@
         ? `<div class="postMedia"><img src="${esc(p.imageUrl)}" alt="" onerror="this.closest('.postMedia').remove();" /></div>`
         : "";
 
-      //  본문: short(미리보기) + full(전체) 두 개 만들어서 토글
       const shortBody = previewText(p.body, 95);
+      const authorId = p.authorId || p.authorName || "user";
+      const cCount = (p.comments || []).length;
 
       card.innerHTML = `
         <div class="postTop">
           <div class="author">
             <div class="avatar" aria-hidden="true"></div>
             <div class="authorText">
-              <div class="authorName">${esc(p.authorName)}</div>
-              <div class="authorMeta">${esc(timeAgo(p.createdAt))} · ${esc(p.authorSub || "")}</div>
+              <div class="authorName">${esc(authorId)}</div>
+              <div class="authorMeta">${esc(timeAgo(p.createdAt))}${p.authorSub ? ` · ${esc(p.authorSub)}` : ""}</div>
             </div>
           </div>
           <div class="catBadge">${esc(catLabel(p.category))}</div>
@@ -492,32 +625,42 @@
         ${media}
 
         <div class="postActions">
-          <button class="actionBtn ${p._liked ? "is-liked":""}" type="button" data-like="${esc(p.id)}" aria-label="좋아요">
-            ${heartSvg()}
+          <button class="actionBtn ${p._liked ? "is-liked" : ""}" type="button" data-like="${esc(p.id)}" aria-label="좋아요">
+            ${iconHeart()}
             <span>좋아요</span>
             <span>${p.likeCount || 0}</span>
           </button>
 
-          <!--  댓글 버튼도 “이동” 대신 “펼치기”에 사용 -->
-          <button class="actionBtn" type="button" data-open="${esc(p.id)}">
-            <span class="actionDot" aria-hidden="true"></span>
+          <button class="actionBtn" type="button" data-open="${esc(p.id)}" aria-label="댓글">
+            ${iconComment()}
             <span>댓글</span>
-            <span>${(p.comments||[]).length}</span>
+            <span>${cCount}</span>
           </button>
 
-          <button class="actionBtn" type="button" data-share="${esc(p.id)}">
-            <span class="actionDot" aria-hidden="true"></span>
+          <button class="actionBtn ${p._bookmarked ? "is-bookmarked" : ""}" type="button" data-bm="${esc(p.id)}" aria-label="북마크">
+            ${iconBookmark()}
+            <span>${p._bookmarked ? "북마크됨" : "북마크"}</span>
+          </button>
+
+          <button class="actionBtn" type="button" data-share="${esc(p.id)}" aria-label="공유">
+            ${iconShare()}
             <span>공유</span>
           </button>
         </div>
 
-        <!--  상세 영역 (기본 숨김) -->
         <div class="postDetail" style="display:none;">
-          <div class="postDetail__title" style="margin-top:10px; font-weight:700;">댓글</div>
-          <div class="postDetail__comments" style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+          <div style="font-weight:800; margin-top:4px;">댓글</div>
+
+          <form class="cForm" data-cform="${esc(p.id)}">
+            <input class="cInput" name="comment" type="text" maxlength="200" placeholder="댓글을 입력하세요" autocomplete="off" />
+            <button class="cSubmit" type="submit">등록</button>
+          </form>
+
+          <div class="postDetail__comments">
             ${renderComments(p.comments)}
           </div>
-          <button type="button" class="postDetail__close" data-collapse="1"
+
+          <button type="button" data-collapse="1"
             style="margin-top:12px; width:100%; height:38px; border-radius:12px; border:1px solid rgba(0,0,0,.08); background:#fff;">
             접기
           </button>
@@ -529,12 +672,10 @@
 
     postList.appendChild(frag);
 
-    // 베스트에서 클릭해서 특정 글 펼치기 예약된 경우
-    if (pendingOpenId){
+    if (pendingOpenId) {
       const target = postList.querySelector(`.postCard[data-open="${CSS.escape(pendingOpenId)}"]`);
-      if (target){
-        // 다른 글 닫기(원하면 제거 가능)
-        postList.querySelectorAll(".postCard.is-open").forEach(c => setCardOpen(c, false));
+      if (target) {
+        postList.querySelectorAll(".postCard.is-open").forEach((c) => setCardOpen(c, false));
         setCardOpen(target, true);
         target.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -542,52 +683,91 @@
     }
   }
 
-  // 클릭 이벤트: 이동 제거 + 카드 토글
+  /* ===== events ===== */
   postList?.addEventListener("click", (e) => {
-    // 좋아요
+    // detail 내부 클릭이면 카드 토글 방지 + 접기 처리
+    if (e.target.closest(".postDetail")) {
+      const collapseBtn = e.target.closest("[data-collapse='1']");
+      if (collapseBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = e.target.closest(".postCard");
+        if (card) setCardOpen(card, false);
+      }
+    }
+
     const likeBtn = e.target.closest("[data-like]");
-    if (likeBtn){
+    if (likeBtn) {
       e.preventDefault();
       e.stopPropagation();
       const id = likeBtn.getAttribute("data-like");
       toggleLike(id);
+      pendingOpenId = id;
       renderAll();
       return;
     }
 
-    // 공유
+    const bmBtn = e.target.closest("[data-bm]");
+    if (bmBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = bmBtn.getAttribute("data-bm");
+      toggleBookmark(id);
+      pendingOpenId = id;
+      renderAll();
+      return;
+    }
+
     const shareBtn = e.target.closest("[data-share]");
-    if (shareBtn){
+    if (shareBtn) {
       e.preventDefault();
       e.stopPropagation();
       alert("공유는 다음 단계에서 연결해줄게 🙂");
       return;
     }
 
-    // 접기 버튼
-    const collapseBtn = e.target.closest("[data-collapse='1']");
-    if (collapseBtn){
-      e.preventDefault();
-      e.stopPropagation();
+    const openBtn = e.target.closest("[data-open]");
+    if (openBtn) {
       const card = e.target.closest(".postCard");
-      if (card) setCardOpen(card, false);
+      if (card) setCardOpen(card, true);
       return;
     }
 
-    // 댓글 버튼 or 카드 아무 곳 클릭 => 토글
     const card = e.target.closest(".postCard");
     if (!card) return;
 
-    // (댓글 버튼도 결국 카드 토글)
-    toggleCard(card);
+    const isOpen = card.classList.contains("is-open");
+    setCardOpen(card, !isOpen);
   });
 
-  function renderAll(){
+  postList?.addEventListener("submit", (e) => {
+    const form = e.target.closest(".cForm");
+    if (!form) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const postId = form.getAttribute("data-cform");
+    const input = form.querySelector("input[name='comment']");
+    const text = (input?.value || "").trim();
+    if (!text) return;
+
+    addComment(postId, text);
+    if (input) input.value = "";
+
+    pendingOpenId = postId;
+    renderAll();
+
+    const card = postList.querySelector(`.postCard[data-open="${CSS.escape(postId)}"]`);
+    card?.querySelector(".cInput")?.focus?.();
+  });
+
+  function renderAll() {
     renderBest();
     renderFeed();
   }
 
   /* ===== init ===== */
   seedRich(false);
+  normalizeIds();
   renderAll();
 })();

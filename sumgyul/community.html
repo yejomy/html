@@ -11,12 +11,11 @@
     <main class="page" id="mainContent">
 
       <section class="hero" aria-label="커뮤니티 상단">
-        <img class="heroBg" src="./images/stableback.png" alt="" aria-hidden="true" />
+        <img class="heroBg" src="./images/home_banner.png" alt="" aria-hidden="true" />
         <div class="heroShade" aria-hidden="true"></div>
 
         <div class="hero__inner">
           <header class="hero__topbar">
-            <!-- 메뉴 버튼: aria-controls / aria-expanded 추가 (JS에서 토글) -->
             <button
               class="iconBtn"
               id="openDrawerBtn"
@@ -28,19 +27,17 @@
               <img src="./images/icon_menu.svg" class="iconImg" alt="" aria-hidden="true" />
             </button>
 
-            <!-- 타이틀 -->
             <div class="topbarCenter" id="topbarTitle">
               <div class="topbar__centerTitle" aria-live="polite">커뮤니티</div>
             </div>
 
-            <!-- 검색 폼 (label + name 추가) -->
             <form
               class="topbarCenter topSearch is-hidden"
               id="topSearchForm"
               role="search"
               aria-label="검색"
             >
-              <label class="srOnly" for="topSearchInput"></label>
+              <label class="srOnly" for="topSearchInput">검색어</label>
               <input
                 id="topSearchInput"
                 class="topSearchInput"
@@ -48,9 +45,7 @@
                 name="q"
                 placeholder="검색어를 입력하세요"
                 autocomplete="off"
-                aria-describedby="searchHelp"
               />
-              <span id="searchHelp" class="srOnly"></span>
 
               <button class="iconBtn" type="submit" aria-label="검색 실행">
                 <img src="./images/icon_search.svg" class="iconImg" alt="" aria-hidden="true" />
@@ -66,7 +61,6 @@
               </button>
             </form>
 
-            <!-- 오른쪽 버튼 영역 -->
             <div class="topbar__right" id="topbarRight">
               <button
                 class="iconBtn"
@@ -85,7 +79,6 @@
             </div>
           </header>
 
-          <!-- 카테고리 탭: tablist 패턴 -->
           <nav class="topTabs" aria-label="커뮤니티 카테고리" role="tablist">
             <button class="topTab" type="button" role="tab" aria-selected="false" data-cat="all">전체</button>
             <button class="topTab is-active" type="button" role="tab" aria-selected="true" data-cat="popular">인기</button>
@@ -95,12 +88,12 @@
             <button class="topTab" type="button" role="tab" aria-selected="false" data-cat="routine">루틴</button>
           </nav>
 
-          <!-- 정렬 칩: 토글 버튼(aria-pressed) 패턴 -->
           <section class="chips" aria-label="정렬">
             <button class="chip is-on" type="button" data-sort="hot" aria-pressed="true">인기순</button>
             <button class="chip" type="button" data-sort="new" aria-pressed="false">최신순</button>
             <button class="chip" type="button" data-sort="comment" aria-pressed="false">댓글많은순</button>
             <button class="chip" type="button" data-sort="like" aria-pressed="false">좋아요순</button>
+            <button class="chip" type="button" data-sort="bookmark" aria-pressed="false">북마크</button>
           </section>
         </div>
       </section>
@@ -117,20 +110,16 @@
           </div>
 
           <div class="postList" id="postList" aria-labelledby="feedTitle"></div>
-
-          <!-- 비어있을 때 안내: live region -->
           <div class="hint" id="emptyHint" aria-live="polite" role="status"></div>
         </section>
       </section>
 
     </main>
 
-    <!-- FAB -->
     <button class="fab" id="fabWriteBtn" type="button" aria-label="글쓰기">
       <img src="./images/icon_pencil.svg" alt="" aria-hidden="true" class="fab__icon" />
     </button>
 
-    <!-- 하단 탭 -->
     <nav class="tabWrap" aria-label="하단 탭">
       <div class="tabbar" role="navigation" aria-label="주요 메뉴">
         <button class="tab" type="button" data-tab="home">
@@ -160,7 +149,7 @@
       </div>
     </nav>
 
-    <!-- Drawer: hidden + aria-hidden (JS에서 토글) -->
+    <!-- Drawer -->
     <div class="drawer" id="drawer" aria-hidden="true" hidden>
       <div class="drawer__dim" data-close="drawer" aria-hidden="true"></div>
 
@@ -223,6 +212,7 @@
         </footer>
       </aside>
     </div>
+
   </div>
 
   <script src="./js/community.js"></script>

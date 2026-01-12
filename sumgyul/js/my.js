@@ -26,17 +26,19 @@
   const drawer = document.getElementById("drawer");
   const openDrawerBtn = document.getElementById("openDrawerBtn");
 
-  function openDrawer() {
-    drawer?.classList.add("is-open");
-    drawer?.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-  function closeDrawer() {
-    drawer?.classList.remove("is-open");
-    drawer?.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
+function openDrawer() {
+  drawer.hidden = false;              // ⭐ 핵심
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
 
+function closeDrawer() {
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+  drawer.hidden = true;               // ⭐ 핵심
+  document.body.style.overflow = "";
+}
   openDrawerBtn?.addEventListener("click", openDrawer);
   drawer?.addEventListener("click", (e) => {
     if (e.target.closest("[data-close='drawer']")) closeDrawer();
