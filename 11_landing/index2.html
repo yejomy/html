@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>맥북프로 이벤트 랜딩</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero__inner">
+      <nav class="topnav">
+        <div class="topnav__left">
+          <a href="#about" class="topnav__link">이벤트 안내</a>
+          <a href="#how" class="topnav__link">참여방법</a>
+          <a href="#apply" class="topnav__link">응모하기</a>
+        </div>
+        <div class="topnav__center">
+          <div class="brand"><span class="brand__text">CONNECTS</span></div>
+        </div>
+        <div class="topnav__right">
+          <a href="#notice" class="topnav__link">공지</a>
+          <a href="#footer" class="topnav__link">문의</a>
+        </div>
+      </nav>
+
+      <div class="hero__titleArea">
+        <div class="hero__datePill">2026.01.13 ~ 2026.01.17</div>
+
+        <div class="hero__macbook">
+          <img src="./images/macbook.jpg" alt="맥북프로" />
+        </div>
+
+        <h1 class="hero__title">
+          맥북프로가<br />
+          <span class="accent">미래를 밀어줄게</span>
+        </h1>
+
+        <p class="hero__subtitle">매일 밤 10시, 선착순 100% 증정</p>
+
+        <a class="hero__cta" href="#apply">지금 응모하기</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="arrowBar">
+        <span class="arrowBar__arrow">‹</span>
+        <p class="arrowBar__text">소중한 경험을 공유하는 여러분을 커넥츠가 응원합니다.</p>
+        <span class="arrowBar__arrow">›</span>
+      </div>
+
+      <p class="about__desc">
+        맥북프로를 고민 중이라면, 매일 밤 10시에 열리는 이벤트에 참여해보세요.<br />
+        참여자에게는 사은품이 100% 제공됩니다(선착순/재고 소진 시 변경될 수 있음).
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW (full-bleed video) -->
+  <section id="how" class="how">
+    <div class="howVideo">
+      <video class="howVideo__video" id="howVideo" autoplay muted playsinline preload="auto">
+        <source src="./images/xlarge.mp4" type="video/mp4" />
+      </video>
+      <div class="howVideo__overlay" aria-hidden="true"></div>
+    </div>
+
+    <div class="container how__content">
+      <div class="howText">
+        <div class="howText__kicker">HOW TO JOIN</div>
+        <h2 class="howText__title">이벤트 참여 방법</h2>
+
+        <!-- STEP 박스 버전 -->
+        <div class="howSteps">
+          <div class="howStep">
+            <div class="howStep__head">STEP 1</div>
+            <div class="howStep__body">사은품 선택</div>
+          </div>
+          <div class="howStep">
+            <div class="howStep__head">STEP 2</div>
+            <div class="howStep__body">퀴즈 정답 입력</div>
+          </div>
+          <div class="howStep">
+            <div class="howStep__head">STEP 3</div>
+            <div class="howStep__body">이름/전화번호/이메일 작성</div>
+          </div>
+          <div class="howStep">
+            <div class="howStep__head">STEP 4</div>
+            <div class="howStep__body">매일 밤 22:00 결과 확인</div>
+          </div>
+        </div>
+
+        <p class="howText__note">* 영상은 자동재생(무음)되며 1회 재생 후 마지막 화면이 유지됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLY -->
+  <section id="apply" class="apply">
+    <div class="container">
+      <h2 class="apply__title">매일 밤 10시 이벤트가 시작됩니다!</h2>
+
+      <div class="countdown">
+        <div class="countdown__label">다음 이벤트까지 남은 시간</div>
+
+        <div class="countdown__digits" aria-live="polite">
+          <div class="digit" id="cd_h1">0</div>
+          <div class="digit" id="cd_h2">0</div>
+          <span class="digitSep">:</span>
+          <div class="digit" id="cd_m1">0</div>
+          <div class="digit" id="cd_m2">0</div>
+          <span class="digitSep">:</span>
+          <div class="digit" id="cd_s1">0</div>
+          <div class="digit" id="cd_s2">0</div>
+        </div>
+
+        <div class="countdown__bar">
+          <div class="countdown__barFill" id="cd_bar"></div>
+        </div>
+
+        <div class="countdown__note">
+          * 테스트 중: 현재는 버튼이 항상 눌리도록 열어둔 상태입니다.
+        </div>
+
+        <div class="openStatus" id="openStatus" aria-live="polite"></div>
+      </div>
+
+      <div class="applyCard applyCard--glass">
+        <div class="applyCard__q">
+          <span class="qLabel">Q.</span>
+          원하는 사은품 <b>번호(1~6)</b>를 선택하고, 아래 입력란에 <b>번호만</b> 입력해 주세요.
+        </div>
+
+        <div class="giftGrid" id="giftGrid">
+          <button type="button" class="giftItem" data-no="1" data-gift="애플워치 SE3">
+            <span class="giftItem__badge">1</span>
+            <img class="giftItem__thumb" src="./images/gift-watch.jpg" alt="애플워치 SE3">
+            <span class="giftItem__label">애플워치 SE3</span>
+          </button>
+
+          <button type="button" class="giftItem" data-no="2" data-gift="신세계 상품권 2만원권">
+            <span class="giftItem__badge">2</span>
+            <img class="giftItem__thumb" src="./images/gift-shinsegae.jpg" alt="신세계 상품권 2만원권">
+            <span class="giftItem__label">신세계 상품권 2만원권</span>
+          </button>
+
+          <button type="button" class="giftItem" data-no="3" data-gift="매직마우스">
+            <span class="giftItem__badge">3</span>
+            <img class="giftItem__thumb" src="./images/gift-magicmouse.jpg" alt="매직마우스">
+            <span class="giftItem__label">매직마우스</span>
+          </button>
+
+          <button type="button" class="giftItem" data-no="4" data-gift="에어태그">
+            <span class="giftItem__badge">4</span>
+            <img class="giftItem__thumb" src="./images/gift-airtag.jpg" alt="에어태그">
+            <span class="giftItem__label">에어태그</span>
+          </button>
+
+          <button type="button" class="giftItem" data-no="5" data-gift="스타벅스 아메리카노 쿠폰">
+            <span class="giftItem__badge">5</span>
+            <img class="giftItem__thumb" src="./images/gift-starbucks.jpg" alt="스타벅스 아메리카노 쿠폰">
+            <span class="giftItem__label">스타벅스 아메리카노</span>
+          </button>
+
+          <button type="button" class="giftItem" data-no="6" data-gift="바나나맛우유">
+            <span class="giftItem__badge">6</span>
+            <img class="giftItem__thumb" src="./images/gift-banana.jpg" alt="바나나맛우유">
+            <span class="giftItem__label">바나나맛우유</span>
+          </button>
+        </div>
+
+        <div class="quizRow">
+          <label class="field field--dark">
+            <span class="field__label">정답 입력(사은품 번호 1~6)</span>
+            <input id="quizAnswer" type="text" inputmode="numeric" placeholder="예) 2" autocomplete="off" required />
+          </label>
+        </div>
+
+        <!-- ✅ 폼 시작 태그 고정 -->
+        <form id="contactForm" class="space-y-4" name="submit-to-google-sheet">
+          <!-- ✅ 시트 헤더와 동일하게 name 맞춤 -->
+          <input type="hidden" id="selectedGift" name="selectedGift" value="" />
+          <input type="hidden" id="submittedAt" name="submittedAt" value="" />
+          <input type="hidden" id="quizAnswerHidden" name="answer" value="" />
+
+          <div class="formGrid">
+            <label class="field field--dark">
+              <span class="field__label">이름</span>
+              <input type="text" name="name" placeholder="홍길동" required />
+            </label>
+
+            <label class="field field--dark">
+              <span class="field__label">전화번호</span>
+              <input type="tel" name="phone" placeholder="010-0000-0000" required />
+            </label>
+
+            <label class="field field--dark field--full">
+              <span class="field__label">이메일</span>
+              <input type="email" name="email" placeholder="example@domain.com" required />
+            </label>
+
+            <div class="field field--dark field--full">
+              <span class="field__label">사은품 확인</span>
+              <div class="readonlyBox readonlyBox--dark" id="quizAnswerPreview">번호를 입력하면 사은품명이 표시됩니다.</div>
+            </div>
+          </div>
+
+          <div class="formActions">
+            <button type="submit" class="btn btn--primary btn--wide" id="submitBtn">응모하기</button>
+          </div>
+
+          <div class="formStatus" id="formStatus" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="notice" class="notice">
+    <div class="container notice__box">
+      <h4 class="notice__title">유의사항</h4>
+      <ul class="notice__list">
+        <li>본 이벤트는 사전 고지 없이 변경/종료될 수 있습니다.</li>
+        <li>부정 참여(중복/매크로 등) 의심 시 당첨이 취소될 수 있습니다.</li>
+        <li>사은품은 재고에 따라 동급 제품으로 변경될 수 있습니다.</li>
+        <li>개인정보는 이벤트 목적 외 사용되지 않으며, 일정 기간 후 파기됩니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer id="footer" class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">CONNECTS</div>
+      <div class="footer__bottom">© <span id="yearNow"></span> CONNECTS. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
