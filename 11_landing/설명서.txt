@@ -1,0 +1,14 @@
+1.form태그안에 form이름을 준다 contactForm
+2. 각각 폼안에data를 받는 name='변수명' 구글시트에 타틀명으로 입력된다
+3. 구글 스프래드 시트 주소안에 연결해서 data를 보낸다 
+4. 구글 시트에서 구글 app script를 만든다 -> 구글 시트주소가 만들어지면서 
+form안에 data를 받아서 저장하는 script
+
+5.https://github.com/jamiewilson/form-to-google-sheets
+ https://script.google.com/macros/s/AKfycbxf6oyB2MSa3J-6YgJME-klqYiduqlTNBNBV3Pid7pma2uIhowNsRTNOWYzfseBqtNRPA/exec
+내 구글시트 주소 
+
+6.확장프로그램->apps script -> 실행시켜 붙여넣기 
+7. 시트이름이 sheet1 -> 한글쉬트이름을 바꿔준다
+8. 배포 버튼을 클릭 도구 ->웹/앱을 선택 -> 접근 권한을 설정
+9. 설명부분에 프로젝트이름이 동일해야한다 ex)contactForm
